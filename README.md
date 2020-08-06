@@ -16,3 +16,8 @@ A stock/financial portfolio tracking app -- front end
 - *I want the game to calculate dividends and add them to my portfolio earnings.*
 - *I want to be able to pull up company info for my selected stocks from the SEC web site. -- STRETCH GOAL*
 
+# WIREFRAME
+
+! [Screenshot of Wireframe]
+(https://github.com/cox512/Stock_Trackr_Front/blob/master/10baggr_wire_screenshot.png)
+
