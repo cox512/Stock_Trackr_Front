@@ -18,6 +18,6 @@ A stock/financial portfolio tracking app -- front end
 
 # WIREFRAME
 
-! [Screenshot of Wireframe]
+![Screenshot of Wireframe]
 (https://github.com/cox512/Stock_Trackr_Front/blob/master/10baggr_wire_screenshot.png)
 
