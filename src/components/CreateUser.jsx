@@ -1,5 +1,5 @@
 import React from 'react'
-import LogIn from './LogIn';
+// import LogIn from './LogIn';
 
 export default function CreateUser(props) {
     return (
@@ -22,16 +22,7 @@ export default function CreateUser(props) {
                 <input type='Submit' />
             </form>
             <div>    
-                {props.showLogin ?
-                <LogIn 
-                    handleChange={props.handleChange}
-                    handleLogin={props.handleLogin} 
-                /> :
-                <>
-                <h4>Already have an account?</h4>
-                <button onClick={(evt)=>props.revealLogin(evt)}>Login</button>
-                </>
-                }
+                
             </div>
             </>
         </div>

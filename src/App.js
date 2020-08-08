@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 import Home from "./components/Home";
-// import LogIn from "./components/LogIn";
-// import CreateUser from "./components/CreateUser";
-import Watchlist from "./components/Watchlist";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
-import ShowStock from "./components/ShowStock";
+import Account from "./components/Account";
+import UserPage from "./components/UserPage";
 
 const baseURL = "http://localhost:8000/";
 
@@ -18,7 +16,9 @@ export default class App extends Component {
     currentUser: "",
     showLogin: false,
     ticker: "",
-    chosenStock: null,
+    stockPrice: null,
+    redirect: null,
+    symbol: "",
   };
 
   handleChange = (evt) => {
@@ -66,7 +66,6 @@ export default class App extends Component {
   loginUser = (userInfo) => {
     console.log(userInfo);
     let data = JSON.stringify(userInfo);
-
     let config = {
       method: "POST",
       url: baseURL + "user/login",
@@ -77,7 +76,6 @@ export default class App extends Component {
       },
       data: data,
     };
-
     axios(config)
       .then((res) => {
         console.log(res.data);
@@ -88,6 +86,7 @@ export default class App extends Component {
         this.setState({
           currentUser: data.data,
           showLogin: false,
+          redirect: true,
         });
         console.log(this.state.currentUser);
       })
@@ -118,15 +117,19 @@ export default class App extends Component {
 
     axios(API_CALL)
       .then((res) => {
+        console.log(res.data);
         return res.data;
       })
       .then((data) => {
+        console.log(data["Meta Data"]["2. Symbol"]);
         console.log(
           Object.entries(Object.entries(data["Time Series (1min)"])[1][1])[3][1]
         );
         this.setState({
-          ticker: this.state.ticker,
-          chosenStock: data,
+          symbol: data["Meta Data"]["2. Symbol"],
+          stockPrice: Object.entries(
+            Object.entries(data["Time Series (1min)"])[1][1]
+          )[3][1],
         });
       })
       .catch((error) => {
@@ -134,48 +137,53 @@ export default class App extends Component {
       });
   };
 
+  addToWatchlist = (evt) => {
+    evt.preventDefault();
+    // const i = 0;
+    // return i;
+  };
+
   render() {
     return (
       <div className="App">
-        <NavBar
-          currentUser={this.state.currentUser}
-          handleChange={this.handleChange}
-        />
-        {this.state.chosenStock ? (
-          <ShowStock
-            currentStock={this.state.currentStock}
-            ticker={this.state.ticker}
+        <BrowserRouter>
+          <NavBar
+            currentUser={this.state.currentUser}
+            handleChange={this.handleChange}
           />
-        ) : null}
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <Home
-                handleCreateNewUser={this.handleCreateNewUser}
-                handleChange={this.handleChange}
-                handleLogin={this.handleLogin}
-                showLogin={this.state.showLogin}
-                revealLogin={this.revealLogin}
-                handleStockSearch={this.handleStockSearch}
-                ticker={this.state.ticker}
-              />
-            )}
-          />
-          {/* <Route
-            exact
-            path="/register"
-            render={() => (
-              <CreateUser
-                handleCreateNewUser={this.handleCreateNewUser}
-                handleChange={this.handleChange}
-              />
-            )}
-          /> */}
-          <Route exact path="/watchlist" component={Watchlist} />
-          <Route component={Error} />
-        </Switch>
+          <Switch>
+            <Route
+              exact
+              path="/userpage"
+              render={() => (
+                <UserPage
+                  stockPrice={this.state.stockPrice}
+                  symbol={this.state.symbol}
+                  handleStockSearch={this.handleStockSearch}
+                  handleChange={this.handleChange}
+                  currentUser={this.state.currentUser}
+                  addToWatchlist={this.addToWatchlist}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <Home
+                  handleCreateNewUser={this.handleCreateNewUser}
+                  handleChange={this.handleChange}
+                  handleLogin={this.handleLogin}
+                  showLogin={this.state.showLogin}
+                  revealLogin={this.revealLogin}
+                  redirect={this.state.redirect}
+                />
+              )}
+            />
+            <Route exact path="/account" component={Account} />
+            <Route component={Error} />
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }
