@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Watchlist from "./components/Watchlist";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
+import ShowStock from "./components/ShowStock";
 
 const baseURL = "http://localhost:8000/";
 
@@ -17,6 +18,7 @@ export default class App extends Component {
     currentUser: "",
     showLogin: false,
     ticker: "",
+    chosenStock: null,
   };
 
   handleChange = (evt) => {
@@ -103,7 +105,6 @@ export default class App extends Component {
   handleStockSearch = (evt) => {
     evt.preventDefault();
     let random = Math.floor(Math.random() * 2);
-    console.log(random);
     const pickAPI_KEY = () => {
       let API_KEYS = [
         process.env.REACT_APP_API_KEY1,
@@ -113,16 +114,19 @@ export default class App extends Component {
     };
 
     let stockTicker = this.state.ticker;
-    let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockTicker}&interval=1min&outputsize=full&apikey=${pickAPI_KEY}`;
+    let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockTicker}&interval=1min&outputsize=compact&apikey=${pickAPI_KEY}`;
 
     axios(API_CALL)
       .then((res) => {
         return res.data;
       })
       .then((data) => {
-        console.log(data);
+        console.log(
+          Object.entries(Object.entries(data["Time Series (1min)"])[1][1])[3][1]
+        );
         this.setState({
           ticker: this.state.ticker,
+          chosenStock: data,
         });
       })
       .catch((error) => {
@@ -137,7 +141,12 @@ export default class App extends Component {
           currentUser={this.state.currentUser}
           handleChange={this.handleChange}
         />
-
+        {this.state.chosenStock ? (
+          <ShowStock
+            currentStock={this.state.currentStock}
+            ticker={this.state.ticker}
+          />
+        ) : null}
         <Switch>
           <Route
             exact
