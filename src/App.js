@@ -102,11 +102,32 @@ export default class App extends Component {
 
   handleStockSearch = (evt) => {
     evt.preventDefault();
-    console.log(this.state);
+    let random = Math.floor(Math.random() * 2);
+    console.log(random);
+    const pickAPI_KEY = () => {
+      let API_KEYS = [
+        process.env.REACT_APP_API_KEY1,
+        process.env.REACT_APP_API_KEY2,
+      ];
+      return API_KEYS[random];
+    };
 
-    this.setState({
-      ticker: this.state.ticker,
-    });
+    let stockTicker = this.state.ticker;
+    let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockTicker}&interval=1min&outputsize=full&apikey=${pickAPI_KEY}`;
+
+    axios(API_CALL)
+      .then((res) => {
+        return res.data;
+      })
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          ticker: this.state.ticker,
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   render() {
