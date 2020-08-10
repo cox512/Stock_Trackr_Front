@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StockSearch from "./StockSearch";
 import ShowStock from "./ShowStock";
 
 export default function UserPage (props) {
     
+
+    
+
     return (
         <div>
                
@@ -19,7 +22,10 @@ export default function UserPage (props) {
             <ShowStock
                 stockPrice={props.stockPrice}
                 symbol={props.symbol}
-                addToWatchlist={props.addToWatchlist}
+                handleChange={props.handleChange}
+                baseURL={props.baseURL}
+                // addToWatchlist={props.addToWatchlist}
+                // addList={props.addlist}
             />
         ) : null}
         </div>
