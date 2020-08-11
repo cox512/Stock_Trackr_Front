@@ -70,15 +70,23 @@ export default class App extends Component {
     let config = {
       method: "POST",
       url: baseURL + "user/login",
+
       headers: {
         "Content-Type": "application/json",
         //from https://github.com/axios/axios/issues/319
         // Accept: "/",
         // "Cache-Control": "no-cache",
-        Cookie: document.cookie,
+
+        // Cookie: document.cookie,
+        // Authorization: {
+        //   username:
+        //   password:
+        // },
+        // document.cookie,
         // "session=.eJwlzssNgzAMANBdcu7B-EfCMsh2bLVXKKequxepE7z3aXsdeT7b9j6ufLT9NdvWYlS3Gsiq5a6zo6BKQMyEaTrYNQYIVs9IETNOBwEzV2AgU0RyKhZeZ1kireKKUSgLplhEEJPnxFgI1ehmbLg7wBBGiXZHrjOP_0ba9wcRZTAC.Xy6-zw.a2SOYnwSc3SYhYC2lMhKkp5oqi4",
       },
       data: data,
+      withCredentials: true,
     };
     axios(config)
       .then((res) => {

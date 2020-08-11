@@ -18,19 +18,22 @@ export default function ShowStock (props) {
 
     const createNewList = (evt) => {
         evt.preventDefault();
-        console.log(watchlists)
-
+        // console.log(watchlists)
         let data = JSON.stringify(watchlists);
         console.log(data)
         let config = {
             method: "POST",
-            url: props.baseURL + "api/v1/watchlists/",
+            url: props.baseURL + "api/v1/watchlists/", 
+            data: data,
             headers: {
                 "Content-Type": "application/json",
-                // 'Cookie': document.cookie
-                'Cookie': 'session=.eJwlzssNgzAMANBdcu7B-EfCMsh2bLVXKKequxepE7z3aXsdeT7b9j6ufLT9NdvWYlS3Gsiq5a6zo6BKQMyEaTrYNQYIVs9IETNOBwEzV2AgU0RyKhZeZ1kireKKUSgLplhEEJPnxFgI1ehmbLg7wBBGiXZHrjOP_0ba9wcRZTAC.Xy9s-Q.uxrG7u2J4tcsIRQWfbejwImL0dA'
+                // "Auth": 
+                // document.cookie,
+                
+                // Cookie: document.cookie,
+                // 'session=.eJwlzssNgzAMANBdcu7B-EfCMsh2bLVXKKequxepE7z3aXsdeT7b9j6ufLT9NdvWYlS3Gsiq5a6zo6BKQMyEaTrYNQYIVs9IETNOBwEzV2AgU0RyKhZeZ1kireKKUSgLplhEEJPnxFgI1ehmbLg7wBBGiXZHrjOP_0ba9wcRZTAC.Xy9s-Q.uxrG7u2J4tcsIRQWfbejwImL0dA'
             },
-            data: data,
+            withCredentials: true,
         };
         axios(config) 
         .then((res) => {
@@ -45,7 +48,7 @@ export default function ShowStock (props) {
             // });
             console.log(watchlists);
         })
-        .catch((error) => console.error({ Error: error }));
+        .catch((error) => console.error({Error: error}));
     }
     
     return (

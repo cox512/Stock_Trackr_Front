@@ -20,13 +20,15 @@ export default function Home(props) {
             url: props.baseURL + 'api/v1/watchlists/',
             headers: { 
                 'Content-Type': "application.json",
-                'Cookie': document.cookie
+                // 'Cookie': document.cookie
             // 'session=.eJwlzssNgzAMANBdcu7B-EfCMsh2bLVXKKequxepE7z3aXsdeT7b9j6ufLT9NdvWYlS3Gsiq5a6zo6BKQMyEaTrYNQYIVs9IETNOBwEzV2AgU0RyKhZeZ1kireKKUSgLplhEEJPnxFgI1ehmbLg7wBBGiXZHrjOP_0ba9wcRZTAC.Xy9s-Q.uxrG7u2J4tcsIRQWfbejwImL0dA'
-            }
+            },
+            withCredentials: true,
           };
           axios(config)
           .then((res) => {
-            return res.data;
+              console.log(res.data)
+            // return res.data;
           })
           .then((data) => {
               console.log(data.data)
