@@ -18,7 +18,6 @@ export default function ShowStock (props) {
 
     const createNewList = (evt) => {
         evt.preventDefault();
-        // console.log(watchlists)
         let data = JSON.stringify(watchlists);
         console.log(data)
         let config = {
@@ -27,18 +26,13 @@ export default function ShowStock (props) {
             data: data,
             headers: {
                 "Content-Type": "application/json",
-                // "Auth": 
-                // document.cookie,
-                
-                // Cookie: document.cookie,
-                // 'session=.eJwlzssNgzAMANBdcu7B-EfCMsh2bLVXKKequxepE7z3aXsdeT7b9j6ufLT9NdvWYlS3Gsiq5a6zo6BKQMyEaTrYNQYIVs9IETNOBwEzV2AgU0RyKhZeZ1kireKKUSgLplhEEJPnxFgI1ehmbLg7wBBGiXZHrjOP_0ba9wcRZTAC.Xy9s-Q.uxrG7u2J4tcsIRQWfbejwImL0dA'
             },
             withCredentials: true,
         };
         axios(config) 
         .then((res) => {
             console.log(res);            
-            // return res.data;
+            return res.data;
         })
         .then((data) => {
             console.log(data.data);

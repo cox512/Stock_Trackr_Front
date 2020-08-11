@@ -3,9 +3,6 @@ import StockSearch from "./StockSearch";
 import ShowStock from "./ShowStock";
 
 export default function UserPage (props) {
-    
-
-    
 
     return (
         <div>
@@ -24,8 +21,7 @@ export default function UserPage (props) {
                 symbol={props.symbol}
                 handleChange={props.handleChange}
                 baseURL={props.baseURL}
-                // addToWatchlist={props.addToWatchlist}
-                // addList={props.addlist}
+                
             />
         ) : null}
         </div>
