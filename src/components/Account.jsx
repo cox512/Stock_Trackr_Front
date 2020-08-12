@@ -22,7 +22,10 @@ export default class Account extends Component {
     render() {
         return (
             <div>
-                <button onClick={()=>this.logout()}>Logout</button>
+                {/* Turn into a modal */}
+                <button type="button">Delete User</button>
+                <button type="button">Account Info</button> 
+                <button type="button" onClick={()=>this.logout()}>Logout</button>
             </div>
         )
     }

@@ -1,8 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StockSearch from "./StockSearch";
 import ShowStock from "./ShowStock";
+import axios from 'axios';
 
 export default function UserPage (props) {
+
+    const [ticker, setTicker] = useState('');
+    const [symbol, setSymbol] = useState('');
+    const [stockPrice, setStockPrice] = useState('');
+    const [watchlists, setWatchlists] = useState([])
+
+    const handleStockData = (data) => {
+        setSymbol(data["Meta Data"]["2. Symbol"]);
+        setStockPrice(Object.entries(data["Time Series (1min)"])[0][1]["4. close"]);
+        
+    }
+
+    const showWatchlists = () =>{
+        console.log("showWatchlists")
+        var config = {
+            method: 'GET',
+            url: props.baseURL + 'api/v1/watchlists/',
+            headers: { 
+                'Content-Type': "application.json",
+            },
+            withCredentials: true,
+          };
+          axios(config)
+          .then((res) => {
+            console.log(res.data)
+            return res.data;
+          })
+          .then((data) => {
+              console.log(data.data)
+                setWatchlists(data.data)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
+
+    useEffect(() => {
+        showWatchlists();
+    }, []);
 
     return (
         <div>
@@ -12,18 +52,27 @@ export default function UserPage (props) {
             <StockSearch
                 handleChange={props.handleChange}
                 handleStockSearch={props.handleStockSearch}
-                ticker={props.ticker}
-
+                ticker={ticker}
+                handleStockData={handleStockData}
             />
-            {props.stockPrice ? (
+            {/* <button onClick={()=>showWatchlists()}>SHOW WATCHLISTS</button> */}
+            <h4>Your Watchlists</h4>
+            <ul>
+                {watchlists.map(list => {
+                    return (
+                        <li key={list.id}>{list.title}</li>
+                    )
+                })}
+            </ul>
+
+            {stockPrice ? (
             <ShowStock
-                stockPrice={props.stockPrice}
-                symbol={props.symbol}
-                handleChange={props.handleChange}
+                stockPrice={stockPrice}
+                symbol={symbol}
                 baseURL={props.baseURL}
                 
             />
-        ) : null}
+            ) : null}   
         </div>
     )
 }

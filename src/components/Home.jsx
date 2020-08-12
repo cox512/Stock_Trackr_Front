@@ -13,43 +13,15 @@ export default function Home(props) {
         return <Redirect to='/userpage'/>
     }
 
-    
-
-    const showWatchlists = () =>{
-        console.log("showWatchlists")
-        var config = {
-            method: 'GET',
-            url: props.baseURL + 'api/v1/watchlists/',
-            headers: { 
-                'Content-Type': "application.json",
-            },
-            withCredentials: true,
-          };
-          axios(config)
-          .then((res) => {
-            console.log(res.data)
-            return res.data;
-          })
-          .then((data) => {
-              console.log(data.data)
-                setWatchlists(data.data)
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    }
-
     return (
         <div>
             <h1>HOME PAGE</h1>
-            {/* <h2>Logged In Status: {props.loginStatus}</h2> */}
-            <button onClick={()=>showWatchlists()}>SHOW WATCHLISTS</button>
+            
             <h3>Research stocks ... <br/>
                 Add them to your watchlists ... <br/>
                 Find the next 10Baggr!
             </h3>
            
-    
             <CreateUser
                 handleSuccessfulRegistration={props.handleSuccessfulRegistration}
                 loginStatus={props.loginStatus}
