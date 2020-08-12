@@ -3,29 +3,16 @@ import axios from 'axios'
 
 export default class Account extends Component {
 
-    logout = () => {
-        console.log("logout")        
-        var data = JSON.stringify(this.props.currentUser);
-        console.log(data)
-        
+    logout = () => {        
         var config = {
             method: 'GET',
             url: this.props.baseURL + 'user/logout',
-            headers: { 
-                'Content-Type': 'application/json'
-            },
-            data : data,
             withCredentials: true,
         };
         axios(config)
         .then((res) => {
-            console.log(res.data)
-            // return res.data;
-        })
-        .then (() => {
-            this.setState({
-                currentUser: '',
-            })
+            // console.log(res)
+            this.props.handleLogout();
         })
         .catch((error) => {
             console.log(error);

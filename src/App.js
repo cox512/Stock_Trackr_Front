@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
-import { Switch, Route, BrowserRouter } from "react-router-dom";
+import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
@@ -14,7 +14,6 @@ export default class App extends Component {
   state = {
     currentUser: {},
     loginStatus: false,
-    // redirect: false,
     showLoginBox: false,
     ticker: "",
     stockPrice: null,
@@ -25,14 +24,55 @@ export default class App extends Component {
     this.setState({
       loginStatus: true,
       currentUser: data,
-      // redirect: true,
     });
+  };
+
+  //Is there a way to run this without getting the CORS error in the console. Sessions?
+  checkLoginStatus = () => {
+    var config = {
+      method: "GET",
+      url: baseURL + "user/",
+      withCredentials: true,
+    };
+    axios(config)
+      .then((res) => {
+        if (res.data.logged_in && this.state.loginStatus === false) {
+          this.setState({
+            loginStatus: true,
+            currentUser: res.data.data[0],
+          });
+        } else if (!res.data.logged_in && this.state.loginStatus === true) {
+          this.setState({
+            loginStatus: false,
+            currentUser: {},
+          });
+        }
+        console.log("logged in?", res.data);
+      })
+      .catch((err) => {
+        console.log("check login error: ", err);
+      });
+  };
+
+  componentDidMount = () => {
+    this.checkLoginStatus();
   };
 
   revealLoginBox = (evt) => {
     this.setState({
       showLoginBox: true,
     });
+  };
+
+  handleLogout = () => {
+    this.setState({
+      loginStatus: false,
+      currentUser: "",
+    });
+    if (!this.state.loginStatus) {
+      console.log("this works");
+      return <Redirect to="/" />;
+    }
   };
 
   handleStockSearch = (evt) => {
@@ -108,11 +148,11 @@ export default class App extends Component {
                   handleSuccessfulRegistration={
                     this.handleSuccessfulRegistration
                   }
-                  handleChange={this.handleChange}
+                  // handleChange={this.handleChange}
                   currentUser={this.state.currentUser}
                   loginStatus={this.state.loginStatus}
                   baseURL={baseURL}
-                  handleLogin={this.handleLogin}
+                  // handleLogin={this.handleLogin}
                   showLoginBox={this.state.showLoginBox}
                   revealLoginBox={this.revealLoginBox}
                   // redirect={this.state.redirect}
@@ -126,6 +166,7 @@ export default class App extends Component {
                 <Account
                   currentUser={this.state.currentUser}
                   baseURL={baseURL}
+                  handleLogout={this.handleLogout}
                 />
               )}
             />

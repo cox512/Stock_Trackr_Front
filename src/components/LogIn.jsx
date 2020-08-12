@@ -10,7 +10,6 @@ export default class LogIn extends Component {
     }
     
     handleChange = (evt) => {
-        console.log("handle change");
         this.setState({
           [evt.target.id]: evt.target.value,
         });
@@ -23,10 +22,8 @@ export default class LogIn extends Component {
     }
 
     handleSubmit = (evt) => {
-        // console.log('handlesubmit')
         evt.preventDefault()
         let data = JSON.stringify(this.state);
-        // console.log(data)
         let config = {
             method: "POST",
             url: this.props.baseURL + "user/login",
@@ -38,13 +35,12 @@ export default class LogIn extends Component {
         };
         axios(config)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 return res.data;
             })
             .then((data) => {
                 if (data.status.code === 200) {
                     this.props.handleSuccessfulRegistration(data.data);
-                    
                 } else {
                     this.setState({
                         logInError: true,
