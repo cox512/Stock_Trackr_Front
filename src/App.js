@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
+// import { Button } from "antd";
+
 import axios from "axios";
 import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 import Home from "./components/Home";
@@ -18,6 +20,13 @@ export default class App extends Component {
     // ticker: "",
     // stockPrice: null,
     // symbol: "",
+  };
+
+  handleChange = (evt) => {
+    // console.log("handle change");
+    this.setState({
+      [evt.target.id]: evt.target.value,
+    });
   };
 
   handleSuccessfulRegistration = (data) => {
@@ -131,6 +140,7 @@ export default class App extends Component {
                   currentUser={this.state.currentUser}
                   baseURL={baseURL}
                   handleLogout={this.handleLogout}
+                  handleChange={this.handleChange}
                 />
               )}
             />

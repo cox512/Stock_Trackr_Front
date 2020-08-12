@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CreateUser from './CreateUser';
 import LogIn from './LogIn';
-import axios from "axios";
+// import axios from "axios";
 
 import { Redirect } from "react-router-dom";
 
 export default function Home(props) {
 
-    const [watchlists, setWatchlists] = useState([])
+    // const [watchlists, setWatchlists] = useState([])
 
     if (props.loginStatus) {
         return <Redirect to='/userpage'/>
