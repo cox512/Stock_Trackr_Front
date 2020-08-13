@@ -42,7 +42,9 @@ export default function ShowStock (props) {
     }
     
     const addStock = (id) => {
-        let data = JSON.stringify([props.symbol, id]);
+        let symbol = props.symbol.toUpperCase();
+        console.log(symbol)
+        let data = JSON.stringify([symbol, id]);
         console.log(data)
         let config = {
             method: "POST",
@@ -55,7 +57,7 @@ export default function ShowStock (props) {
         };
         axios(config) 
         .then((res) => {
-            console.log(res);            
+            // console.log(res);            
             return res.data;
         })
         .then((data) => {
@@ -78,14 +80,10 @@ export default function ShowStock (props) {
             withCredentials: true,
         };
         axios(config) 
-        .then((res) => {
-            console.log(res);            
-            // return res.data;
+        .then(() => {
+            // console.log(res);            
+            props.handleWatchlistSet()        
         })
-        // .then((data) => {
-        //     console.log(data.data);
-        //     props.handleWatchlistSet(data.data)
-        // })
         .catch((error) => console.error({Error: error}));
     }
 
@@ -97,27 +95,28 @@ export default function ShowStock (props) {
             {/* On button click (when addList=true), dropdown menu shows all of the current watchlists, ending with the opportunity to create a new one. */}
             { props.addList ?
             <div>
-            {props.watchlists ?
-            <> 
-            <h3>What list would you like to add the stock to?</h3> 
-            <ul>
-                {props.watchlists.map(list => {
-                    return (
-                        <>
-                        <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title} <button type="button" onClick={()=>deleteWatchlist(list.id)}>x</button></li>
-                        
-                        </>
-                    )
-                })}
-            </ul> 
-            <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
-            </>
-            :
-            <>
-            <h3>You don't currently have and watchlists. Create one to get started!</h3>
-            <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
-            </>
-            }
+                {props.watchlists ?
+                <> 
+                <h3>What list would you like to add the stock to?</h3> 
+                <ul>
+                    {props.watchlists.map(list => {
+                        return (
+                            
+                            <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title}<button key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</button></li>
+                            
+                            
+                            
+                        )
+                    })}
+                </ul> 
+                <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
+                </>
+                :
+                <>
+                <h3>You don't currently have any watchlists. Create one to get started!</h3>
+                <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
+                </>
+                }
             </div> 
             :
             <button type="button" onClick={() => props.setAddList(true)}>Add to Watchlist</button>

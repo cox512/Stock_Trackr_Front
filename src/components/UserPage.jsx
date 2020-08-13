@@ -75,16 +75,16 @@ export default function UserPage (props) {
             </ul> */}
 
             {stockPrice ? (
-            <ShowStock
-                stockPrice={stockPrice}
-                symbol={symbol}
-                baseURL={props.baseURL}
-                watchlists={watchlists}
-                handleChange={handleChange}
-                handleWatchlistSet={handleWatchlistSet}
-                addList={addList}
-                setAddList={setAddList}
-            />
+                <ShowStock
+                    stockPrice={stockPrice}
+                    symbol={symbol}
+                    baseURL={props.baseURL}
+                    watchlists={watchlists}
+                    handleChange={handleChange}
+                    handleWatchlistSet={handleWatchlistSet}
+                    addList={addList}
+                    setAddList={setAddList}
+                />
             ) : null}   
         </div>
     )
