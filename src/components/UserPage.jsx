@@ -9,11 +9,21 @@ export default function UserPage (props) {
     const [symbol, setSymbol] = useState('');
     const [stockPrice, setStockPrice] = useState('');
     const [watchlists, setWatchlists] = useState([])
+    const [addList, setAddList] = useState(false);
 
     const handleStockData = (data) => {
         setSymbol(data["Meta Data"]["2. Symbol"]);
         setStockPrice(Object.entries(data["Time Series (1min)"])[0][1]["4. close"]);
         
+    }
+
+    const handleChange = (evt) => {
+        setWatchlists(evt.target.value)
+    }
+
+    const handleWatchlistSet = () => {
+        showWatchlists()
+        setAddList(true);
     }
 
     const showWatchlists = () =>{
@@ -56,21 +66,25 @@ export default function UserPage (props) {
                 handleStockData={handleStockData}
             />
             {/* <button onClick={()=>showWatchlists()}>SHOW WATCHLISTS</button> */}
-            <h4>Your Watchlists</h4>
+            {/* <h4>Your Watchlists</h4>
             <ul>
                 {watchlists.map(list => {
                     return (
                         <li key={list.id}>{list.title}</li>
                     )
                 })}
-            </ul>
+            </ul> */}
 
             {stockPrice ? (
             <ShowStock
                 stockPrice={stockPrice}
                 symbol={symbol}
                 baseURL={props.baseURL}
-                
+                watchlists={watchlists}
+                handleChange={handleChange}
+                handleWatchlistSet={handleWatchlistSet}
+                addList={addList}
+                setAddList={setAddList}
             />
             ) : null}   
         </div>
