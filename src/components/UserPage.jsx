@@ -41,7 +41,7 @@ export default function UserPage (props) {
             return res.data;
           })
           .then((data) => {
-              console.log(data.data)
+            //   console.log(data.data)
                 setWatchlists(data.data)
           })
           .catch((error) => {
