@@ -106,8 +106,8 @@ export default class App extends Component {
               path="/userpage"
               render={() => (
                 <UserPage
-                  stockPrice={this.state.stockPrice}
-                  symbol={this.state.symbol}
+                  // stockPrice={this.state.stockPrice}
+                  // symbol={this.state.symbol}
                   currentUser={this.state.currentUser}
                   baseURL={baseURL}
                 />

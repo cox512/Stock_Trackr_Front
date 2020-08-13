@@ -7,3 +7,7 @@
 ul {
     list-style: none;
 }
+.pick-list:hover {
+    color: green;
+    cursor: pointer;
+}

@@ -41,12 +41,12 @@ export default function ShowStock (props) {
         .catch((error) => console.error({Error: error}));
     }
     
-    const addStock = (evt) => {
-        let data = JSON.stringify(evt.target.id);
+    const addStock = (id) => {
+        let data = JSON.stringify([props.symbol, id]);
         console.log(data)
         let config = {
             method: "POST",
-            url: props.baseURL + "api/v1/watchlists/", 
+            url: props.baseURL + "api/v1/stocks/", 
             data: data,
             headers: {
                 "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function ShowStock (props) {
             <ul>
                 {props.watchlists.map(list => {
                     return (
-                        <li key={list.id} onClick={(evt)=>addStock(evt)}>{list.title}</li>
+                        <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title}</li>
                     )
                 })}
             </ul> 
