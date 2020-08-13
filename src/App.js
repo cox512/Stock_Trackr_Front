@@ -17,13 +17,9 @@ export default class App extends Component {
     currentUser: {},
     loginStatus: false,
     showLoginBox: false,
-    // ticker: "",
-    // stockPrice: null,
-    // symbol: "",
   };
 
   handleChange = (evt) => {
-    // console.log("handle change");
     this.setState({
       [evt.target.id]: evt.target.value,
     });

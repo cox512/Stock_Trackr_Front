@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-// import ShowStock from './ShowStock';
+import ShowStock from './ShowStock';
 
 export default class StockSearch extends Component {
     

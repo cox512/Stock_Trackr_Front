@@ -14,7 +14,6 @@ export default function UserPage (props) {
     const handleStockData = (data) => {
         setSymbol(data["Meta Data"]["2. Symbol"]);
         setStockPrice(Object.entries(data["Time Series (1min)"])[0][1]["4. close"]);
-        
     }
 
     const handleChange = (evt) => {
@@ -27,7 +26,7 @@ export default function UserPage (props) {
     }
 
     const showWatchlists = () =>{
-        console.log("showWatchlists")
+        // console.log("showWatchlists")
         var config = {
             method: 'GET',
             url: props.baseURL + 'api/v1/watchlists/',
@@ -38,7 +37,7 @@ export default function UserPage (props) {
           };
           axios(config)
           .then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             return res.data;
           })
           .then((data) => {

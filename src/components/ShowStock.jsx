@@ -63,7 +63,30 @@ export default function ShowStock (props) {
             props.handleWatchlistSet(data.data)
         })
         .catch((error) => console.error({Error: error}));
+    }
 
+    const deleteWatchlist = (id) => {
+        let data = JSON.stringify(id);
+        console.log(data)
+        let config = {
+            method: "DELETE",
+            url: props.baseURL + "api/v1/watchlists/" + id, 
+            data: data,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        };
+        axios(config) 
+        .then((res) => {
+            console.log(res);            
+            // return res.data;
+        })
+        // .then((data) => {
+        //     console.log(data.data);
+        //     props.handleWatchlistSet(data.data)
+        // })
+        .catch((error) => console.error({Error: error}));
     }
 
     return (
@@ -80,7 +103,10 @@ export default function ShowStock (props) {
             <ul>
                 {props.watchlists.map(list => {
                     return (
-                        <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title}</li>
+                        <>
+                        <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title} <button type="button" onClick={()=>deleteWatchlist(list.id)}>x</button></li>
+                        
+                        </>
                     )
                 })}
             </ul> 
