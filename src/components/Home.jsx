@@ -65,7 +65,8 @@ export default function Home(props) {
                             </>
                             }   
                         </div>
-                        <img style={{position: 'relative'}} className="home-bg" src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' alt="Logo"/>
+                        {/* 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' */}
+                        <img style={{position: 'relative'}} className="home-bg" src='' alt="Logo"/>
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>ten-bagger ©2020</Footer>

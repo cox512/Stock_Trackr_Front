@@ -39,16 +39,13 @@ export default class LogIn extends Component {
         let config = {
             method: "POST",
             url: this.props.baseURL + "user/login",
-           
             headers: {
                 // "Access-Control-Allow-Origin": "*",
                 "Content-Type": "application/json",
                 // "Set-Cookie": "cross-site-cookie=name; SameSite=None; Secure"
             },
             data: data,
-            
-            withCredentials: true,
-            
+            withCredentials: true,  
         };
         axios(config)
             .then((res) => {
