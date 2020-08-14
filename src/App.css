@@ -11,3 +11,20 @@ ul {
     color: green;
     cursor: pointer;
 }
+
+.home-bg {
+    width: 100vw;
+    margin: 0 auto;
+    
+    position: relative;
+}
+
+.createUser-div {
+    position: absolute;
+    padding: 2em;
+    border: 3px solid rgb(240, 225, 17);
+    left: 5%;
+    top: 25%;
+    z-index: 1;
+    background: rgb(243, 245, 237)
+}

@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Form, Input, Button } from 'antd';
 
+const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+    };
+
+const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+    };
+  
 export default class LogIn extends Component {
     state = {
         username: '',
@@ -29,11 +39,16 @@ export default class LogIn extends Component {
         let config = {
             method: "POST",
             url: this.props.baseURL + "user/login",
+           
             headers: {
+                // "Access-Control-Allow-Origin": "*",
                 "Content-Type": "application/json",
+                // "Set-Cookie": "cross-site-cookie=name; SameSite=None; Secure"
             },
             data: data,
+            
             withCredentials: true,
+            
         };
         axios(config)
             .then((res) => {
@@ -54,11 +69,54 @@ export default class LogIn extends Component {
         });
     }
 
+    onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+      };
+
+    
+    onFinish = values => {
+          console.log('Success:', values);
+    }
+    
     
 
     render () {
         return (
             <div>
+                {/* <Form
+                    {...layout}
+                    name="basic"
+                    initialValues={{ remember: true }}
+                    onFinish={this.onFinish}
+                    onFinishFailed={this.onFinishFailed}
+                    >
+                    <Form.Item
+                        label="Username"
+                        name="username"
+                        rules={[{ required: true, message: 'Please input your username!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[{ required: true, message: 'Please input your password!' }]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item {...tailLayout}>
+                        <Button type="primary" htmlType="submit">
+                        Submit
+                        </Button>
+                    </Form.Item>
+                    </Form> */}
+                
+
+
+
+
                 { this.state.logInError ? 
                     <>
                         <h3>There was an error logging you in. Please try again.</h3>

@@ -6,13 +6,15 @@ export default function NavBar(props) {
         <div className='NavBar'>
 
             <p>10baggr</p>
-            { props.currentUser ?
-            <>
+            {/* { props.currentUser ? */}
+            
             <Link to='/account'>ACCOUNT</Link> 
             <Link to='/userpage'>USER PAGE</Link>
-            </>
-            :
-            <Link to='/'>HOME</Link> }  
+            
+            
+            <Link to='/'>HOME</Link> 
+            
+
     
         </div>
     )
