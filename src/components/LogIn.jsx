@@ -22,8 +22,10 @@ export default class LogIn extends Component {
     }
 
     handleSubmit = (evt) => {
+        console.log(this.props.baseURL)
         evt.preventDefault()
         let data = JSON.stringify(this.state);
+        console.log(this.state)
         let config = {
             method: "POST",
             url: this.props.baseURL + "user/login",
@@ -35,7 +37,7 @@ export default class LogIn extends Component {
         };
         axios(config)
             .then((res) => {
-                // console.log(res.data);
+                console.log(res.data);
                 return res.data;
             })
             .then((data) => {

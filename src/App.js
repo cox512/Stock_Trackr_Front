@@ -10,7 +10,7 @@ import Error from "./components/Error";
 import Account from "./components/Account";
 import UserPage from "./components/UserPage";
 
-const baseURL = "http://localhost:8000/";
+const baseURL = "http://localhost:8000/" || "https://tenbagger.herokuapp.com/";
 
 export default class App extends Component {
   state = {
@@ -34,6 +34,7 @@ export default class App extends Component {
 
   //Is there a way to run this without getting the CORS error in the console. Sessions?
   checkLoginStatus = () => {
+    console.log(baseURL);
     var config = {
       method: "GET",
       url: baseURL + "user/",
