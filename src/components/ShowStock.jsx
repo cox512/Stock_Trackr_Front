@@ -11,6 +11,7 @@ export default function ShowStock (props) {
     
     const [showNewListForm, setShowNewListForm] = useState(false)
     const [title, setTitle] = useState('');
+    const [seeAddToWatchlist, setSeeAddToWatchlist] = useState(true)
 
     const handleChange = (evt) => {
         setTitle(evt.target.value)
@@ -87,53 +88,47 @@ export default function ShowStock (props) {
         .catch((error) => console.error({Error: error}));
     }
 
+    const addToWatchlistClick = (evt) =>{
+        props.showWatchlists()
+        props.setAddList(true);
+        setSeeAddToWatchlist(false);
+    }
+
     return (
         <div>
             <h2>{props.symbol}</h2>
             <h4>Current Price: ${props.stockPrice}</h4>
             <div>
-            {/* On button click (when addList=true), dropdown menu shows all of the current watchlists, ending with the opportunity to create a new one. */}
-            { props.addList ?
-            <div>
-                {props.watchlists ?
-                <> 
-                <h3>What list would you like to add the stock to?</h3> 
-                <ul>
-                    {props.watchlists.map(list => {
-                        return (
-                            
-                            <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title}<button key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</button></li>
-                            
-                            
-                            
-                        )
-                    })}
-                </ul> 
-                <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
-                </>
-                :
-                <>
-                <h3>You don't currently have any watchlists. Create one to get started!</h3>
-                <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
-                </>
-                }
-            </div> 
-            :
-            <button type="button" onClick={() => props.setAddList(true)}>Add to Watchlist</button>
-            }
+                { seeAddToWatchlist ?
+                <button type="button" onClick={(evt) => addToWatchlistClick(evt)}>Add to Watchlist</button> : null}
+                {/* On button click (when addList=true), dropdown menu shows all of the current watchlists, ending with the opportunity to create a new one. */}
+                { props.addList ?
+                <div>
+                    {/* Different message depending on if they have any Watchlists */}
+                    {props.watchlists ?
+                    <h3>What list would you like to add the stock to?</h3> :
+                    <h3>You don't currently have any watchlists. Create one to get started!</h3>
+                    }
+                    <ul>
+                        {props.watchlists.map(list => {
+                            return (   
+                                <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title}<button key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</button></li>    
+                            )
+                        })}
+                    </ul> 
+                    <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
+                </div> 
+                : null 
+                } 
             </div>
-
-            <div>
             {/*  if showNewListForm is true, reveal the create new list form. If false, show the create New List button. */}
             { showNewListForm ?
                 <form onSubmit={(evt)=>createNewList(evt)}>
                     <label htmlFor="title">Title:</label>
                     <input type="text" id="title" onChange={(evt) => handleChange(evt)} />
                     <input type="submit" value="Create List"/>
-                </form> : null}
-            
-            </div> 
+                </form> 
+                : null}
         </div>
-    )
-    
+    )   
 }

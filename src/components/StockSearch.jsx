@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ShowStock from './ShowStock';
 
 export default class StockSearch extends Component {
     
@@ -12,6 +11,7 @@ export default class StockSearch extends Component {
     };
 
     handleStockSearch = (evt) => {
+        let ticker = this.state.ticker.toUpperCase()
         evt.preventDefault();
         let random = Math.floor(Math.random() * 2);
         const pickAPI_KEY = () => {
@@ -21,8 +21,8 @@ export default class StockSearch extends Component {
           ];
           return API_KEYS[random];
         };
-        let stockTicker = this.state.ticker;
-        let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockTicker}&interval=1min&outputsize=compact&apikey=${pickAPI_KEY}`;
+        // let stockTicker = ticker;
+        let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=1min&outputsize=compact&apikey=${pickAPI_KEY}`;
         axios(API_CALL)
           .then((res) => {
             console.log(res.data);

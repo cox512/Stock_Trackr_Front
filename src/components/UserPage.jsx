@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import StockSearch from "./StockSearch";
 import ShowStock from "./ShowStock";
 import axios from 'axios';
@@ -49,9 +49,9 @@ export default function UserPage (props) {
           });
     }
 
-    useEffect(() => {
-        showWatchlists();
-    }, []);
+    // useEffect(() => {
+    //     showWatchlists();
+    // }, []);
 
     return (
         <div>
@@ -82,6 +82,7 @@ export default function UserPage (props) {
                     watchlists={watchlists}
                     handleChange={handleChange}
                     handleWatchlistSet={handleWatchlistSet}
+                    showWatchlists={ showWatchlists }
                     addList={addList}
                     setAddList={setAddList}
                 />
