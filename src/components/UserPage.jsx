@@ -17,6 +17,7 @@ export default function UserPage (props) {
     const [eraseWatchlistArray, setEraseWatchlistArray] = useState(false)
     const [showStockArray, setShowStockArray] = useState(false)
     const [stockList, setStockList] = useState([])
+    const [currentWatchlist, setCurrentWatchlist] = useState('')
 
     const handleStockData = (data) => {
         setSymbol(data["Meta Data"]["2. Symbol"]);
@@ -33,6 +34,9 @@ export default function UserPage (props) {
         setEraseWatchlistArray(true)
     }
 
+    const getStockDetails = () => {
+
+    }
 
     const showWatchlists = () =>{
         //GET call to get all watchlists from the database. Ends with a setWatchlists call that adds the retrieved lists to the 'watchlists' array in state.
@@ -58,6 +62,13 @@ export default function UserPage (props) {
                 console.log(error);
           });
     }
+
+    // const handleStockDelete = (watchlistId) => {
+    //     console.log("handleDeleteStock")
+    //     // call to display all the stocks
+    //     getStockList(watchlistId)
+
+    // }
 
     const getStockList = (watchlistId) =>{
         //POST call to get all stocks in chosen watchlist from the database. Ends with a setStockList call that adds the retrieved stocks to the 'Stocks' array in state.
@@ -94,11 +105,13 @@ export default function UserPage (props) {
 
 
     return (
-        <div className="container">
-            <div className="stocks-search border">
+        <>
+        <div className="greeting">
                 <h3>Hello there, {props.currentUser["fname"]}</h3>
                 <h4>What company would you like to know more about today?</h4>
-            </div>
+        </div>
+        <div className="container">
+            
             <div className="show-stock border">
                 <h3>CURRENT STOCK</h3>
             {stockPrice ? (
@@ -134,16 +147,27 @@ export default function UserPage (props) {
                     showStockArray={showStockArray}
                     setShowStockArray={setShowStockArray}
                     getStockList={getStockList}
+                    setCurrentWatchlist={setCurrentWatchlist}
+                    currentWatchlist={currentWatchlist}
                     
                 />
+            </div>
+            <div className="border">
+            <h3>Stocks Saved in {currentWatchlist}</h3>
                 <StockList
                     showStockArray={showStockArray}
                     setShowStockArray={setShowStockArray}
                     stockList={stockList}
+                    getStockDetails={getStockDetails}
+                    baseURL={props.baseURL}
+                    getStockList={getStockList}
+                    currentWatchlist={currentWatchlist}
+                    // handleStockDelete={handleStockDelete}
 
                 />
             </div>   
         </div>
+        </>
     )
 }
 

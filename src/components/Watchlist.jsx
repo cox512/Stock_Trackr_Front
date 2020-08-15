@@ -36,6 +36,7 @@ export default function Watchlist(props) {
     }
 
     const addStock = (id) => {
+        props.setCurrentWatchlist(id)
         let symbol = props.symbol.toUpperCase();
         console.log(symbol)
         let data = JSON.stringify([symbol, id]);
@@ -89,6 +90,7 @@ export default function Watchlist(props) {
                     <div>
                     <h3>What list would you like to add the stock to?</h3>
                     {/* After a user adds a stock to a watchlist, hide the array of lists. */}
+                    <div id="left">
                     { !props.eraseWatchlistArray ? 
                     <ul>
                         {props.watchlists.map(list => {
@@ -100,6 +102,7 @@ export default function Watchlist(props) {
                             )
                         })}
                     </ul> : null }
+                    </div>
                     {/* After user adds a stock to a watchlist, show that watchlist's array of stocks */}
                     { props.showStockArray ? null
                     // Run a function that gets all of the stocks in the selected watchlist and displays them.
@@ -109,7 +112,7 @@ export default function Watchlist(props) {
                     <div>
                     {/* If they don't have any watchlists, let them know. */}
                     { props.watchlists ? null :
-                    <h3>You don't currently have any watchlists. Create one to get started!</h3> }
+                    <h3><i>You don't currently have any watchlists. Create one to get started!</i></h3> }
                     </div> 
                     
             </div>
