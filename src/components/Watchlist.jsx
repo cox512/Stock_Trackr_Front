@@ -3,15 +3,8 @@ import axios from 'axios';
 
 export default function Watchlist(props) {
     const [showNewListForm, setShowNewListForm] = useState(false)
-    const [seeAddToWatchlist, setSeeAddToWatchlist] = useState(true)
     const [title, setTitle] = useState('');
     
-    const addToWatchlistClick = (evt) =>{
-        props.showWatchlists()
-        props.setAddList(true);
-        setSeeAddToWatchlist(false);
-    }
-
     const handleChange = (evt) => {
         setTitle(evt.target.value)
     }
@@ -62,8 +55,10 @@ export default function Watchlist(props) {
             return res.data;
         })
         .then((data) => {
-            console.log(data.data);
-            props.handleWatchlistSet(data.data)
+            console.log(data.data.watchlist.id);
+            // props.handleWatchlistSet(data.data)
+            // Might need to pass the watchlist id here.
+            props.getStockList(data.data.watchlist.id)
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -91,16 +86,10 @@ export default function Watchlist(props) {
         <div>
             <div>
                 <h3>WATCHLISTS</h3>
-                {/* { seeAddToWatchlist ? 
-                // <button type="button" onClick={(evt) => addToWatchlistClick(evt)}>Add {props.symbol} to Watchlist</button> : null} */}
-                {/* On button click (when addList=true), dropdown menu shows all of the current watchlists, ending with the opportunity to create a new one. */}
-                {/* { props.addList ? */}
-                <div>
-                    {/* Different message depending on if they have any Watchlists */}
-                    
                     <div>
-                    <h3>What list would you like to add the stock to?</h3> 
-                    {props.watchlists ?
+                    <h3>What list would you like to add the stock to?</h3>
+                    {/* After a user adds a stock to a watchlist, hide the array of lists. */}
+                    { !props.eraseWatchlistArray ? 
                     <ul>
                         {props.watchlists.map(list => {
                             return (
@@ -110,14 +99,19 @@ export default function Watchlist(props) {
                                 </div>     
                             )
                         })}
-                    </ul> 
-                    :
+                    </ul> : null }
+                    {/* After user adds a stock to a watchlist, show that watchlist's array of stocks */}
+                    { props.showStockArray ? null
+                    // Run a function that gets all of the stocks in the selected watchlist and displays them.
+                    : null
+                    }
+                    </div>
+                    <div>
+                    {/* If they don't have any watchlists, let them know. */}
+                    { props.watchlists ? null :
                     <h3>You don't currently have any watchlists. Create one to get started!</h3> }
                     </div> 
-                    <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(false))}>Create new watchlist</button>
-                </div> 
-                {/* : null 
-                }  */}
+                    
             </div>
             <div>
             {/*  if showNewListForm is true, reveal the create new list form. If false, show the create New List button. */}
@@ -127,7 +121,7 @@ export default function Watchlist(props) {
                     <input type="text" id="title" onChange={(evt) => handleChange(evt)} />
                     <input type="submit" value="Create List"/>
                 </form> 
-                : null}
+                : <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(true))}>Create new watchlist</button>}
             </div>
         </div>
     )

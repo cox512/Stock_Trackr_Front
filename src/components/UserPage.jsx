@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import StockSearch from "./StockSearch";
 import ShowStock from "./ShowStock";
-import Watchlist from "./Watchlist"
+import Watchlist from "./Watchlist";
+import StockList from "./StockList";
 import axios from 'axios';
 import "../App.css";
 
@@ -13,6 +14,9 @@ export default function UserPage (props) {
     const [stockPrice, setStockPrice] = useState('');
     const [watchlists, setWatchlists] = useState([])
     const [addList, setAddList] = useState(true);
+    const [eraseWatchlistArray, setEraseWatchlistArray] = useState(false)
+    const [showStockArray, setShowStockArray] = useState(false)
+    const [stockList, setStockList] = useState([])
 
     const handleStockData = (data) => {
         setSymbol(data["Meta Data"]["2. Symbol"]);
@@ -24,11 +28,14 @@ export default function UserPage (props) {
     }
 
     const handleWatchlistSet = () => {
+        // Performs a new GET call to retrieve the new array of watchlists (post-creation of new list)
         showWatchlists()
-        setAddList(true);
+        setEraseWatchlistArray(true)
     }
 
+
     const showWatchlists = () =>{
+        //GET call to get all watchlists from the database. Ends with a setWatchlists call that adds the retrieved lists to the 'watchlists' array in state.
         console.log("showWatchlists")
         var config = {
             method: 'GET',
@@ -44,11 +51,40 @@ export default function UserPage (props) {
             return res.data;
           })
           .then((data) => {
-              console.log(data.data)
+                console.log(data.data)
                 setWatchlists(data.data)
           })
           .catch((error) => {
-            console.log(error);
+                console.log(error);
+          });
+    }
+
+    const getStockList = (watchlistId) =>{
+        //POST call to get all stocks in chosen watchlist from the database. Ends with a setStockList call that adds the retrieved stocks to the 'Stocks' array in state.
+        let data = JSON.stringify({watchlist: watchlistId})
+        console.log("getStockList")
+        console.log("watchlist ID: ", data)
+        var config = {
+            method: "POST",
+            url: props.baseURL + "api/v1/stocks/showList",
+            data: data,
+            headers: { 
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          };
+          axios(config)
+          .then((res) => {
+            console.log(res.data)
+            return res.data;
+          })
+          .then((data) => {
+                console.log(data.data)
+                setStockList(data.data)
+                setShowStockArray(true)
+          })
+          .catch((error) => {
+                console.log(error);
           });
     }
 
@@ -62,12 +98,6 @@ export default function UserPage (props) {
             <div className="stocks-search border">
                 <h3>Hello there, {props.currentUser["fname"]}</h3>
                 <h4>What company would you like to know more about today?</h4>
-                {/* <StockSearch
-                    handleChange={props.handleChange}
-                    handleStockSearch={props.handleStockSearch}
-                    ticker={ticker}
-                    handleStockData={handleStockData}
-                /> */}
             </div>
             <div className="show-stock border">
                 <h3>CURRENT STOCK</h3>
@@ -79,9 +109,7 @@ export default function UserPage (props) {
                     watchlists={watchlists}
                     handleChange={handleChange}
                     handleWatchlistSet={handleWatchlistSet}
-                    showWatchlists={ showWatchlists }
-                    addList={addList}
-                    setAddList={setAddList}
+                  
                 />
             ) : null}
                 <StockSearch
@@ -101,8 +129,18 @@ export default function UserPage (props) {
                     symbol={symbol}
                     handleWatchlistSet={handleWatchlistSet}
                     baseURL={props.baseURL}
-                    // showNewListForm={showNewListForm}
-                    // setShowNewListForm={setShowNewListForm} 
+                    eraseWatchlistArray={eraseWatchlistArray}
+                    setEraseWatchlistArray={setEraseWatchlistArray}
+                    showStockArray={showStockArray}
+                    setShowStockArray={setShowStockArray}
+                    getStockList={getStockList}
+                    
+                />
+                <StockList
+                    showStockArray={showStockArray}
+                    setShowStockArray={setShowStockArray}
+                    stockList={stockList}
+
                 />
             </div>   
         </div>
