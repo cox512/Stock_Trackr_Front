@@ -98,3 +98,14 @@ ul {
 .form > input {
     text-align: right;
 }
+
+.container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.border {
+    text-align: center;
+    border: 2px solid rgb(0, 21, 74);
+    margin: 1em;
+}

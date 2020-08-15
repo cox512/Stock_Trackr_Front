@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StockSearch from "./StockSearch";
 import ShowStock from "./ShowStock";
+import Watchlist from "./Watchlist"
 import axios from 'axios';
 import "../App.css";
 
 export default function UserPage (props) {
 
+    // const [showNewListForm, setShowNewListForm] = useState(false)
     const [ticker, setTicker] = useState('');
     const [symbol, setSymbol] = useState('');
     const [stockPrice, setStockPrice] = useState('');
     const [watchlists, setWatchlists] = useState([])
-    const [addList, setAddList] = useState(false);
+    const [addList, setAddList] = useState(true);
 
     const handleStockData = (data) => {
         setSymbol(data["Meta Data"]["2. Symbol"]);
@@ -50,27 +52,25 @@ export default function UserPage (props) {
           });
     }
 
-    return (
-        <div>
-               
-            <h3>Hello there, {props.currentUser["fname"]}</h3>
-            <h4>What company would you like to know more about today?</h4>
-            <StockSearch
-                handleChange={props.handleChange}
-                handleStockSearch={props.handleStockSearch}
-                ticker={ticker}
-                handleStockData={handleStockData}
-            />
-            {/* <button onClick={()=>showWatchlists()}>SHOW WATCHLISTS</button> */}
-            {/* <h4>Your Watchlists</h4>
-            <ul>
-                {watchlists.map(list => {
-                    return (
-                        <li key={list.id}>{list.title}</li>
-                    )
-                })}
-            </ul> */}
+    useEffect(() => {
+        showWatchlists();
+    }, []);
 
+
+    return (
+        <div className="container">
+            <div className="stocks-search border">
+                <h3>Hello there, {props.currentUser["fname"]}</h3>
+                <h4>What company would you like to know more about today?</h4>
+                {/* <StockSearch
+                    handleChange={props.handleChange}
+                    handleStockSearch={props.handleStockSearch}
+                    ticker={ticker}
+                    handleStockData={handleStockData}
+                /> */}
+            </div>
+            <div className="show-stock border">
+                <h3>CURRENT STOCK</h3>
             {stockPrice ? (
                 <ShowStock
                     stockPrice={stockPrice}
@@ -83,7 +83,28 @@ export default function UserPage (props) {
                     addList={addList}
                     setAddList={setAddList}
                 />
-            ) : null}   
+            ) : null}
+                <StockSearch
+                    handleChange={props.handleChange}
+                    handleStockSearch={props.handleStockSearch}
+                    ticker={ticker}
+                    handleStockData={handleStockData}
+                />
+            </div>
+            <div className="watchlist border">
+                <Watchlist
+                    showWatchlists={showWatchlists}
+                    addlist={addList}
+                    setAddList={setAddList}
+                    watchlists={watchlists}
+                    setWatchlists={setWatchlists}
+                    symbol={symbol}
+                    handleWatchlistSet={handleWatchlistSet}
+                    baseURL={props.baseURL}
+                    // showNewListForm={showNewListForm}
+                    // setShowNewListForm={setShowNewListForm} 
+                />
+            </div>   
         </div>
     )
 }

@@ -21,7 +21,6 @@ export default class StockSearch extends Component {
           ];
           return API_KEYS[random];
         };
-        // let stockTicker = ticker;
         let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=1min&outputsize=compact&apikey=${pickAPI_KEY}`;
         axios(API_CALL)
           .then((res) => {
@@ -43,7 +42,7 @@ export default class StockSearch extends Component {
           });
       };
     
-    render() {
+  render() {
     return (
         <div>
             <p>Enter a ticker symbol below</p>
@@ -52,9 +51,7 @@ export default class StockSearch extends Component {
                 <input type="text" id="ticker" placeholder="TICKER SYMBOL" onChange={(evt)=>this.handleChange(evt)}/><br/>
                 <input type="submit" value="Search"/>
             </form>
-            
-            
         </div>
-    )
+      )
     }
 }
