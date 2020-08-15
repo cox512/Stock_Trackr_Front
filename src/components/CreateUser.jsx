@@ -60,8 +60,8 @@ export default class CreateUser extends Component {
 
     render () {
         return (
-            <div>
-                <h3>New to 10Baggr?
+            <div className="form">
+                <h3 className="form-header">New to 10Baggr?<br/>
                 Create an account and get started!</h3>
                 { this.state.errorMessage ? 
                     <>
@@ -77,8 +77,8 @@ export default class CreateUser extends Component {
                         <input type="text" id="username" value={this.state.username} onChange={(evt)=> this.handleChange(evt)}/><br/>
                         <label htmlFor="password">Password:</label>
                         <input type="password" id="password" value={this.state.password} onChange={(evt)=> this.handleChange(evt)}/><br/>
-                        <label htmlFor="passwordConfirmation">Confirm Password:</label>
-                        <input type="password" id="passwordConfirmation" value={this.state.passwordConfirmation} onChange={(evt)=> this.handleChange(evt)}/><br/>
+                        {/* <label htmlFor="passwordConfirmation">Confirm Password:</label>
+                        <input type="password" id="passwordConfirmation" value={this.state.passwordConfirmation} onChange={(evt)=> this.handleChange(evt)}/><br/> */}
                         <label htmlFor="email">Email:</label>
                         <input type="email" id="email" value={this.state.email} onChange={(evt)=> this.handleChange(evt)}/><br/>
                         <button type='Submit'>Create Account</button>

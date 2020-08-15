@@ -3,19 +3,20 @@ import { Link } from 'react-router-dom';
 
 export default function NavBar(props) {
     return (
-        <div className='NavBar'>
-
-            <p>10baggr</p>
+        <div className='nav-container' id="NavBar">
+            <div className="whole-logo">
+            <h3 id="logo-text">
+              10
+              <img id="logo" src="./moneybag.png" alt="Logo" />
+              bagger
+            </h3>
+            </div>
+            <div className="links">
             {/* { props.currentUser ? */}
-            
-            <Link to='/account'>ACCOUNT</Link> 
-            <Link to='/userpage'>USER PAGE</Link>
-            
-            
-            <Link to='/'>HOME</Link> 
-            
-
-    
+            <Link className="link" to='/'>HOME</Link> 
+            <Link className="link" to='/userpage'>DASHBOARD</Link>
+            <Link className="link" to='/account'>ACCOUNT</Link>
+            </div> 
         </div>
     )
 }

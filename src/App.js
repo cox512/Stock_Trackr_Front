@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-// import Moment from "react-moment";
-// import "moment-timezone";
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
-import {
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-} from "@ant-design/icons";
-import Button from "antd/lib/button";
-import "antd/lib/button/style/css";
+
 import axios from "axios";
 import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 import Home from "./components/Home";
@@ -18,8 +9,6 @@ import Error from "./components/Error";
 import Account from "./components/Account";
 import UserPage from "./components/UserPage";
 
-const { SubMenu } = Menu;
-const { Header, Footer, Content, Sider } = Layout;
 const baseURL = "http://localhost:8000/" || "https://tenbagger.herokuapp.com/";
 
 export default class App extends Component {
