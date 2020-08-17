@@ -20,7 +20,6 @@ export default class Account extends Component {
         };
         axios(config)
         .then((res) => {
-            // console.log(res)
             this.props.handleLogout();
         })
         .catch((error) => {
@@ -83,18 +82,18 @@ export default class Account extends Component {
                 
                 <form onSubmit={(evt) => this.handleUpdate(evt)}>
                         <label htmlFor="fname">First Name:</label>
-                        <input type="text" id="fname" value={this.props.currentUser.fname} onChange={(evt)=> this.handleChange(evt)}/><br/>
+                        <input type="text" id="fname" value={this.props.currentUser.fname} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
                         <label htmlFor="lname">Last Name:</label>
-                        <input type="text" id="lname" value={this.props.currentUser.lname} onChange={(evt)=> this.handleChange(evt)}/><br/>
+                        <input type="text" id="lname" value={this.props.currentUser.lname} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
                         <label htmlFor="username">Username:</label>
-                        <input type="text" id="username" value={this.props.currentUser.username} onChange={(evt)=> this.handleChange(evt)}/><br/>
+                        <input type="text" id="username" value={this.props.currentUser.username} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
                         {/* <label htmlFor="password">Password:</label>
                         <input type="password" id="password" onChange={(evt)=> this.handleChange(evt)}/><br/>
                         <label htmlFor="passwordConfirmation">Confirm Password:</label>
                         <input type="password" id="passwordConfirmation" value={this.props.currentUser.passwordConfirmation} onChange={(evt)=> this.handleChange(evt)}/><br/> */}
                         <label htmlFor="email">Email:</label>
-                        <input type="email" id="email" value={this.props.currentUser.email} onChange={(evt)=> this.handleChange(evt)}/><br/>
-                        <button type='Submit'>Create Account</button>
+                        <input type="email" id="email" value={this.props.currentUser.email} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
+                        <button type='Submit'>Update Account</button>
                     </form>
                     
                 </Modal>

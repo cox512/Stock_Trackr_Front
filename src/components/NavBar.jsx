@@ -14,7 +14,7 @@ export default function NavBar(props) {
             <div className="links">
             {/* { props.currentUser ? */}
             <Link className="link" to='/'>HOME</Link> 
-            <Link className="link" to='/userpage'>DASHBOARD</Link>
+            <Link className="link" to='/dashboard'>DASHBOARD</Link>
             <Link className="link" to='/account'>ACCOUNT</Link>
             </div> 
         </div>

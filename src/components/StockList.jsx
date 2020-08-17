@@ -7,37 +7,37 @@ export default function StockList (props) {
 
     const deleteStock = (stockId) => {
         console.log(stockId)
-        // let data = JSON.stringify(stockId);
-        // console.log(data)
-        // let config = {
-        //     method: "DELETE",
-        //     url: props.baseURL + "api/v1/stocks/" + stockId, 
-        //     data: data,
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     withCredentials: true,
-        // };
-        // axios(config) 
-        // .then(() => {
-        //     console.log("in the axios delete call");
-        //     // props.handleStockDelete()
-        //     props.getStockList(props.currentWatchlist)
+        let data = JSON.stringify(stockId);
+        console.log(data)
+        let config = {
+            method: "DELETE",
+            url: props.baseURL + "api/v1/stocks/" + stockId, 
+            data: data,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        };
+        axios(config) 
+        .then(() => {
+            console.log("in the axios delete call");
+            // props.handleStockDelete()
+            props.getStockList(props.currentWatchlist)
             
             
-        // })
-        // .catch((error) => console.error({Error: error}));
+        })
+        .catch((error) => console.error({Error: error}));
     }
 
    
     
     const  stockStats =  () => {
+        console.log('stockStats')
         let random = Math.floor(Math.random() * 2);
         let API_KEY = [
             process.env.REACT_APP_API_KEY1,
             process.env.REACT_APP_API_KEY2,
           ];
-        // setStockDetails([]);
         const newStockDetails =[]
         props.stockList.map ( async stock => {
             const promise = await axios(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock.ticker}&apikey=${API_KEY[random]}`)
@@ -61,8 +61,9 @@ export default function StockList (props) {
                 console.error("Error:", error);
             })
             const result = await Object.entries(promise)
-            
+           
             newStockDetails.push(result)
+            console.log('newStockDetails', newStockDetails)
             return setStockDetails(newStockDetails)
             // console.log('result :', newStockDetails)
     })}
@@ -81,27 +82,28 @@ export default function StockList (props) {
                     <tr>
                         <th >Ticker</th>
                         <th>Price</th>
-                        <th>% Chng</th>
                         <th>$ Chng</th>
-                        <button type="button" onClick={()=>stockStats('AFL')}>x</button>
+                        <th>% Chng</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody >  
                  { stockDetails === null ? null :
                   stockDetails.map( (stock, i) => {
-                  
+   
                      return (
-                         console.log('map: ', stock[0][1]['Global Quote']['01. symbol'])
-                        //  <tr>{}</tr>
-                        // <tr className="container" key={i}>
-                        // <td className="pick-list"  onClick={()=> props.getStockDetails()}>{stockDetails[i][0]}</td>
-                        // <td className="pick-list" onClick={()=> props.getStockDetails()}>{stockDetails[i][4]}</td>
-                        // <td className="pick-list" onClick={()=> props.getStockDetails()}>{stockDetails[i][9]}</td>
-                        // <td className="pick-list" onClick={()=> props.getStockDetails()}>{stockDetails[i][8]}</td>
-                        // <button type="button" onClick={(evt)=>deleteStock(evt)}>x</button>
-                        //  </tr>  
-                    )
-                     })} 
+                         <div className="stock-row">
+                        <tr className="container" key={i}>
+                            <td className="pick-list"  onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['01. symbol']}</td>
+                            <td className="pick-list" onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['05. price']}</td>
+                            <td className="pick-list" onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['09. change']}</td>
+                            <td className="pick-list" onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['10. change percent']}</td> 
+                           
+                         </tr>
+                        <button type="button" onClick={()=>deleteStock(i)}>x</button>   
+                        </div>
+                    )}
+                     )} 
                 </tbody> 
         </table> :
             null

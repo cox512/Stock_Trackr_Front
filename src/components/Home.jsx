@@ -12,7 +12,7 @@ export default function Home(props) {
     // const [watchlists, setWatchlists] = useState([])
 
     if (props.loginStatus) {
-        return <Redirect to='/userpage'/>
+        return <Redirect to='/dashboard'/>
     }
 
     return (

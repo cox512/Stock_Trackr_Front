@@ -14,14 +14,11 @@ export default class StockSearch extends Component {
         let ticker = this.state.ticker.toUpperCase()
         evt.preventDefault();
         let random = Math.floor(Math.random() * 2);
-        const pickAPI_KEY = () => {
-          let API_KEYS = [
+        let API_KEY = [
             process.env.REACT_APP_API_KEY1,
             process.env.REACT_APP_API_KEY2,
           ];
-          return API_KEYS[random];
-        };
-        let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=1min&outputsize=compact&apikey=${pickAPI_KEY}`;
+        let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=1min&outputsize=compact&apikey=${API_KEY[random]}`;
         
         axios(API_CALL)
           .then((res) => {
@@ -31,12 +28,7 @@ export default class StockSearch extends Component {
           .then((data) => {
             console.log(data["Meta Data"]["2. Symbol"]);
             console.log(Object.entries(data["Time Series (1min)"])[0][1]["4. close"])
-            //Originally wrote it as below, but found a better way, I think.
-            // console.log(
-            //   Object.entries(Object.entries(data["Time Series (1min)"])[1][1])[3][1]
-            // );
             this.props.handleStockData(data);
-            
           })
           .catch((error) => {
             console.error("Error:", error);

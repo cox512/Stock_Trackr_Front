@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
-
+import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
 import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
 import Account from "./components/Account";
-import UserPage from "./components/UserPage";
+import Dashboard from "./components/Dashboard";
 
 const baseURL = "http://localhost:8000/" || "https://tenbagger.herokuapp.com/";
 
@@ -31,9 +31,8 @@ export default class App extends Component {
     });
   };
 
-  //Is there a way to run this without getting the CORS error in the console. Sessions?
   checkLoginStatus = () => {
-    console.log(baseURL);
+    // Upon mounting, look to see if there is currently a user logged in. If so make them the currentUser. If not, make sure there is no currentUser in state
     var config = {
       method: "GET",
       url: baseURL + "user/",
@@ -51,6 +50,7 @@ export default class App extends Component {
             loginStatus: false,
             currentUser: {},
           });
+          return <Redirect to="/" />;
         }
         console.log("logged in?", res.data);
       })
@@ -100,11 +100,9 @@ export default class App extends Component {
           <Switch>
             <Route
               exact
-              path="/userpage"
+              path="/dashboard"
               render={() => (
-                <UserPage
-                  // stockPrice={this.state.stockPrice}
-                  // symbol={this.state.symbol}
+                <Dashboard
                   currentUser={this.state.currentUser}
                   baseURL={baseURL}
                 />
