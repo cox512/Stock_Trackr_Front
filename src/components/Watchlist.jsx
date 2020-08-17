@@ -36,9 +36,13 @@ export default function Watchlist(props) {
     }
 
     const addStock = (id) => {
+        // Adds a new stock to the selected Watchlist (after the user clicks on the name.)
         props.setCurrentWatchlist(id)
         let symbol = props.symbol.toUpperCase();
-        console.log(symbol)
+        if (symbol === "") {
+            return props.getStockList(id)        
+        }         
+        // Rewrite this stringify call as an object when you have the time.
         let data = JSON.stringify([symbol, id]);
         console.log(data)
         let config = {
@@ -56,10 +60,9 @@ export default function Watchlist(props) {
             return res.data;
         })
         .then((data) => {
-            console.log(data.data.watchlist.id);
-            // props.handleWatchlistSet(data.data)
-            // Might need to pass the watchlist id here.
+            // console.log(data.data.watchlist.id);
             props.getStockList(data.data.watchlist.id)
+         
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -90,18 +93,20 @@ export default function Watchlist(props) {
                     <div>
                     <h3>What list would you like to add the stock to?</h3>
                     {/* After a user adds a stock to a watchlist, hide the array of lists. */}
-                    <div id="left">
+                    <div>
                     { !props.eraseWatchlistArray ? 
-                    <ul>
+                    <table>
                         {props.watchlists.map(list => {
                             return (
-                                <div className="container">  
-                                <li className="pick-list" key={list.id} onClick={()=>addStock(list.id)}>{list.title}</li>
-                                <button key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</button>
-                                </div>     
+                                <tbody key={list.id}>
+                                <tr className="container" >  
+                                    <td className="pick-list"  onClick={()=>addStock(list.id)}>{list.title}</td>
+                                    <td><button key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</button></td>
+                                </tr>
+                                </tbody>     
                             )
                         })}
-                    </ul> : null }
+                    </table> : null }
                     </div>
                     {/* After user adds a stock to a watchlist, show that watchlist's array of stocks */}
                     { props.showStockArray ? null

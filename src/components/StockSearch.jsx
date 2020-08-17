@@ -22,6 +22,7 @@ export default class StockSearch extends Component {
           return API_KEYS[random];
         };
         let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=1min&outputsize=compact&apikey=${pickAPI_KEY}`;
+        
         axios(API_CALL)
           .then((res) => {
             console.log(res.data);

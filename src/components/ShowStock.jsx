@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import axios from "axios";
+import React from 'react'
 
 export default function ShowStock (props) {
 //COME BACK AND TAKE A LOOK AT ROUNDING TO ONLY 2 DECIMAL PLACES. BOOKMARKED A MEDIUM ARTICLE IN PROJECT 4 FOLDER

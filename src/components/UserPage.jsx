@@ -18,6 +18,8 @@ export default function UserPage (props) {
     const [showStockArray, setShowStockArray] = useState(false)
     const [stockList, setStockList] = useState([])
     const [currentWatchlist, setCurrentWatchlist] = useState('')
+    const [stockDetails, setStockDetails] = useState([])
+
 
     const handleStockData = (data) => {
         setSymbol(data["Meta Data"]["2. Symbol"]);
@@ -35,8 +37,31 @@ export default function UserPage (props) {
     }
 
     const getStockDetails = () => {
-
+        
     }
+
+
+
+    // const retrieveStockTicker = (stockId) => {
+    //     console.log(stockId)
+    //     // let data = JSON.stringify({ id: stockId });
+    //     // console.log(data)
+    //     let config = {
+    //         method: "GET",
+    //         url: props.baseURL + "api/v1/stocks/" + stockId, 
+    //         // data: data,
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         withCredentials: true,
+    //     };
+    //     axios(config) 
+    //     .then((data) => {
+    //         console.log(data.data.data.ticker);            
+    //         return data.data.data.ticker;
+    //     })
+    //     .catch((error) => console.error({Error: error}));
+    // }
 
     const showWatchlists = () =>{
         //GET call to get all watchlists from the database. Ends with a setWatchlists call that adds the retrieved lists to the 'watchlists' array in state.
@@ -51,24 +76,13 @@ export default function UserPage (props) {
           };
           axios(config)
           .then((res) => {
-            console.log(res.data)
-            return res.data;
-          })
-          .then((data) => {
-                console.log(data.data)
-                setWatchlists(data.data)
+            console.log(res.data.data)
+            setWatchlists(res.data.data)
           })
           .catch((error) => {
                 console.log(error);
           });
     }
-
-    // const handleStockDelete = (watchlistId) => {
-    //     console.log("handleDeleteStock")
-    //     // call to display all the stocks
-    //     getStockList(watchlistId)
-
-    // }
 
     const getStockList = (watchlistId) =>{
         //POST call to get all stocks in chosen watchlist from the database. Ends with a setStockList call that adds the retrieved stocks to the 'Stocks' array in state.
@@ -93,6 +107,7 @@ export default function UserPage (props) {
                 console.log(data.data)
                 setStockList(data.data)
                 setShowStockArray(true)
+                // stockListMap()
           })
           .catch((error) => {
                 console.log(error);
@@ -103,6 +118,43 @@ export default function UserPage (props) {
         showWatchlists();
     }, []);
 
+    // const stockStats = (ticker) => {
+    //     let random = Math.floor(Math.random() * 2);
+    //     let API_KEY = [
+    //         process.env.REACT_APP_API_KEY1,
+    //         process.env.REACT_APP_API_KEY2,
+    //       ];
+    //     let API_CALL = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${API_KEY[random]}`;
+       
+    //     axios(API_CALL)
+    //       .then((res) => {
+    //         console.log(res.data['Global Quote']);
+    //     //     return res.data;
+    //     //   }).then((data) => {
+    //         return (res.data['Global Quote'])
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error:", error);
+    //       });     
+    // }
+
+    // const stockListMap = () => {
+    //     console.log("stockListMap")
+
+    //     stockList.map (stock => {
+    //         console.log("stock")
+    //         stockStats(stock.ticker)
+    //         .then((data) => {
+    //         console.log(data)
+    //         handleStockDetails(data)
+    //         })
+    // })}
+    
+
+    // const handleStockDetails = (data) => {
+    //     setStockDetails(data)
+    //     console.log(stockDetails)
+    // }
 
     return (
         <>
@@ -149,6 +201,7 @@ export default function UserPage (props) {
                     getStockList={getStockList}
                     setCurrentWatchlist={setCurrentWatchlist}
                     currentWatchlist={currentWatchlist}
+                    // stockListMap={ stockListMap }
                     
                 />
             </div>
@@ -162,7 +215,8 @@ export default function UserPage (props) {
                     baseURL={props.baseURL}
                     getStockList={getStockList}
                     currentWatchlist={currentWatchlist}
-                    // handleStockDelete={handleStockDelete}
+                 
+                   
 
                 />
             </div>   

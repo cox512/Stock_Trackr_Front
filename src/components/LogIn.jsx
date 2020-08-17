@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Form, Input, Button } from 'antd';
-
-// const layout = {
-//     labelCol: { span: 8 },
-//     wrapperCol: { span: 16 },
-//     };
-
-// const tailLayout = {
-//     wrapperCol: { offset: 8, span: 16 },
-//     };
   
 export default class LogIn extends Component {
     state = {

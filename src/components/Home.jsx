@@ -1,12 +1,11 @@
 import React from 'react';
 import CreateUser from './CreateUser';
 import LogIn from './LogIn';
-import { Layout, Menu, Breadcrumb } from 'antd';
-import { Redirect, Link, BrowserRouter } from "react-router-dom";
+import { Layout } from 'antd';
+import { Redirect} from "react-router-dom";
 import "../App.css";
 
-const { Header, Content, Footer } = Layout;
-const { SubMenu, parentMenu } = Menu;
+const { Footer } = Layout;
 
 export default function Home(props) {
 
