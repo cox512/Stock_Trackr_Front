@@ -90,8 +90,8 @@ class App extends Component {
     if (!this.state.loginStatus) {
       console.log("User is logged out.");
       // Redirect home isn't working for some reason.
-      // return <Redirect to="/" />;
-      this.history.push("/");
+      return <Redirect to="/" />;
+      // this.state.history.push("/");
     }
   };
 

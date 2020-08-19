@@ -1,10 +1,17 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Modal, Button } from 'antd';
+// import Button from 'react-bootstrap/Button'
 import "../App.css";
 import { Redirect, withRouter } from "react-router-dom";
 
 export default class Account extends Component {
+    state = {
+        fname: '',
+        lname: '',
+        username: '',
+        email: '',
+    }
     
     logout = () => {        
         var config = {
@@ -20,6 +27,15 @@ export default class Account extends Component {
             console.log(error);
         });
     }
+
+    handleChange = (evt) => {
+        this.setState({
+            fname: evt.target.value,
+            lname: evt.target.value,
+            username: evt.target.value,
+            email: evt.target.value,
+        });
+      };
 
     handleUpdate = (evt) => {
         evt.preventDefault();
@@ -57,7 +73,7 @@ export default class Account extends Component {
         console.log(id)
         let config = {
             method: "DELETE",
-            url: this.props.baseURL + "api/v1/stocks/" + id, 
+            url: this.props.baseURL + "user/" + id, 
             data: id,
             headers: {
                 "Content-Type": "application/json",
@@ -68,7 +84,9 @@ export default class Account extends Component {
         .then(() => {
             console.log("in the axios delete call");
             this.props.handleLogout();
-            return <Redirect to="/"/>
+        }).then(() => {
+            //redirect isn't working
+            return <Redirect to="/" />;
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -96,15 +114,13 @@ export default class Account extends Component {
                 
                 <form onSubmit={(evt) => this.handleUpdate(evt)}>
                         <label htmlFor="fname">First Name:</label>
-                        <input type="text" id="fname" value={this.props.currentUser.fname} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
+                        <input type="text" id="fname" 
+                        value={this.props.currentUser.fname}
+                         onChange={(evt)=> this.handleChange(evt)}/><br/>
                         <label htmlFor="lname">Last Name:</label>
                         <input type="text" id="lname" value={this.props.currentUser.lname} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
                         <label htmlFor="username">Username:</label>
                         <input type="text" id="username" value={this.props.currentUser.username} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
-                        {/* <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" onChange={(evt)=> this.handleChange(evt)}/><br/>
-                        <label htmlFor="passwordConfirmation">Confirm Password:</label>
-                        <input type="password" id="passwordConfirmation" value={this.props.currentUser.passwordConfirmation} onChange={(evt)=> this.handleChange(evt)}/><br/> */}
                         <label htmlFor="email">Email:</label>
                         <input type="email" id="email" value={this.props.currentUser.email} onChange={(evt)=> this.props.handleChange(evt)}/><br/>
                         <button type='Submit'>Update Account</button>

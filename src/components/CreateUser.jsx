@@ -56,7 +56,7 @@ export default class CreateUser extends Component {
   render () {
     return (
       <div className="form">
-        <h3 className="form-header">New to 10Baggr?<br/>
+        <h3 className="form-header">New to 10bagger?<br/>
           Create an account and get started!</h3>
         { this.state.errorMessage ? 
         <>

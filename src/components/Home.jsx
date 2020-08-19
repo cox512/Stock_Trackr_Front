@@ -42,11 +42,11 @@ export default function Home(props) {
                 <div className="leads">
                     <h3 id="lead-lines">Research stocks ... <br/>
                     Add them to your watchlists ... <br/>
-                    Find the next 10Baggr!
+                    Find the next 10bagger!
                     </h3>
                 </div>
             </div>
-            <footer style={{ textAlign: 'left' }}>ten-bagger ©2020</footer>
+            <footer style={{ textAlign: 'left' }}>10bagger ©2020</footer>
         </div>
     )
 }
