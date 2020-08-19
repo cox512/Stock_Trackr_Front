@@ -7,16 +7,16 @@ import axios from 'axios';
 import { Redirect, Route } from "react-router-dom";
 import "../App.css";
 import CompanyOverview from './CompanyOverview';
+import { Modal, Button } from 'antd';
+
+
 
 export default function Dashboard (props) {
-
-    // const [showNewListForm, setShowNewListForm] = useState(false)
+    
     const [ticker, setTicker] = useState('');
-    const [symbol, setSymbol] = useState('');
-    const [stockPrice, setStockPrice] = useState('');
+    const [currentStock, setCurrentStock] = useState("")
     const [watchlists, setWatchlists] = useState([])
     const [addList, setAddList] = useState(true);
-    const [eraseWatchlistArray, setEraseWatchlistArray] = useState(false)
     const [showStockArray, setShowStockArray] = useState(false)
     const [stockList, setStockList] = useState([])
     const [currentWatchlist, setCurrentWatchlist] = useState('')
@@ -26,11 +26,9 @@ export default function Dashboard (props) {
     const [balanceSheet, setBalanceSheet] = useState(null)
     const [cashFlowStatement, setCashFlowStatement] = useState(null)
 
-
     const handleStockData = (data) => {
-        setSymbol(data["Meta Data"]["2. Symbol"]);
-        setStockPrice(Object.entries(data["Time Series (1min)"])[0][1]["4. close"]);
-        getOverview(data["Meta Data"]["2. Symbol"])
+        setCurrentStock({ symbol: data["Global Quote"]["01. symbol"], price: data["Global Quote"]["05. price"], $change: data["Global Quote"]["09. change"], pct_change: data["Global Quote"]["10. change percent"]});
+        getOverview(data["Global Quote"]["01. symbol"])
     }
 
     const handleChange = (evt) => {
@@ -40,11 +38,6 @@ export default function Dashboard (props) {
     const handleWatchlistSet = () => {
         // Performs a new GET call to retrieve the new array of watchlists (post-creation of new list)
         showWatchlists()
-        setEraseWatchlistArray(true)
-    }
-
-    const getStockDetails = () => {
-        
     }
 
     const showWatchlists = () =>{
@@ -71,7 +64,7 @@ export default function Dashboard (props) {
     const getStockList = (watchlistId) =>{
         //POST call to get all stocks in chosen watchlist from the database. Ends with a setStockList call that adds the retrieved stocks to the 'Stocks' array in state.
         let data = JSON.stringify({watchlist: watchlistId})
-        console.log("getStockList")
+        console.log("getStockList function")
         console.log("watchlist ID: ", data)
         var config = {
             method: "POST",
@@ -82,30 +75,24 @@ export default function Dashboard (props) {
             },
             withCredentials: true,
           };
-          axios(config)
-          .then((res) => {
-            console.log(res.data)
-            return res.data;
-          })
-          .then((data) => {
-                console.log(data.data)
-                setStockList(data.data)
-                setShowStockArray(true)
-                // stockListMap()
-          })
-          .catch((error) => {
-                console.log(error);
-          });
+        
+        axios(config)
+        .then((res) => {
+            console.log('data narrowed: ', res.data.data)
+            setStockList(res.data.data)
+            setShowStockArray(true)  
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     useEffect(() => {
-        
         showWatchlists();
     }, []);
 
     const getOverview = (symbol) => {
-        console.log(symbol)
-        console.log('getOverview')
+        console.log('getOverview Symbol:', symbol)
         let random = Math.floor(Math.random() * 2);
         let API_KEY = [
             process.env.REACT_APP_API_KEY1,
@@ -113,9 +100,7 @@ export default function Dashboard (props) {
           ];
         axios(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
-            // console.log(Object.entries(res.data))
             console.log(res.data)
-            // let overview = Object.entries(JSON.stringify(res.data))
             setOverview(res.data)
         })
         .catch((error) => {
@@ -193,21 +178,20 @@ export default function Dashboard (props) {
         
         <div className="greeting">
                 <h3>Hello there, {props.currentUser["fname"]}</h3>
-                <h4>What company would you like to know more about today?</h4>
+                <h4>What company would you like to research today?</h4>
         </div>
         <div className="container">
             
             <div className="show-stock border">
                 <h3>CURRENT STOCK</h3>
-            {stockPrice ? (
+            {currentStock ? (
                 <ShowStock
-                    stockPrice={stockPrice}
-                    symbol={symbol}
+                    currentStock={currentStock}
                     baseURL={props.baseURL}
                     watchlists={watchlists}
                     handleChange={handleChange}
                     handleWatchlistSet={handleWatchlistSet}
-                  
+                    ticker={ticker}
                 />
             ) : null}
                 <StockSearch
@@ -216,6 +200,7 @@ export default function Dashboard (props) {
                     ticker={ticker}
                     handleStockData={handleStockData}
                     getOverview={getOverview}
+                    currentStock={currentStock}
                 />
             </div>
             <div className="watchlist border">
@@ -225,38 +210,35 @@ export default function Dashboard (props) {
                     setAddList={setAddList}
                     watchlists={watchlists}
                     setWatchlists={setWatchlists}
-                    symbol={symbol}
                     handleWatchlistSet={handleWatchlistSet}
                     baseURL={props.baseURL}
-                    eraseWatchlistArray={eraseWatchlistArray}
-                    setEraseWatchlistArray={setEraseWatchlistArray}
                     showStockArray={showStockArray}
                     setShowStockArray={setShowStockArray}
                     getStockList={getStockList}
                     setCurrentWatchlist={setCurrentWatchlist}
                     currentWatchlist={currentWatchlist}
-                    // stockListMap={ stockListMap }
+                    currentStock={currentStock}
                     
                 />
             </div>
-            <div className="border">
-            <h3>Stocks Saved in {currentWatchlist}</h3>
-                <StockList
-                    showStockArray={showStockArray}
-                    setShowStockArray={setShowStockArray}
-                    stockList={stockList}
-                    getStockDetails={getStockDetails}
-                    baseURL={props.baseURL}
-                    getStockList={getStockList}
-                    currentWatchlist={currentWatchlist}
-
-                />
-            </div> 
+            { currentWatchlist ?
+                <div className="border">
+                    <h3>Stocks Saved in {currentWatchlist.title}</h3> 
+                    <StockList
+                        showStockArray={showStockArray}
+                        setShowStockArray={setShowStockArray}
+                        stockList={stockList}
+                        baseURL={props.baseURL}
+                        getStockList={getStockList}
+                        currentWatchlist={currentWatchlist}
+                    />
+                </div> : null
+            }
            
         </div>
         <div className="border">
                 <CompanyOverview 
-                    symbol={symbol}
+                    currentStock={currentStock}
                     overview={overview}
                     setOverview={setOverview}
                     getOverview={getOverview}
@@ -265,7 +247,8 @@ export default function Dashboard (props) {
                     getCashFlowStatement={getCashFlowStatement}
 
                 />    
-        </div> 
+        </div>
+        
         <div >
             <img className="foot-img" src="./stock-chart.jpg" alt="stock chart"/>
         </div> 

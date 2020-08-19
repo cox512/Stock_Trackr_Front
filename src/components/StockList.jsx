@@ -1,8 +1,11 @@
 import React, { useState, useEffect }  from 'react'
 import axios from 'axios'
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table"
 
 export default function StockList (props) {
     const [stockDetails, setStockDetails] = useState(null)
+    const [renderStocks, setRenderStocks] = useState(false)
 
 
     const deleteStock = (stockId) => {
@@ -29,86 +32,53 @@ export default function StockList (props) {
         .catch((error) => console.error({Error: error}));
     }
 
-   
+    // useEffect calls stockStats upon the state of showStockArray chaning. It cycles through all of the stocks in the watchlist and gets information on all of them and  puts them into the stockDetails array.HOLD ON THIS FOR NOW. There's a promises issue.
+    // const  stockStats = () => {
+    //     console.log('stockStats')
+    //     let random = Math.floor(Math.random() * 2);
+    //     let API_KEY = [
+    //         process.env.REACT_APP_API_KEY1,
+    //         process.env.REACT_APP_API_KEY2,
+    //       ];
+    //     const newStockDetails =[]
+    //     props.stockList.map (async stock => {
+    //         const promise = await axios(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock.ticker}&apikey=${API_KEY[random]}`)
+    //         .catch((error) => {
+    //             console.error("Error:", error);
+    //         })
+    //         const result = await Object.entries(promise)
+    //         newStockDetails.push(result)
+    //         console.log('newStockDetails', newStockDetails)
+    //         return setStockDetails(newStockDetails)
+    //     })
+    // }
     
-    const  stockStats =  () => {
-        console.log('stockStats')
-        let random = Math.floor(Math.random() * 2);
-        let API_KEY = [
-            process.env.REACT_APP_API_KEY1,
-            process.env.REACT_APP_API_KEY2,
-          ];
-        const newStockDetails =[]
-        props.stockList.map ( async stock => {
-            const promise = await axios(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock.ticker}&apikey=${API_KEY[random]}`)
-
-            // .then(res => {
-            //     // console.log(res.data['Global Quote']);
-            //     return res.data['Global Quote'];
-            // }).then(data => {
-            //     console.log(data)
-            //     let dataArray = Object.entries(data)
-            //     console.log(dataArray)
-            //     // const newStockDetails = [dataArray, ...stockDetails]
-            //     newStockDetails.push(dataArray)
-            //     console.log(newStockDetails)
-                
-            // }).then(() => {
-            //     setStockDetails('5')
-            //     console.log('stockDetails: ', stockDetails)
-            // })
-            .catch((error) => {
-                console.error("Error:", error);
-            })
-            const result = await Object.entries(promise)
-           
-            newStockDetails.push(result)
-            console.log('newStockDetails', newStockDetails)
-            return setStockDetails(newStockDetails)
-            // console.log('result :', newStockDetails)
-    })}
-
-    useEffect(() => {
-        console.log('showStockArray has changed')
-        stockStats()
-    }, [props.showStockArray])
+    // useEffect(() => {
+    //     console.log('showStockArray has changed')
+    //     stockStats()
+    // }, [props.showStockArray])
     
-
     return (
-        <div>
+        <div >
+            If there are stocks in the Watchlist, list them all
             { props.showStockArray ? 
-            <table>
+            <Table >
                 <thead>
                     <tr>
-                        <th >Ticker</th>
-                        <th>Price</th>
-                        <th>$ Chng</th>
-                        <th>% Chng</th>
-                        <th>Delete</th>
+                        <th>Stock</th>
                     </tr>
                 </thead>
-                <tbody >  
-                 { stockDetails === null ? null :
-                  stockDetails.map( (stock, i) => {
-   
-                     return (
-                         <div className="stock-row">
-                        <tr className="container" key={i}>
-                            <td className="pick-list"  onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['01. symbol']}</td>
-                            <td className="pick-list" onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['05. price']}</td>
-                            <td className="pick-list" onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['09. change']}</td>
-                            <td className="pick-list" onClick={()=> props.getStockDetails()}>{stock[0][1]['Global Quote']['10. change percent']}</td> 
-                           
+                <tbody>  
+                { props.stockList.map(stock => {
+                    return (
+                        <tr key={stock.id}>
+                            <td className="pick-list">{stock.ticker}</td>
+                            <td className="pick-list"><Button  variant="danger" type="button" onClick={()=>deleteStock(stock.id)}>x</Button></td>
                          </tr>
-                        <button type="button" onClick={()=>deleteStock(i)}>x</button>   
-                        </div>
                     )}
-                     )} 
-                </tbody> 
-        </table> :
-            null
-            }
-                
+                )}
+                </tbody>
+            </Table> : null } 
         </div>
     )
     

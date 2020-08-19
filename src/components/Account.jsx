@@ -3,13 +3,7 @@ import axios from 'axios'
 import { Modal, Button } from 'antd';
 
 export default class Account extends Component {
-    state = {
-        modalVisible: false,
-      };
     
-    setModalVisible(modalVisible) {
-        this.setState({ modalVisible });
-      }
     
 
     logout = () => {        
@@ -69,15 +63,15 @@ export default class Account extends Component {
                 <button type="button" onClick={()=>this.logout()}>Logout</button>
             </div>
             <div>
-                <Button type="primary" onClick={() => this.setModalVisible(true)}>
+                <Button type="primary" onClick={() => this.props.setModalVisible(true)}>
                 Update account info
                 </Button>
                 <Modal
                 title="Update your account information"
                 centered
-                visible={this.state.modalVisible}
-                onOk={() => this.setModalVisible(false)}
-                onCancel={() => this.setModalVisible(false)}
+                visible={this.props.modalVisible}
+                onOk={() => this.props.setModalVisible(false)}
+                onCancel={() => this.props.setModalVisible(false)}
                 >
                 
                 <form onSubmit={(evt) => this.handleUpdate(evt)}>

@@ -126,9 +126,14 @@ ul {
 
 .foot-img {
     width: 100%;
-    max-height: 25em;
+    max-height: 100vh;
 }
 
 .overview-div {
     text-align: left;
+}
+
+.stock-list {
+    display: flex;
+    justify-content: space-around;
 }

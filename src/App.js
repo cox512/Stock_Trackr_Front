@@ -3,6 +3,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+
 import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
@@ -16,6 +18,12 @@ export default class App extends Component {
     currentUser: {},
     loginStatus: false,
     showLoginBox: false,
+
+    modalVisible: false,
+  };
+
+  setModalVisible = (modalVisible) => {
+    this.setState({ modalVisible });
   };
 
   handleChange = (evt) => {
@@ -105,6 +113,8 @@ export default class App extends Component {
                 <Dashboard
                   currentUser={this.state.currentUser}
                   baseURL={baseURL}
+                  modalVisible={this.state.modalVisible}
+                  setModalVisible={this.setModalVisible}
                 />
               )}
             />
@@ -136,6 +146,8 @@ export default class App extends Component {
                   baseURL={baseURL}
                   handleLogout={this.handleLogout}
                   handleChange={this.handleChange}
+                  modalVisible={this.state.modalVisible}
+                  setModalVisible={this.setModalVisible}
                 />
               )}
             />

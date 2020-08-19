@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
+
 
 export default function Watchlist(props) {
     const [showNewListForm, setShowNewListForm] = useState(false)
@@ -36,12 +40,16 @@ export default function Watchlist(props) {
     }
 
     const addStock = (id) => {
-        // Adds a new stock to the selected Watchlist (after the user clicks on the name.)
+        // Add a new stock to the selected Watchlist (after the user clicks on the name.)
+        console.log("currentWatchlist ID: ", id)
         props.setCurrentWatchlist(id)
-        let symbol = props.symbol.toUpperCase();
-        if (symbol === "") {
+        let symbol = props.currentStock.symbol;
+        console.log('addStock symbol: ', symbol)
+        //Come back and check out this function call !!!!!
+        if (symbol === undefined) {
+            console.log('addStock if statement')
             return props.getStockList(id)        
-        }         
+        }   
         // Rewrite this stringify call as an object when you have the time.
         let data = JSON.stringify([symbol, id]);
         console.log(data)
@@ -56,13 +64,8 @@ export default function Watchlist(props) {
         };
         axios(config) 
         .then((res) => {
-            // console.log(res);            
-            return res.data;
-        })
-        .then((data) => {
-            // console.log(data.data.watchlist.id);
-            props.getStockList(data.data.watchlist.id)
-         
+            console.log('addStock returns: ', res);            
+            // props.getStockList(res.data.data.watchlist.id)
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -92,22 +95,19 @@ export default function Watchlist(props) {
                 <h3>WATCHLISTS</h3>
                     <div>
                     <h3>What list would you like to add the stock to?</h3>
-                    {/* After a user adds a stock to a watchlist, hide the array of lists. */}
-                    <div>
-                    { !props.eraseWatchlistArray ? 
-                    <table>
-                        {props.watchlists.map(list => {
-                            return (
-                                <tbody key={list.id}>
-                                <tr className="container" >  
-                                    <td className="pick-list"  onClick={()=>addStock(list.id)}>{list.title}</td>
-                                    <td><button key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</button></td>
+                    <Table>
+                        <tbody >
+                            {props.watchlists.map(list => {
+                            return (    
+                                <tr key={list.id}>  
+                                    <td className="pick-list" onClick={()=>addStock(list.id)}>{list.title}</td>
+                                    <td className="pick-list"><Button  variant="danger" key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</Button></td>
                                 </tr>
-                                </tbody>     
-                            )
-                        })}
-                    </table> : null }
-                    </div>
+                            )})} 
+                        </tbody>     
+                    </Table>
+                    
+                    
                     {/* After user adds a stock to a watchlist, show that watchlist's array of stocks */}
                     { props.showStockArray ? null
                     // Run a function that gets all of the stocks in the selected watchlist and displays them.

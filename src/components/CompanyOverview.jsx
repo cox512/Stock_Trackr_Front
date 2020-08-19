@@ -1,18 +1,33 @@
 import React from 'react'
+import { Modal, Button } from 'antd';
+
 
 export default function CompanyOverview (props) {
     
-    
-
     return (
         <>
             {props.overview ?
             <>
                 <div>
-                <button onClick={() => props.getIncomeStatement(props.overview.Symbol)}>Income Statement</button>
-                <button onClick={() => props.getBalanceSheet(props.overview.Symbol)}>Balance Sheet</button>
-                <button onClick={() => props.getCashFlowStatement(props.overview.Symbol)}>Cash Flow Statement</button>
+                {/* <Button type="primary" onClick={() => props.setModalVisible(true)}>
+                Update account info
+                </Button> */}
+                <Button type="primary" onClick={() => props.getIncomeStatement(props.overview.Symbol)}>Income Statement</Button>
+                <Button onClick={() => props.getBalanceSheet(props.overview.Symbol)}>Balance Sheet</Button>
+                <Button onClick={() => props.getCashFlowStatement(props.overview.Symbol)}>Cash Flow Statement</Button>
                 </div>
+
+                <div>
+                    {/* Modal to display the income statement on button click*/}
+                    <Modal
+                            title="Income Statement"
+                            centered
+                            visible={props.modalVisible}
+                            onOk={() => props.setModalVisible(false)}
+                            onCancel={() => props.setModalVisible(false)}
+                            >    
+                    </Modal>
+                </div> 
 
                 <div className="overview-div">
                 <p><b>Company Name:</b> {props.overview.Name}</p>
@@ -23,14 +38,8 @@ export default function CompanyOverview (props) {
                 <p><b>52-Week High:</b>{props.overview["52WeekHigh"]}</p>
                 <p><b>52-Week Low:</b>{props.overview["52WeekLow"]}</p>
                 <p><b>Overview:</b> {props.overview.Description}</p>
-
-
                 </div>
-            </>
-             : null
+            </> : null
         }
-                
-    </>
-    )
-    
+    </>)
 }
