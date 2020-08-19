@@ -2,9 +2,14 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  BrowserRouter,
+  Redirect,
+  withRouter,
+} from "react-router-dom";
 import Button from "react-bootstrap/Button";
-
 import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
@@ -13,7 +18,7 @@ import Dashboard from "./components/Dashboard";
 
 const baseURL = "http://localhost:8000/" || "https://tenbagger.herokuapp.com/";
 
-export default class App extends Component {
+class App extends Component {
   state = {
     currentUser: {},
     loginStatus: false,
@@ -83,8 +88,10 @@ export default class App extends Component {
       currentUser: "",
     });
     if (!this.state.loginStatus) {
-      console.log("this works");
-      return <Redirect to="/" />;
+      console.log("User is logged out.");
+      // Redirect home isn't working for some reason.
+      // return <Redirect to="/" />;
+      this.history.push("/");
     }
   };
 
@@ -158,3 +165,6 @@ export default class App extends Component {
     );
   }
 }
+
+const AppWithRouter = withRouter(App);
+export default AppWithRouter;

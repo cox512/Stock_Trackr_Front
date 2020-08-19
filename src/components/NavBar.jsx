@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function NavBar(props) {
     return (
-        <div className='nav-container' id="NavBar">
+        <div className='nav-bar'>
             <div className="whole-logo">
             <h3 id="logo-text">
               10

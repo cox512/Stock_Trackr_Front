@@ -1,9 +1,6 @@
 
 @import '~antd/dist/antd.css';
 
-/* body {
-    background-color: red;
-} */
 ul {
     list-style: none;
 }
@@ -37,23 +34,18 @@ ul {
     color: #BEBFC0;
     font-size: 2em;
     margin: 0 2em;
-    /* display: flex; */
-    /* align-self: center; */
-
 }
 
-.nav-container {
+.nav-bar {
     display: flex;
     justify-content: space-between;
-    
     background-color: rgb(0, 21, 74)
 }
 
 .links {
     display: flex;
     font-size: 1.5em;
-    /* margin-top: 2.4em; */
-    margin-right: 1.5em;
+    /* margin-right: 1.5em; */
 }
 
 .link {
@@ -61,7 +53,6 @@ ul {
     color: #BEBFC0;
     align-self: center;
     font-weight: bold;
-
 }
 
 .whole-logo {
@@ -79,7 +70,6 @@ ul {
     top: 20%;
     font-weight: bold;
     font-size: 2.6em;
-    /* background-color: rgba(234, 237, 225, .5); */
     height: 100vh;
     background-image: linear-gradient(0deg,rgba(234, 237, 225, .5), rgba(234, 237, 225, 0));
 }
@@ -87,7 +77,7 @@ ul {
 #lead-lines {
     align-self: center;
     font-style: bold;
-    
+    font-size: 1em;
 }
 
 .form-header {

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import StockSearch from "./StockSearch";
-import ShowStock from "./ShowStock";
+// import ShowStock from "./ShowStock";
 import Watchlist from "./Watchlist";
 import StockList from "./StockList";
 import axios from 'axios';
-import { Redirect, Route } from "react-router-dom";
+// import { Redirect, Route } from "react-router-dom";
 import "../App.css";
 import CompanyOverview from './CompanyOverview';
-import { Modal, Button } from 'antd';
-
-
+// import { Modal, Button } from 'antd';
 
 export default function Dashboard (props) {
     
@@ -20,7 +18,6 @@ export default function Dashboard (props) {
     const [showStockArray, setShowStockArray] = useState(false)
     const [stockList, setStockList] = useState([])
     const [currentWatchlist, setCurrentWatchlist] = useState('')
-    const [stockDetails, setStockDetails] = useState([])
     const [overview, setOverview] = useState(null)
     const [incomeStatement, setIncomeStatement] = useState(null)
     const [balanceSheet, setBalanceSheet] = useState(null)
@@ -31,9 +28,9 @@ export default function Dashboard (props) {
         getOverview(data["Global Quote"]["01. symbol"])
     }
 
-    const handleChange = (evt) => {
-        setWatchlists(evt.target.value)
-    }
+    // const handleChange = (evt) => {
+    //     setWatchlists(evt.target.value)
+    // }
 
     const handleWatchlistSet = () => {
         // Performs a new GET call to retrieve the new array of watchlists (post-creation of new list)
@@ -42,7 +39,6 @@ export default function Dashboard (props) {
 
     const showWatchlists = () =>{
         //GET call to get all watchlists from the database. Ends with a setWatchlists call that adds the retrieved lists to the 'watchlists' array in state.
-        console.log("showWatchlists")
         var config = {
             method: 'GET',
             url: props.baseURL + 'api/v1/watchlists/',
@@ -53,7 +49,7 @@ export default function Dashboard (props) {
           };
           axios(config)
           .then((res) => {
-            console.log(res.data.data)
+            console.log("showWatchlist data:", res.data.data)
             setWatchlists(res.data.data)
           })
           .catch((error) => {
@@ -171,11 +167,6 @@ export default function Dashboard (props) {
 
     return (
         <>
-        {/* <Route exact path="/">
-            {props.currentUser ? null : 
-            <Redirect to="/" />}
-        </Route> */}
-        
         <div className="greeting">
                 <h3>Hello there, {props.currentUser["fname"]}</h3>
                 <h4>What company would you like to research today?</h4>
@@ -184,7 +175,7 @@ export default function Dashboard (props) {
             
             <div className="show-stock border">
                 <h3>CURRENT STOCK</h3>
-            {currentStock ? (
+            {/* {currentStock ? (
                 <ShowStock
                     currentStock={currentStock}
                     baseURL={props.baseURL}
@@ -193,7 +184,7 @@ export default function Dashboard (props) {
                     handleWatchlistSet={handleWatchlistSet}
                     ticker={ticker}
                 />
-            ) : null}
+            ) : null} */}
                 <StockSearch
                     handleChange={props.handleChange}
                     handleStockSearch={props.handleStockSearch}
@@ -223,7 +214,6 @@ export default function Dashboard (props) {
             </div>
             { currentWatchlist ?
                 <div className="border">
-                    <h3>Stocks Saved in {currentWatchlist.title}</h3> 
                     <StockList
                         showStockArray={showStockArray}
                         setShowStockArray={setShowStockArray}

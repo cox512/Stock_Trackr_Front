@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Modal, Button } from 'antd';
+import "../App.css";
+import { Redirect, withRouter } from "react-router-dom";
 
 export default class Account extends Component {
     
-    
-
     logout = () => {        
         var config = {
             method: 'GET',
@@ -43,14 +43,34 @@ export default class Account extends Component {
             console.log(data.data);
             if (data.status.code === 200) {
                 this.props.handleSuccessfulRegistration(data.data);
-              } else {
+            } else {
                 this.setState({
                     errorMessage: true
                 })
-              }
+            }
         })
         .catch((error) => console.error({Error: error}));
+    }
 
+    deleteUser = (evt) => {
+        let id = JSON.stringify(this.props.currentUser.id);
+        console.log(id)
+        let config = {
+            method: "DELETE",
+            url: this.props.baseURL + "api/v1/stocks/" + id, 
+            data: id,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        };
+        axios(config) 
+        .then(() => {
+            console.log("in the axios delete call");
+            this.props.handleLogout();
+            return <Redirect to="/"/>
+        })
+        .catch((error) => console.error({Error: error}));
     }
 
     render() {
@@ -58,7 +78,7 @@ export default class Account extends Component {
             <>
             <div>
                 {/* Turn into a modal */}
-                <button type="button">Delete User</button>
+                <button type="button" onClick={(evt) => this.deleteUser(evt)}>Delete User</button>
                 <button type="button">Account Info</button> 
                 <button type="button" onClick={()=>this.logout()}>Logout</button>
             </div>

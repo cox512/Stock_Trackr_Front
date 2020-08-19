@@ -3,6 +3,8 @@ import axios from 'axios';
 import "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form"
+// import Form from 'antd/lib/form/Form';
 
 
 export default function Watchlist(props) {
@@ -29,12 +31,12 @@ export default function Watchlist(props) {
         axios(config) 
         .then((res) => {
             console.log(res);            
-            return res.data;
-        })
-        .then((data) => {
-            console.log(data.data);
+        //     return res.data;
+        // })
+        // .then((data) => {
+            console.log(res.data.data);
             setShowNewListForm(false);
-            props.handleWatchlistSet(data.data);
+            props.handleWatchlistSet(res.data.data);
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -64,8 +66,8 @@ export default function Watchlist(props) {
         };
         axios(config) 
         .then((res) => {
-            console.log('addStock returns: ', res);            
-            // props.getStockList(res.data.data.watchlist.id)
+            console.log('addStock returns: ', res);
+            props.getStockList(id)            
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -94,42 +96,36 @@ export default function Watchlist(props) {
             <div>
                 <h3>WATCHLISTS</h3>
                     <div>
-                    <h3>What list would you like to add the stock to?</h3>
-                    <Table>
-                        <tbody >
-                            {props.watchlists.map(list => {
-                            return (    
-                                <tr key={list.id}>  
-                                    <td className="pick-list" onClick={()=>addStock(list.id)}>{list.title}</td>
-                                    <td className="pick-list"><Button  variant="danger" key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</Button></td>
-                                </tr>
-                            )})} 
-                        </tbody>     
-                    </Table>
-                    
-                    
-                    {/* After user adds a stock to a watchlist, show that watchlist's array of stocks */}
-                    { props.showStockArray ? null
-                    // Run a function that gets all of the stocks in the selected watchlist and displays them.
-                    : null
-                    }
+                        <h3>What list would you like to add the stock to?</h3>
+                        <Table>
+                            <tbody >
+                                {props.watchlists.map(list => {
+                                return (    
+                                    <tr key={list.id}>  
+                                        <td className="pick-list" onClick={()=>addStock(list.id)}>{list.title}</td>
+                                        <td className="pick-list"><Button  variant="danger" key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</Button></td>
+                                    </tr>
+                                )})} 
+                            </tbody>     
+                        </Table>         
                     </div>
                     <div>
-                    {/* If they don't have any watchlists, let them know. */}
-                    { props.watchlists ? null :
-                    <h3><i>You don't currently have any watchlists. Create one to get started!</i></h3> }
+                        {/* If the user doesn't have any watchlists ... */}
+                        { props.watchlists ? null :
+                        <h3><i>You don't currently have any watchlists. Create one to get started!</i></h3> }
                     </div> 
-                    
             </div>
             <div>
             {/*  if showNewListForm is true, reveal the create new list form. If false, show the create New List button. */}
             { showNewListForm ?
-                <form onSubmit={(evt)=>createNewList(evt)}>
-                    <label htmlFor="title">Title:</label>
-                    <input type="text" id="title" onChange={(evt) => handleChange(evt)} />
-                    <input type="submit" value="Create List"/>
-                </form> 
-                : <button type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(true))}>Create new watchlist</button>}
+                <Form onSubmit={(evt)=>createNewList(evt)}>
+                    <Form.Group id="title">
+                        <Form.Label htmlFor="title" >Title:</Form.Label>
+                        <Form.Control type="text" placeholder="Name your watchlist" onChange={(evt) => handleChange(evt)}/>
+                    </Form.Group>
+                    <Button variant="outline-dark" type="submit">Create List</Button>
+                </Form> 
+                : <Button variant="outline-dark" type="button" onClick={()=>(setShowNewListForm(true), props.setAddList(true))}>Create new watchlist</Button>}
             </div>
         </div>
     )

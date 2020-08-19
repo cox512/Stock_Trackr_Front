@@ -1,15 +1,13 @@
-import React, { useState, useEffect }  from 'react'
+import React from 'react'
 import axios from 'axios'
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table"
+import "../App.css";
+
 
 export default function StockList (props) {
-    const [stockDetails, setStockDetails] = useState(null)
-    const [renderStocks, setRenderStocks] = useState(false)
-
 
     const deleteStock = (stockId) => {
-        console.log(stockId)
         let data = JSON.stringify(stockId);
         console.log(data)
         let config = {
@@ -24,10 +22,7 @@ export default function StockList (props) {
         axios(config) 
         .then(() => {
             console.log("in the axios delete call");
-            // props.handleStockDelete()
             props.getStockList(props.currentWatchlist)
-            
-            
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -60,7 +55,8 @@ export default function StockList (props) {
     
     return (
         <div >
-            If there are stocks in the Watchlist, list them all
+            <h3>Stocks Saved in <i>{props.currentWatchlist.title}</i></h3> 
+            {/* If there are stocks in the Watchlist, list them all */}
             { props.showStockArray ? 
             <Table >
                 <thead>
