@@ -41,6 +41,8 @@ export default function Watchlist(props) {
         .catch((error) => console.error({Error: error}));
     }
 
+    
+
     const addStock = (id) => {
         // Add a new stock to the selected Watchlist (after the user clicks on the name.)
         console.log("currentWatchlist ID: ", id)
@@ -67,7 +69,8 @@ export default function Watchlist(props) {
         axios(config) 
         .then((res) => {
             console.log('addStock returns: ', res);
-            props.getStockList(id)            
+            props.getStockList(id)
+            //GET the currentWatchlist details            
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -97,6 +100,10 @@ export default function Watchlist(props) {
                 <h3>WATCHLISTS</h3>
                     <div>
                         <h3>What list would you like to add the stock to?</h3>
+                        {/* This first ternary isn't working. Not sure why. */}
+                        { props.watchlists ? null :
+                        <h3><i>You don't currently have any watchlists. Create one to get started!</i></h3>}
+                        { props.watchlists ?
                         <Table>
                             <tbody >
                                 {props.watchlists.map(list => {
@@ -107,13 +114,8 @@ export default function Watchlist(props) {
                                     </tr>
                                 )})} 
                             </tbody>     
-                        </Table>         
+                        </Table>  : null }
                     </div>
-                    <div>
-                        {/* If the user doesn't have any watchlists ... */}
-                        { props.watchlists ? null :
-                        <h3><i>You don't currently have any watchlists. Create one to get started!</i></h3> }
-                    </div> 
             </div>
             <div>
             {/*  if showNewListForm is true, reveal the create new list form. If false, show the create New List button. */}

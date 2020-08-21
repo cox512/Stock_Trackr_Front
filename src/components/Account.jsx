@@ -7,10 +7,11 @@ import { Redirect, withRouter } from "react-router-dom";
 
 export default class Account extends Component {
     state = {
-        fname: '',
-        lname: '',
-        username: '',
-        email: '',
+        updatedUser: null,
+        // fname: '',
+        // lname: '',
+        // username: '',
+        // email: '',
     }
     
     logout = () => {        
@@ -29,11 +30,14 @@ export default class Account extends Component {
     }
 
     handleChange = (evt) => {
+        const editedUser = {...this.state.updatedUser};
+        editedUser[evt.target.id] = evt.target.value;
         this.setState({
-            fname: evt.target.value,
-            lname: evt.target.value,
-            username: evt.target.value,
-            email: evt.target.value,
+            updatedUser: editedUser,
+            // fname: evt.target.value,
+            // lname: evt.target.value,
+            // username: evt.target.value,
+            // email: evt.target.value,
         });
       };
 
@@ -115,7 +119,7 @@ export default class Account extends Component {
                 <form onSubmit={(evt) => this.handleUpdate(evt)}>
                         <label htmlFor="fname">First Name:</label>
                         <input type="text" id="fname" 
-                        value={this.props.currentUser.fname}
+                        value={ this.props.currentUser.fname }
                          onChange={(evt)=> this.handleChange(evt)}/><br/>
                         <label htmlFor="lname">Last Name:</label>
                         <input type="text" id="lname" value={this.props.currentUser.lname} onChange={(evt)=> this.props.handleChange(evt)}/><br/>

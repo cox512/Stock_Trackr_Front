@@ -16,7 +16,7 @@ import Error from "./components/Error";
 import Account from "./components/Account";
 import Dashboard from "./components/Dashboard";
 
-const baseURL = "http://localhost:8000/" || "https://tenbagger.herokuapp.com/";
+const baseURL = process.env.REACT_APP_API_URL;
 
 class App extends Component {
   state = {

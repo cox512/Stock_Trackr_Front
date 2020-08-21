@@ -13,11 +13,12 @@ export default function Dashboard (props) {
     
     const [ticker, setTicker] = useState('');
     const [currentStock, setCurrentStock] = useState("")
-    const [watchlists, setWatchlists] = useState([])
+    const [watchlists, setWatchlists] = useState(null)
     const [addList, setAddList] = useState(true);
     const [showStockArray, setShowStockArray] = useState(false)
     const [stockList, setStockList] = useState([])
     const [currentWatchlist, setCurrentWatchlist] = useState('')
+    const [currentWatchlistTitle, setCurrentWatchlistTitle] = useState ('')
     const [overview, setOverview] = useState(null)
     const [incomeStatement, setIncomeStatement] = useState(null)
     const [balanceSheet, setBalanceSheet] = useState(null)
@@ -76,6 +77,8 @@ export default function Dashboard (props) {
         .then((res) => {
             console.log('data narrowed: ', res.data.data)
             setStockList(res.data.data)
+            console.log(res.data.data[0]["watchlist"]["title"])
+            setCurrentWatchlistTitle(res.data.data[0]["watchlist"]["title"])
             setShowStockArray(true)  
         })
         .catch((error) => {
@@ -221,6 +224,7 @@ export default function Dashboard (props) {
                         baseURL={props.baseURL}
                         getStockList={getStockList}
                         currentWatchlist={currentWatchlist}
+                        currentWatchlistTitle={currentWatchlistTitle}
                     />
                 </div> : null
             }

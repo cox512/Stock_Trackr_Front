@@ -55,15 +55,15 @@ export default function StockList (props) {
     
     return (
         <div >
-            <h3>Stocks Saved in <i>{props.currentWatchlist.title}</i></h3> 
+            <h3>{props.currentWatchlistTitle.toUpperCase()}</h3> 
             {/* If there are stocks in the Watchlist, list them all */}
             { props.showStockArray ? 
             <Table >
-                <thead>
+                {/* <thead>
                     <tr>
                         <th>Stock</th>
                     </tr>
-                </thead>
+                </thead> */}
                 <tbody>  
                 { props.stockList.map(stock => {
                     return (
