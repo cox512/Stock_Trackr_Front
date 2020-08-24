@@ -14,10 +14,15 @@ export default class Account extends Component {
         // email: '',
     }
     
-    logout = () => {        
+    logout = () => {       
+        console.log(this.props.jwt) 
         var config = {
             method: 'GET',
             url: this.props.baseURL + 'user/logout',
+            headers: { 
+                'Authorization': `${this.props.jwt}`, 
+                'Content-Type': 'application.json',
+            },
             withCredentials: true,
         };
         axios(config)

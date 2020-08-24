@@ -40,17 +40,14 @@ export default function Dashboard (props) {
 
     const showWatchlists = () =>{
         //GET call to get all watchlists from the database. Ends with a setWatchlists call that adds the retrieved lists to the 'watchlists' array in state.
-        var config = {
-            method: 'GET',
-            url: props.baseURL + 'api/v1/watchlists/',
-            headers: { 
+        const url = props.baseURL + 'api/v1/watchlists/';
+        axios.get(
+            url,
+            {headers: { 
                 'Content-Type': "application.json",
-            },
-            withCredentials: true,
-          };
-          axios(config)
-          .then((res) => {
-            console.log("showWatchlist data:", res.data.data)
+                'Authorization': `${props.jwt}`,  
+            }}).then((res) => {
+            // console.log("showWatchlist data:", res.data.data)
             setWatchlists(res.data.data)
           })
           .catch((error) => {
@@ -75,6 +72,9 @@ export default function Dashboard (props) {
         
         axios(config)
         .then((res) => {
+            //PROBLEM: I THINK IF THERE'S NOT STOCKS IN THE LIST, THEN THE STRUCTURE OF THE DATA COMES BACK DIFFERENTLY THAN IF THERE IS. 
+            //You may be able to do an if statement with the result, saying if the result is undefined, then run a GET call on the watchlist ID number and make the result the current Watchlist.
+            console.log('res: ', res)
             console.log('data narrowed: ', res.data.data)
             setStockList(res.data.data)
             console.log(res.data.data[0]["watchlist"]["title"])

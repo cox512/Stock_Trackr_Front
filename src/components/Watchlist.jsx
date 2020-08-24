@@ -41,8 +41,6 @@ export default function Watchlist(props) {
         .catch((error) => console.error({Error: error}));
     }
 
-    
-
     const addStock = (id) => {
         // Add a new stock to the selected Watchlist (after the user clicks on the name.)
         console.log("currentWatchlist ID: ", id)
@@ -94,6 +92,7 @@ export default function Watchlist(props) {
         })
         .catch((error) => console.error({Error: error}));
     }
+    
     return (
         <div>
             <div>

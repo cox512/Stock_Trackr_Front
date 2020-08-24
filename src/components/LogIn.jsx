@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import '../App.css'
   
 export default class LogIn extends Component {
     state = {
@@ -22,7 +23,6 @@ export default class LogIn extends Component {
     }
 
     handleSubmit = (evt) => {
-        console.log(this.props.baseURL)
         evt.preventDefault()
         let data = JSON.stringify(this.state);
         console.log(this.state)
@@ -30,16 +30,15 @@ export default class LogIn extends Component {
             method: "POST",
             url: this.props.baseURL + "user/login",
             headers: {
-                // "Access-Control-Allow-Origin": "*",
                 "Content-Type": "application/json",
-                // "Set-Cookie": "cross-site-cookie=name; SameSite=None; Secure"
             },
             data: data,
             withCredentials: true,  
         };
         axios(config)
             .then((res) => {
-                console.log(res.data);
+                console.log(res.data.status['token']);
+                localStorage.setItem('jwt', res.data.status['token'])
                 return res.data;
             })
             .then((data) => {

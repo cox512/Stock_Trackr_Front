@@ -17,13 +17,21 @@ import Account from "./components/Account";
 import Dashboard from "./components/Dashboard";
 
 const baseURL = process.env.REACT_APP_API_URL;
+const jwt = localStorage.getItem("jwt");
+
+// const authAxios = axios.create({
+//   baseURL: process.env.REACT_APP_API_URL,
+//   headers: {
+//     Authorization: `Bearer ${accessToken}`,
+//   },
+//   withCredentials: true,
+// });
 
 class App extends Component {
   state = {
     currentUser: {},
     loginStatus: false,
     showLoginBox: false,
-
     modalVisible: false,
   };
 
@@ -73,7 +81,23 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    this.checkLoginStatus();
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      this.props.history.push("/");
+    }
+    axios
+      .get(baseURL + "user/", { headers: { Authorization: `Bearer ${jwt}` } })
+      .then((res) =>
+        this.setState({
+          currentUser: res.data,
+        })
+      )
+      .catch((err) => {
+        console.log("check login error: ", err);
+        localStorage.removeItem("jwt");
+        this.props.history.push("/");
+      });
+    // this.checkLoginStatus();
   };
 
   revealLoginBox = (evt) => {
@@ -122,6 +146,7 @@ class App extends Component {
                   baseURL={baseURL}
                   modalVisible={this.state.modalVisible}
                   setModalVisible={this.setModalVisible}
+                  jwt={jwt}
                 />
               )}
             />
@@ -140,6 +165,7 @@ class App extends Component {
                   // handleLogin={this.handleLogin}
                   showLoginBox={this.state.showLoginBox}
                   revealLoginBox={this.revealLoginBox}
+                  jwt={jwt}
                   // redirect={this.state.redirect}
                 />
               )}
@@ -155,6 +181,7 @@ class App extends Component {
                   handleChange={this.handleChange}
                   modalVisible={this.state.modalVisible}
                   setModalVisible={this.setModalVisible}
+                  jwt={jwt}
                 />
               )}
             />
