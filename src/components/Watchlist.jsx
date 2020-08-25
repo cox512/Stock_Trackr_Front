@@ -25,18 +25,18 @@ export default function Watchlist(props) {
             data: data,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `${props.jwt}`
             },
             withCredentials: true,
         };
-        axios(config) 
-        .then((res) => {
-            console.log(res);            
-        //     return res.data;
-        // })
-        // .then((data) => {
-            console.log(res.data.data);
+        axios(config)
+        .then(res => {
+            return res;
+        }) 
+        .then((data) => {
+            console.log(data);            
             setShowNewListForm(false);
-            props.handleWatchlistSet(res.data.data);
+            props.showWatchlists();
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -61,6 +61,7 @@ export default function Watchlist(props) {
             data: data,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `${props.jwt}`
             },
             withCredentials: true,
         };
@@ -82,13 +83,16 @@ export default function Watchlist(props) {
             data: data,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `${props.jwt}`
             },
             withCredentials: true,
         };
         axios(config) 
-        .then(() => {
+        .then((res) => {
+        //     return res.json()        
+        // }).then(data => {
             console.log("in the axios delete call");            
-            props.handleWatchlistSet()        
+            props.showWatchlists()
         })
         .catch((error) => console.error({Error: error}));
     }

@@ -6,12 +6,16 @@ import "../App.css";
 import { Redirect, withRouter } from "react-router-dom";
 
 export default class Account extends Component {
-    state = {
+    constructor (props) {
+    super(props)
+    this.state = {
         updatedUser: null,
         // fname: '',
         // lname: '',
         // username: '',
         // email: '',
+    }
+    this.wrapper = React.createRef()
     }
     
     logout = () => {       
@@ -110,6 +114,7 @@ export default class Account extends Component {
                 <button type="button" onClick={()=>this.logout()}>Logout</button>
             </div>
             <div>
+                <div ref={this.wrapper}>{this.props.children}</div>;
                 <Button type="primary" onClick={() => this.props.setModalVisible(true)}>
                 Update account info
                 </Button>

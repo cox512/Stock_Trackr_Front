@@ -22,36 +22,36 @@ export default class LogIn extends Component {
         })
     }
 
-    handleSubmit = (evt) => {
+    handleLoginSubmit = (evt) => {
         evt.preventDefault()
         let data = JSON.stringify(this.state);
-        console.log(this.state)
+        // console.log(this.state)
         let config = {
             method: "POST",
             url: this.props.baseURL + "user/login",
-            headers: {
+            headers: { 
                 "Content-Type": "application/json",
             },
             data: data,
             withCredentials: true,  
         };
         axios(config)
-            .then((res) => {
-                console.log(res.data.status['token']);
-                localStorage.setItem('jwt', res.data.status['token'])
-                return res.data;
-            })
-            .then((data) => {
-                if (data.status.code === 200) {
-                    this.props.handleSuccessfulRegistration(data.data);
-                } else {
-                    this.setState({
-                        logInError: true,
-                    })                
-                }
-            })
-            .catch((error) => {
-                console.log("Login Error:", error );
+        .then(res => {
+            return res.data;
+        })
+        .then((data) => {
+            localStorage.setItem('jwt', data.status['token'])
+            if (data.status.code === 200) {
+                this.props.handleSuccessfulRegistration(data.data);
+            } else {
+                console.log(this.props.jwt)
+                this.setState({
+                    logInError: true,
+                })                
+            }
+        })
+        .catch((error) => {
+            console.log("Login Error:", error );
         });
     }
 
@@ -64,7 +64,7 @@ export default class LogIn extends Component {
                         <h3>There was an error logging you in. Please try again.</h3>
                         <button type="button" onClick={()=>this.resetErrorMessage()}>Okay</button>
                     </> :
-                <form onSubmit={(evt)=>this.handleSubmit(evt)}>
+                <form onSubmit={(evt)=>this.handleLoginSubmit(evt)}>
                     <label htmlFor="username">Username:</label>
                     <input type="text" id="username" onChange={(evt)=>this.handleChange(evt)} value={this.state.username}/><br/>
                     <label htmlFor="password">Password:</label>

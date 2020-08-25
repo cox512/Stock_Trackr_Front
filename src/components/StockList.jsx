@@ -16,6 +16,7 @@ export default function StockList (props) {
             data: data,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `${props.jwt}`
             },
             withCredentials: true,
         };

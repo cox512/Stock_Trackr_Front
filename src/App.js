@@ -17,15 +17,6 @@ import Account from "./components/Account";
 import Dashboard from "./components/Dashboard";
 
 const baseURL = process.env.REACT_APP_API_URL;
-const jwt = localStorage.getItem("jwt");
-
-// const authAxios = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL,
-//   headers: {
-//     Authorization: `Bearer ${accessToken}`,
-//   },
-//   withCredentials: true,
-// });
 
 class App extends Component {
   state = {
@@ -33,6 +24,7 @@ class App extends Component {
     loginStatus: false,
     showLoginBox: false,
     modalVisible: false,
+    jwt: "",
   };
 
   setModalVisible = (modalVisible) => {
@@ -49,6 +41,7 @@ class App extends Component {
     this.setState({
       loginStatus: true,
       currentUser: data,
+      jwt: localStorage.getItem("jwt"),
     });
   };
 
@@ -57,8 +50,13 @@ class App extends Component {
     var config = {
       method: "GET",
       url: baseURL + "user/",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${this.state.jwt}`,
+      },
       withCredentials: true,
     };
+
     axios(config)
       .then((res) => {
         if (res.data.logged_in && this.state.loginStatus === false) {
@@ -107,9 +105,11 @@ class App extends Component {
   };
 
   handleLogout = () => {
+    localStorage.removeItem("jwt");
     this.setState({
       loginStatus: false,
       currentUser: "",
+      jwt: "",
     });
     if (!this.state.loginStatus) {
       console.log("User is logged out.");
@@ -131,11 +131,11 @@ class App extends Component {
     return (
       <div>
         <BrowserRouter>
+          <div ref={this.wrapper}>{this.props.children}</div>;
           <NavBar
             currentUser={this.state.currentUser}
             handleChange={this.handleChange}
           />
-
           <Switch>
             <Route
               exact
@@ -146,7 +146,7 @@ class App extends Component {
                   baseURL={baseURL}
                   modalVisible={this.state.modalVisible}
                   setModalVisible={this.setModalVisible}
-                  jwt={jwt}
+                  jwt={this.state.jwt}
                 />
               )}
             />
@@ -165,7 +165,7 @@ class App extends Component {
                   // handleLogin={this.handleLogin}
                   showLoginBox={this.state.showLoginBox}
                   revealLoginBox={this.revealLoginBox}
-                  jwt={jwt}
+                  jwt={this.state.jwt}
                   // redirect={this.state.redirect}
                 />
               )}
@@ -181,7 +181,7 @@ class App extends Component {
                   handleChange={this.handleChange}
                   modalVisible={this.state.modalVisible}
                   setModalVisible={this.setModalVisible}
-                  jwt={jwt}
+                  jwt={this.state.jwt}
                 />
               )}
             />

@@ -29,26 +29,23 @@ export default function Dashboard (props) {
         getOverview(data["Global Quote"]["01. symbol"])
     }
 
-    // const handleChange = (evt) => {
-    //     setWatchlists(evt.target.value)
-    // }
-
-    const handleWatchlistSet = () => {
-        // Performs a new GET call to retrieve the new array of watchlists (post-creation of new list)
-        showWatchlists()
-    }
-
     const showWatchlists = () =>{
         //GET call to get all watchlists from the database. Ends with a setWatchlists call that adds the retrieved lists to the 'watchlists' array in state.
-        const url = props.baseURL + 'api/v1/watchlists/';
-        axios.get(
-            url,
-            {headers: { 
-                'Content-Type': "application.json",
-                'Authorization': `${props.jwt}`,  
-            }}).then((res) => {
-            // console.log("showWatchlist data:", res.data.data)
+        console.log('showWatchlists')
+        let config = {
+            method: "GET",
+            url: props.baseURL + "api/v1/watchlists/", 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${props.jwt}`
+            },
+            withCredentials: true,
+        };
+        axios(config)
+        .then((res) => {
+            console.log("showWatchlist data:", res.data.data)
             setWatchlists(res.data.data)
+            return res;
           })
           .catch((error) => {
                 console.log(error);
@@ -66,6 +63,7 @@ export default function Dashboard (props) {
             data: data,
             headers: { 
                 "Content-Type": "application/json",
+                "Authorization": `${props.jwt}`
             },
             withCredentials: true,
           };
@@ -204,7 +202,6 @@ export default function Dashboard (props) {
                     setAddList={setAddList}
                     watchlists={watchlists}
                     setWatchlists={setWatchlists}
-                    handleWatchlistSet={handleWatchlistSet}
                     baseURL={props.baseURL}
                     showStockArray={showStockArray}
                     setShowStockArray={setShowStockArray}
@@ -212,6 +209,7 @@ export default function Dashboard (props) {
                     setCurrentWatchlist={setCurrentWatchlist}
                     currentWatchlist={currentWatchlist}
                     currentStock={currentStock}
+                    jwt={props.jwt}
                     
                 />
             </div>
@@ -225,6 +223,7 @@ export default function Dashboard (props) {
                         getStockList={getStockList}
                         currentWatchlist={currentWatchlist}
                         currentWatchlistTitle={currentWatchlistTitle}
+                        jwt={props.jwt}
                     />
                 </div> : null
             }
