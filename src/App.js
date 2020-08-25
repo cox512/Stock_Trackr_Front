@@ -23,8 +23,8 @@ class App extends Component {
     currentUser: {},
     loginStatus: false,
     showLoginBox: false,
-
     modalVisible: false,
+    jwt: "",
   };
 
   setModalVisible = (modalVisible) => {
@@ -41,6 +41,7 @@ class App extends Component {
     this.setState({
       loginStatus: true,
       currentUser: data,
+      jwt: localStorage.getItem("jwt"),
     });
   };
 
@@ -49,8 +50,13 @@ class App extends Component {
     var config = {
       method: "GET",
       url: baseURL + "user/",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${this.state.jwt}`,
+      },
       withCredentials: true,
     };
+
     axios(config)
       .then((res) => {
         if (res.data.logged_in && this.state.loginStatus === false) {
@@ -73,7 +79,23 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    this.checkLoginStatus();
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      this.props.history.push("/");
+    }
+    axios
+      .get(baseURL + "user/", { headers: { Authorization: `Bearer ${jwt}` } })
+      .then((res) =>
+        this.setState({
+          currentUser: res.data,
+        })
+      )
+      .catch((err) => {
+        console.log("check login error: ", err);
+        localStorage.removeItem("jwt");
+        this.props.history.push("/");
+      });
+    // this.checkLoginStatus();
   };
 
   revealLoginBox = (evt) => {
@@ -83,9 +105,11 @@ class App extends Component {
   };
 
   handleLogout = () => {
+    localStorage.removeItem("jwt");
     this.setState({
       loginStatus: false,
       currentUser: "",
+      jwt: "",
     });
     if (!this.state.loginStatus) {
       console.log("User is logged out.");
@@ -107,11 +131,11 @@ class App extends Component {
     return (
       <div>
         <BrowserRouter>
+          <div ref={this.wrapper}>{this.props.children}</div>;
           <NavBar
             currentUser={this.state.currentUser}
             handleChange={this.handleChange}
           />
-
           <Switch>
             <Route
               exact
@@ -122,6 +146,7 @@ class App extends Component {
                   baseURL={baseURL}
                   modalVisible={this.state.modalVisible}
                   setModalVisible={this.setModalVisible}
+                  jwt={this.state.jwt}
                 />
               )}
             />
@@ -140,6 +165,7 @@ class App extends Component {
                   // handleLogin={this.handleLogin}
                   showLoginBox={this.state.showLoginBox}
                   revealLoginBox={this.revealLoginBox}
+                  jwt={this.state.jwt}
                   // redirect={this.state.redirect}
                 />
               )}
@@ -155,6 +181,7 @@ class App extends Component {
                   handleChange={this.handleChange}
                   modalVisible={this.state.modalVisible}
                   setModalVisible={this.setModalVisible}
+                  jwt={this.state.jwt}
                 />
               )}
             />
