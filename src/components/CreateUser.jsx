@@ -39,7 +39,11 @@ export default class CreateUser extends Component {
           };
           axios(config)
             .then((res) => {
-              console.log(res.data.data);
+              console.log(res);
+            //   return res.data;
+            // })
+            // .then((data))
+              localStorage.setItem('jwt', res.data.status.token)
               if (res.data.status.code === 200) {
                 this.props.handleSuccessfulRegistration(res.data.data);
               } else {
