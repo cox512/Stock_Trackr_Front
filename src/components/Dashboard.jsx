@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import StockSearch from "./StockSearch";
-// import ShowStock from "./ShowStock";
 import Watchlist from "./Watchlist";
 import StockList from "./StockList";
 import axios from 'axios';
 // import { Redirect, Route } from "react-router-dom";
 import "../App.css";
 import CompanyOverview from './CompanyOverview';
-// import { Modal, Button } from 'antd';
 
 export default function Dashboard (props) {
     
-    const [ticker, setTicker] = useState('');
     const [currentStock, setCurrentStock] = useState("")
     const [watchlists, setWatchlists] = useState(null)
     const [addList, setAddList] = useState(true);
     const [showStockArray, setShowStockArray] = useState(false)
     const [stockList, setStockList] = useState([])
-    const [currentWatchlist, setCurrentWatchlist] = useState('')
-    const [currentWatchlistTitle, setCurrentWatchlistTitle] = useState ('')
+    const [currentWatchlist, setCurrentWatchlist] = useState(null)
     const [overview, setOverview] = useState(null)
     const [incomeStatement, setIncomeStatement] = useState(null)
     const [balanceSheet, setBalanceSheet] = useState(null)
@@ -29,8 +25,11 @@ export default function Dashboard (props) {
         getOverview(data["Global Quote"]["01. symbol"])
     }
 
+    const emptyCurrentWatchlist = () => {
+        setCurrentWatchlist(null)
+    }
+
     const showWatchlists = () =>{
-        //GET call to get all watchlists from the database. Ends with a setWatchlists call that adds the retrieved lists to the 'watchlists' array in state.
         console.log('showWatchlists')
         let config = {
             method: "GET",
@@ -45,18 +44,37 @@ export default function Dashboard (props) {
         .then((res) => {
             console.log("showWatchlist data:", res.data.data)
             setWatchlists(res.data.data)
-            return res;
           })
           .catch((error) => {
                 console.log(error);
           });
     }
 
+    const getCurrentWatchlist = (id) => {
+        console.log("getCurrentWatchlist id:", id)
+        let config = {
+            method: "GET",
+            url: props.baseURL + "api/v1/watchlists/" + id, 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${props.jwt}`
+            },
+            withCredentials: true,
+        };
+        axios(config)
+        .then((res) => {
+            console.log("getCurrentWatchlist data:", res.data.data)
+            setCurrentWatchlist({'id': res.data.data.id, 'title': res.data.data.title})
+        })
+          .catch((error) => {
+                console.log(error);
+        });
+    }
+
     const getStockList = (watchlistId) =>{
-        //POST call to get all stocks in chosen watchlist from the database. Ends with a setStockList call that adds the retrieved stocks to the 'Stocks' array in state.
+        //Called when a watchlist is clicked AND when the stockList is re-rendered after a stock has been deleted.
         let data = JSON.stringify({watchlist: watchlistId})
-        console.log("getStockList function")
-        console.log("watchlist ID: ", data)
+        console.log("watchlist ID: ", watchlistId)
         var config = {
             method: "POST",
             url: props.baseURL + "api/v1/stocks/showList",
@@ -67,16 +85,10 @@ export default function Dashboard (props) {
             },
             withCredentials: true,
           };
-        
         axios(config)
         .then((res) => {
-            //PROBLEM: I THINK IF THERE'S NOT STOCKS IN THE LIST, THEN THE STRUCTURE OF THE DATA COMES BACK DIFFERENTLY THAN IF THERE IS. 
-            //You may be able to do an if statement with the result, saying if the result is undefined, then run a GET call on the watchlist ID number and make the result the current Watchlist.
             console.log('res: ', res)
-            console.log('data narrowed: ', res.data.data)
             setStockList(res.data.data)
-            console.log(res.data.data[0]["watchlist"]["title"])
-            setCurrentWatchlistTitle(res.data.data[0]["watchlist"]["title"])
             setShowStockArray(true)  
         })
         .catch((error) => {
@@ -156,7 +168,6 @@ export default function Dashboard (props) {
           ];
         axios(`https://www.alphavantage.co/query?function=Balance_Sheet&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
-            // console.log(Object.entries(res.data))
             console.log(res.data)
             // let overview = Object.entries(JSON.stringify(res.data))
             setBalanceSheet(res.data)
@@ -176,53 +187,34 @@ export default function Dashboard (props) {
             
             <div className="show-stock border">
                 <h3>CURRENT STOCK</h3>
-            {/* {currentStock ? (
-                <ShowStock
-                    currentStock={currentStock}
-                    baseURL={props.baseURL}
-                    watchlists={watchlists}
-                    handleChange={handleChange}
-                    handleWatchlistSet={handleWatchlistSet}
-                    ticker={ticker}
-                />
-            ) : null} */}
                 <StockSearch
-                    handleChange={props.handleChange}
-                    handleStockSearch={props.handleStockSearch}
-                    ticker={ticker}
                     handleStockData={handleStockData}
-                    getOverview={getOverview}
                     currentStock={currentStock}
                 />
             </div>
             <div className="watchlist border">
                 <Watchlist
                     showWatchlists={showWatchlists}
-                    addlist={addList}
                     setAddList={setAddList}
                     watchlists={watchlists}
-                    setWatchlists={setWatchlists}
                     baseURL={props.baseURL}
-                    showStockArray={showStockArray}
-                    setShowStockArray={setShowStockArray}
                     getStockList={getStockList}
-                    setCurrentWatchlist={setCurrentWatchlist}
                     currentWatchlist={currentWatchlist}
                     currentStock={currentStock}
                     jwt={props.jwt}
-                    
+                    getCurrentWatchlist={getCurrentWatchlist}
+                    emptyCurrentWatchlist={emptyCurrentWatchlist}
                 />
             </div>
             { currentWatchlist ?
                 <div className="border">
+                    <h3>{currentWatchlist.title.toUpperCase()}</h3>
                     <StockList
                         showStockArray={showStockArray}
-                        setShowStockArray={setShowStockArray}
                         stockList={stockList}
                         baseURL={props.baseURL}
                         getStockList={getStockList}
                         currentWatchlist={currentWatchlist}
-                        currentWatchlistTitle={currentWatchlistTitle}
                         jwt={props.jwt}
                     />
                 </div> : null
@@ -238,7 +230,6 @@ export default function Dashboard (props) {
                     getIncomeStatement={getIncomeStatement}
                     getBalanceSheet={getBalanceSheet}
                     getCashFlowStatement={getCashFlowStatement}
-
                 />    
         </div>
         

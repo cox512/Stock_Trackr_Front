@@ -18,9 +18,7 @@ export default class StockSearch extends Component {
 
     handleStockSearch = (evt) => {
       evt.preventDefault();
-      let ticker = this.state.ticker.toUpperCase()
-      // console.log(ticker)
-       
+      let ticker = this.state.ticker.toUpperCase();       
       let random = Math.floor(Math.random() * 2);
       let API_KEY = [
         process.env.REACT_APP_API_KEY1,
