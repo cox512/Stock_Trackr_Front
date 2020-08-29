@@ -90,6 +90,7 @@ export default class Account extends Component {
             data: id,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `${this.props.jwt}`
             },
             withCredentials: true,
         };

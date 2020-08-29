@@ -9,7 +9,6 @@ import {
   Redirect,
   withRouter,
 } from "react-router-dom";
-import Button from "react-bootstrap/Button";
 import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
