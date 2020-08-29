@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import {
   Switch,
@@ -130,7 +130,7 @@ class App extends Component {
     return (
       <div>
         <BrowserRouter>
-          <div ref={this.wrapper}>{this.props.children}</div>;
+          <div ref={this.wrapper}>{this.props.children}</div>
           <NavBar
             currentUser={this.state.currentUser}
             handleChange={this.handleChange}
