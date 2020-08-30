@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./App.css";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import {
   Switch,
@@ -19,20 +18,18 @@ const baseURL = process.env.REACT_APP_API_URL;
 
 class App extends Component {
   state = {
-    currentUser: {},
+    currentUser: null,
     loginStatus: false,
     showLoginBox: false,
     modalVisible: false,
     jwt: "",
   };
 
-  setModalVisible = (modalVisible) => {
-    this.setState({ modalVisible });
-  };
-
   handleChange = (evt) => {
+    const editedUser = this.state.currentUser;
+    editedUser[evt.target.id] = evt.target.value;
     this.setState({
-      [evt.target.id]: evt.target.value,
+      currentUser: editedUser,
     });
   };
 
@@ -43,6 +40,38 @@ class App extends Component {
       jwt: localStorage.getItem("jwt"),
     });
   };
+
+  // handleUpdate = (evt) => {
+  //   evt.preventDefault();
+  //   console.log(this.state.currentUser);
+  //   let data = JSON.stringify(this.state.currentUser);
+  //   let config = {
+  //     method: "PUT",
+  //     url: baseURL + "user/" + this.state.currentUser.id,
+  //     data: data,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `${this.state.jwt}`,
+  //     },
+  //     withCredentials: true,
+  //   };
+  //   axios(config)
+  //     .then((res) => {
+  //       console.log(res);
+  //       return res.data;
+  //     })
+  //     .then((data) => {
+  //       console.log(data.data);
+  //       if (data.status.code === 200) {
+  //         this.handleSuccessfulRegistration(data.data);
+  //       } else {
+  //         this.setState({
+  //           errorMessage: true,
+  //         });
+  //       }
+  //     })
+  //     .catch((error) => console.error({ Error: error }));
+  // };
 
   checkLoginStatus = () => {
     // Upon mounting, look to see if there is currently a user logged in. If so make them the currentUser. If not, make sure there is no currentUser in state
@@ -55,7 +84,6 @@ class App extends Component {
       },
       withCredentials: true,
     };
-
     axios(config)
       .then((res) => {
         if (res.data.logged_in && this.state.loginStatus === false) {
@@ -112,9 +140,6 @@ class App extends Component {
     });
     if (!this.state.loginStatus) {
       console.log("User is logged out.");
-      // Redirect home isn't working for some reason.
-      return <Redirect to="/" />;
-      // this.state.history.push("/");
     }
   };
 
@@ -134,6 +159,12 @@ class App extends Component {
           <NavBar
             currentUser={this.state.currentUser}
             handleChange={this.handleChange}
+            baseURL={baseURL}
+            jwt={this.state.jwt}
+            handleLogout={this.handleLogout}
+            handleSuccessfulRegistration={this.handleSuccessfulRegistration}
+            // handleUpdate={this.handleUpdate}
+            // modalRedirect={this.modalRedirect}
           />
           <Switch>
             <Route

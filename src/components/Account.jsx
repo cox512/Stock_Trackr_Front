@@ -10,100 +10,10 @@ export default class Account extends Component {
     super(props)
     this.state = {
         updatedUser: null,
-        // fname: '',
-        // lname: '',
-        // username: '',
-        // email: '',
+       
     }
     this.wrapper = React.createRef()
     }
-    
-    // logout = () => {       
-    //     console.log(this.props.jwt) 
-    //     var config = {
-    //         method: 'GET',
-    //         url: this.props.baseURL + 'user/logout',
-    //         headers: { 
-    //             'Authorization': `${this.props.jwt}`, 
-    //             'Content-Type': 'application.json',
-    //         },
-    //         withCredentials: true,
-    //     };
-    //     axios(config)
-    //     .then((res) => {
-    //         this.props.handleLogout();
-    //     })
-    //     .catch((error) => {
-    //         console.log(error);
-    //     });
-    // }
-
-    // handleChange = (evt) => {
-    //     const editedUser = {...this.state.updatedUser};
-    //     editedUser[evt.target.id] = evt.target.value;
-    //     this.setState({
-    //         updatedUser: editedUser,
-    //         // fname: evt.target.value,
-    //         // lname: evt.target.value,
-    //         // username: evt.target.value,
-    //         // email: evt.target.value,
-    //     });
-    //   };
-
-    // handleUpdate = (evt) => {
-    //     evt.preventDefault();
-    //     console.log(this.props.currentUser)
-    //     let data = JSON.stringify(this.props.currentUser);
-    //     let config = {
-    //         method: "POST",
-    //         url: this.props.baseURL + "user/" + this.props.currentUser.id, 
-    //         data: data,
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         withCredentials: true,
-    //     };
-    //     axios(config) 
-    //     .then((res) => {
-    //         console.log(res);            
-    //         return res.data;
-    //     })
-    //     .then((data) => {
-    //         console.log(data.data);
-    //         if (data.status.code === 200) {
-    //             this.props.handleSuccessfulRegistration(data.data);
-    //         } else {
-    //             this.setState({
-    //                 errorMessage: true
-    //             })
-    //         }
-    //     })
-    //     .catch((error) => console.error({Error: error}));
-    // }
-
-    // deleteUser = (evt) => {
-    //     let id = JSON.stringify(this.props.currentUser.id);
-    //     console.log(id)
-    //     let config = {
-    //         method: "DELETE",
-    //         url: this.props.baseURL + "user/" + id, 
-    //         data: id,
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": `${this.props.jwt}`
-    //         },
-    //         withCredentials: true,
-    //     };
-    //     axios(config) 
-    //     .then(() => {
-    //         console.log("in the axios delete call");
-    //         this.props.handleLogout();
-    //     }).then(() => {
-    //         //redirect isn't working
-    //         return <Redirect to="/" />;
-    //     })
-    //     .catch((error) => console.error({Error: error}));
-    // }
 
     render() {
         return (
