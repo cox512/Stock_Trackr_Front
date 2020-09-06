@@ -11,7 +11,6 @@ import {
 import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
-import Account from "./components/Account";
 import Dashboard from "./components/Dashboard";
 
 const baseURL = process.env.REACT_APP_API_URL;
@@ -125,12 +124,6 @@ class App extends Component {
     // this.checkLoginStatus();
   };
 
-  revealLoginBox = (evt) => {
-    this.setState({
-      showLoginBox: true,
-    });
-  };
-
   handleLogout = () => {
     localStorage.removeItem("jwt");
     this.setState({
@@ -153,72 +146,54 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <BrowserRouter>
-          <div ref={this.wrapper}>{this.props.children}</div>
-          <NavBar
-            currentUser={this.state.currentUser}
-            handleChange={this.handleChange}
-            baseURL={baseURL}
-            jwt={this.state.jwt}
-            handleLogout={this.handleLogout}
-            handleSuccessfulRegistration={this.handleSuccessfulRegistration}
-            // handleUpdate={this.handleUpdate}
-            // modalRedirect={this.modalRedirect}
-          />
-          <Switch>
-            <Route
-              exact
-              path="/dashboard"
-              render={() => (
-                <Dashboard
-                  currentUser={this.state.currentUser}
-                  baseURL={baseURL}
-                  modalVisible={this.state.modalVisible}
-                  setModalVisible={this.setModalVisible}
-                  jwt={this.state.jwt}
-                />
-              )}
+      <>
+        <div>
+          <BrowserRouter>
+            <div ref={this.wrapper}>{this.props.children}</div>
+            <NavBar
+              currentUser={this.state.currentUser}
+              handleChange={this.handleChange}
+              baseURL={baseURL}
+              jwt={this.state.jwt}
+              handleLogout={this.handleLogout}
+              handleSuccessfulRegistration={this.handleSuccessfulRegistration}
             />
-            <Route
-              exact
-              path="/"
-              render={() => (
-                <Home
-                  handleSuccessfulRegistration={
-                    this.handleSuccessfulRegistration
-                  }
-                  // handleChange={this.handleChange}
-                  currentUser={this.state.currentUser}
-                  loginStatus={this.state.loginStatus}
-                  baseURL={baseURL}
-                  // handleLogin={this.handleLogin}
-                  showLoginBox={this.state.showLoginBox}
-                  revealLoginBox={this.revealLoginBox}
-                  jwt={this.state.jwt}
-                  // redirect={this.state.redirect}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/account"
-              render={() => (
-                <Account
-                  currentUser={this.state.currentUser}
-                  baseURL={baseURL}
-                  handleLogout={this.handleLogout}
-                  handleChange={this.handleChange}
-                  modalVisible={this.state.modalVisible}
-                  setModalVisible={this.setModalVisible}
-                  jwt={this.state.jwt}
-                />
-              )}
-            />
-            <Route component={Error} />
-          </Switch>
-        </BrowserRouter>
-      </div>
+            <Switch>
+              <Route
+                exact
+                path="/dashboard"
+                render={() => (
+                  <Dashboard
+                    currentUser={this.state.currentUser}
+                    baseURL={baseURL}
+                    modalVisible={this.state.modalVisible}
+                    setModalVisible={this.setModalVisible}
+                    jwt={this.state.jwt}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/"
+                render={() => (
+                  <Home
+                    handleSuccessfulRegistration={
+                      this.handleSuccessfulRegistration
+                    }
+                    currentUser={this.state.currentUser}
+                    loginStatus={this.state.loginStatus}
+                    baseURL={baseURL}
+                    showLoginBox={this.state.showLoginBox}
+                    jwt={this.state.jwt}
+                  />
+                )}
+              />
+              <Route component={Error} />
+            </Switch>
+          </BrowserRouter>
+        </div>
+        <footer id="footer">10bagger ©2020</footer>
+      </>
     );
   }
 }

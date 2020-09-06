@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../App.css'
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button'
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'materialize-css';
+
+
   
 export default class LogIn extends Component {
     state = {
@@ -63,15 +69,22 @@ export default class LogIn extends Component {
                 { this.state.logInError ? 
                     <>
                         <h3>There was an error logging you in. Please try again.</h3>
-                        <button type="button" onClick={()=>this.resetErrorMessage()}>Okay</button>
+                        <Button type="button" onClick={()=>this.resetErrorMessage()}>Okay</Button>
                     </> :
-                <form onSubmit={(evt)=>this.handleLoginSubmit(evt)}>
-                    <label htmlFor="username">Username:</label>
-                    <input type="text" id="username" onChange={(evt)=>this.handleChange(evt)} value={this.state.username}/><br/>
-                    <label htmlFor="password">Password:</label>
-                    <input type="password" id="password" onChange={(evt)=>this.handleChange(evt)} value={this.state.password}/><br/>
-                    <input type="submit" value="Login"/>
-                </form>
+                <Form onSubmit={(evt)=>this.handleLoginSubmit(evt)}>
+                    <Form.Group>
+                        <Form.Label htmlFor="username">Username:</Form.Label>
+                        <Form.Control type="text" id="username" value={this.state.username} onChange={(evt)=>this.handleChange(evt)} />
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label htmlFor="password">Password:</Form.Label>
+                        <Form.Control type="password" id="password" 
+                        onChange={(evt)=>this.handleChange(evt)} 
+                        value={this.state.password}/>
+                    </Form.Group>
+                    <Button type="submit" variant="primary">Log In</Button>
+                    </Form>
                 }    
             </div>
         )

@@ -4,8 +4,6 @@ import "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form"
-// import Form from 'antd/lib/form/Form';
-
 
 export default function Watchlist(props) {
     const [showNewListForm, setShowNewListForm] = useState(false)
@@ -89,9 +87,6 @@ export default function Watchlist(props) {
         };
         axios(config) 
         .then((res) => {
-        //     return res.json()        
-        // }).then(data => {
-            console.log("in the axios delete call");            
             props.showWatchlists()
         })
         .catch((error) => console.error({Error: error}));
@@ -104,7 +99,7 @@ export default function Watchlist(props) {
                     <div>
                         <h3>What list would you like to add the stock to?</h3>
                         {/* This first ternary isn't working. Not sure why. */}
-                        { props.watchlists ? null :
+                        { props.seeWarning === false ? null :
                         <h3><i>You don't currently have any watchlists. Create one to get started!</i></h3>}
                         { props.watchlists ?
                         <Table>

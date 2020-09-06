@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import axios from 'axios';
 import '../App.css'
 
@@ -112,10 +113,24 @@ export default function NavBar(props) {
              : null}
             
             <h3 id="logo-text">
-              10
-              <img id="logo" src="./moneybag.png" alt="Logo" />
-              bagger
+              10bagger
             </h3>
+            </div>
+            <div>
+                <DropdownButton id="mobile-dropdown" title="Menu">
+                    <Dropdown.Item href="/">Home</Dropdown.Item>
+                    <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
+                    <DropdownButton id="dropdown-basic-button" title="Account">
+                        <Dropdown.Item className="drop-item" href="#"
+                        onClick={()=> handleShow()}>Update Profile 
+                        </Dropdown.Item>
+                           
+                        <Dropdown.Item className="drop-item" href="#" onClick={() => deleteUser()} >Delete Account </Dropdown.Item>
+
+                        <Dropdown.Item className="drop-item" href="#" onClick={() => logout()}>Logout</Dropdown.Item>
+
+                    </DropdownButton>
+                </DropdownButton>
             </div>
 
             <div className="links">
@@ -146,7 +161,7 @@ export default function NavBar(props) {
  
             <Modal
                 animation={false}
-                show={props.show}
+                show={show}
                 onHide={() => handleClose()}
                 backdrop="static"
                 keyboard={false}
