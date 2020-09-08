@@ -5,8 +5,10 @@ import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import Alert from 'react-bootstrap/Alert'
 import axios from 'axios';
 import '../App.css'
+import { Hidden } from '@material-ui/core';
 
 export default function NavBar(props) {
     const [redirect, setRedirect] = useState(null)
@@ -57,7 +59,8 @@ export default function NavBar(props) {
           .catch((error) => console.error({ Error: error }));
       };
 
-    const logout = () => {       
+    const logout = () => {     
+        
         console.log(props.jwt) 
         var config = {
             method: 'GET',
@@ -78,6 +81,13 @@ export default function NavBar(props) {
         .catch((error) => {
             console.log(error);
         });
+    }
+
+    const handleAlert = (evt) => {
+        if (props.currentUser === null) {
+           alert("Please log-in first.");
+           return false;
+        }
     }
 
     const deleteUser = () => {
@@ -118,16 +128,43 @@ export default function NavBar(props) {
             </div>
             <div>
                 <DropdownButton id="mobile-dropdown" title="Menu">
-                    <Dropdown.Item href="/">Home</Dropdown.Item>
-                    <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-                    <DropdownButton id="dropdown-basic-button" title="Account">
-                        <Dropdown.Item className="drop-item" href="#"
-                        onClick={()=> handleShow()}>Update Profile 
-                        </Dropdown.Item>
-                           
-                        <Dropdown.Item className="drop-item" href="#" onClick={() => deleteUser()} >Delete Account </Dropdown.Item>
+                    <Dropdown.Item 
+                        href="/">
+                        Home
+                    </Dropdown.Item>
+                    <Dropdown.Item 
+                        href="/dashboard" 
+                        onClick={(evt)=>handleAlert(evt)}>
+                        Dashboard
+                    </Dropdown.Item>
+                    <DropdownButton 
+                        id="account-button" 
+                        title="Account"
+                        onClick={(evt)=>handleAlert(evt)}>
+                        {props.currentUser === null ? null :
+                        <>
 
-                        <Dropdown.Item className="drop-item" href="#" onClick={() => logout()}>Logout</Dropdown.Item>
+                        <Dropdown.Item
+                            className="drop-item" 
+                            href="#"
+                            onClick={()=> handleShow()}>
+                            Update Profile 
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            className="drop-item" 
+                            href="#" 
+                            onClick={() => deleteUser()} >
+                            Delete Account 
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            className="drop-item" 
+                            href="#" 
+                            onClick={() => logout()}>
+                            Logout
+                        </Dropdown.Item>
+                        </>
+
+                        }
 
                     </DropdownButton>
                 </DropdownButton>
