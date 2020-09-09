@@ -23,7 +23,7 @@ export default function StockList (props) {
         axios(config) 
         .then(() => {
             console.log("in the axios delete call");
-            props.getStockList(props.currentWatchlist)
+            props.getStockList(props.currentWatchlist.id)
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -56,15 +56,8 @@ export default function StockList (props) {
     
     return (
         <div >
-            <h3>{props.currentWatchlistTitle.toUpperCase()}</h3> 
-            {/* If there are stocks in the Watchlist, list them all */}
             { props.showStockArray ? 
             <Table >
-                {/* <thead>
-                    <tr>
-                        <th>Stock</th>
-                    </tr>
-                </thead> */}
                 <tbody>  
                 { props.stockList.map(stock => {
                     return (
@@ -75,8 +68,8 @@ export default function StockList (props) {
                     )}
                 )}
                 </tbody>
-            </Table> : null } 
+            </Table>   
+             : null }
         </div>
     )
-    
 }

@@ -9,11 +9,11 @@ export default function Watchlist(props) {
     const [showNewListForm, setShowNewListForm] = useState(false)
     const [title, setTitle] = useState('');
     
-    const handleChange = (evt) => {
+    const handleTitleChange = (evt) => {
         setTitle(evt.target.value)
     }
 
-    const createNewList = (evt) => {
+    const createWatchlist = (evt) => {
         evt.preventDefault();
         let data = JSON.stringify(title);
         console.log(data)
@@ -28,11 +28,8 @@ export default function Watchlist(props) {
             withCredentials: true,
         };
         axios(config)
-        .then(res => {
-            return res;
-        }) 
-        .then((data) => {
-            console.log(data);            
+        .then((res) => {
+            console.log(res);            
             setShowNewListForm(false);
             props.showWatchlists();
         })
@@ -40,18 +37,14 @@ export default function Watchlist(props) {
     }
 
     const addStock = (id) => {
-        // Add a new stock to the selected Watchlist (after the user clicks on the name.)
         console.log("currentWatchlist ID: ", id)
-        props.setCurrentWatchlist(id)
+        props.getCurrentWatchlist(id)
         let symbol = props.currentStock.symbol;
-        console.log('addStock symbol: ', symbol)
-        //Come back and check out this function call !!!!!
         if (symbol === undefined) {
-            console.log('addStock if statement')
+            console.log('addStock if statement id:', id)
             return props.getStockList(id)        
         }   
-        // Rewrite this stringify call as an object when you have the time.
-        let data = JSON.stringify([symbol, id]);
+        let data = JSON.stringify({symbol: symbol, id: id});
         console.log(data)
         let config = {
             method: "POST",
@@ -66,8 +59,7 @@ export default function Watchlist(props) {
         axios(config) 
         .then((res) => {
             console.log('addStock returns: ', res);
-            props.getStockList(id)
-            //GET the currentWatchlist details            
+            props.getStockList(props.currentWatchlist.id)
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -88,6 +80,7 @@ export default function Watchlist(props) {
         axios(config) 
         .then((res) => {
             props.showWatchlists()
+            props.emptyCurrentWatchlist()
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -118,10 +111,10 @@ export default function Watchlist(props) {
             <div>
             {/*  if showNewListForm is true, reveal the create new list form. If false, show the create New List button. */}
             { showNewListForm ?
-                <Form onSubmit={(evt)=>createNewList(evt)}>
+                <Form onSubmit={(evt)=>createWatchlist(evt)}>
                     <Form.Group id="title">
                         <Form.Label htmlFor="title" >Title:</Form.Label>
-                        <Form.Control type="text" placeholder="Name your watchlist" onChange={(evt) => handleChange(evt)}/>
+                        <Form.Control type="text" placeholder="Name your watchlist" onChange={(evt) => handleTitleChange(evt)}/>
                     </Form.Group>
                     <Button variant="outline-dark" type="submit">Create List</Button>
                 </Form> 
