@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button'
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'materialize-css';
+
+
 
 export default class CreateUser extends Component {
     state = {
@@ -65,21 +71,33 @@ export default class CreateUser extends Component {
         { this.state.errorMessage ? 
         <>
         <h3>There was an error creating your account. Please try again.</h3>
-        <button type="button" onClick={()=>this.resetErrorMessage()}>Okay</button>
+        <Button type="button" variant="priimay" onClick={()=>this.resetErrorMessage()}>Okay</Button>
         </> :
-        <form onSubmit={(evt) => this.createNewUser(evt)}>
-          <label htmlFor="fname">First Name:</label>
-          <input type="text" id="fname" value={this.state.fname} onChange={(evt)=> this.handleChange(evt)}/><br/>
-          <label htmlFor="lname">Last Name:</label>
-          <input type="text" id="lname" value={this.state.lname} onChange={(evt)=> this.handleChange(evt)}/><br/>
-          <label htmlFor="username">Username:</label>
-          <input type="text" id="username" value={this.state.username} onChange={(evt)=> this.handleChange(evt)}/><br/>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" value={this.state.password} onChange={(evt)=> this.handleChange(evt)}/><br/>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={this.state.email} onChange={(evt)=> this.handleChange(evt)}/><br/>
-          <button type='Submit'>Create Account</button>
-        </form>
+        <Form onSubmit={(evt) => this.createNewUser(evt)}>
+            <Form.Group>
+                <Form.Label htmlFor="fname">First Name</Form.Label>
+                <Form.Control type="text" id='fname' value={ this.state.fname } onChange={(evt)=> this.handleChange(evt)}/>
+            </Form.Group>
+            <Form.Group >
+                <Form.Label htmlFor="lname">Last Name</Form.Label>
+                <Form.Control type="text" id="lname" value={ this.state.lname } onChange={(evt)=> this.handleChange(evt)}/>
+            </Form.Group>
+            <Form.Group >
+                <Form.Label htmlFor="usesrname">Username</Form.Label>
+                <Form.Control id="username" type="text" value={ this.state.username } onChange={(evt)=> this.handleChange(evt)}/>
+            </Form.Group>
+            <Form.Group >
+                <Form.Label htmlFor="password">Password</Form.Label>
+                <Form.Control id="password" type="password" value={ this.state.password } onChange={(evt)=> this.handleChange(evt)}/>
+            </Form.Group>
+            <Form.Group >
+                <Form.Label htmlFor="email">Email address</Form.Label>
+                <Form.Control id="email" type="email" value={ this.state.email } onChange={(evt)=> this.handleChange(evt)}/>
+            </Form.Group>
+          <Button 
+            variant="primary" 
+            type="submit">Create Account</Button>
+        </Form>
         }
       </div>
     )

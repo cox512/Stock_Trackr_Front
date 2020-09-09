@@ -1,5 +1,7 @@
 
-@import '~antd/dist/antd.css';
+html, body {
+    height: 100%;
+}
 
 ul {
     list-style: none;
@@ -9,75 +11,28 @@ ul {
     cursor: pointer;
 }
 
-.home-bg {
-    width: 100vw;
-    margin: 0 auto;
-    position: relative;
-}
-
-.createUser-div {
-    position: absolute;
-    padding: 2em;
-    border: 3px solid rgb(240, 225, 17);
-    left: 5%;
-    top: 45%;
-    z-index: 1;
-    background: rgb(243, 245, 237)
-}
-
-#logo {
-    width: 60px;
-    margin-bottom: 1em;
-}
-
 #logo-text {
     color: #BEBFC0;
     font-size: 2em;
     margin: 0 2em;
+    padding-bottom: .6em;
 }
 
 .nav-bar {
     display: flex;
+    position: absolute;
+    width: 100%;
     justify-content: space-between;
-    background-color: rgb(0, 21, 74)
-}
-
-.links {
-    display: flex;
-    font-size: 1.5em;
-    /* margin-right: 1.5em; */
-}
-
-.link {
-    padding: 0 1em;
-    color: #BEBFC0;
-    align-self: center;
-    font-weight: bold;
+    background-color: rgb(0, 21, 74);
+    z-index: 2;
+    padding: 1em;
+    padding-left: 0;
 }
 
 .whole-logo {
     margin-top: 1em;
     display: flex;
     align-self: center;
-}
-
-.leads {
-    display: flex;
-    position: absolute;
-    padding: .3em;
-    z-index: 1;
-    right: 5%;
-    top: 20%;
-    font-weight: bold;
-    font-size: 2.6em;
-    height: 100vh;
-    background-image: linear-gradient(0deg,rgba(234, 237, 225, .5), rgba(234, 237, 225, 0));
-}
-
-#lead-lines {
-    align-self: center;
-    font-style: bold;
-    font-size: 1em;
 }
 
 .form-header {
@@ -107,7 +62,7 @@ ul {
 
 .greeting {
     text-align: center;
-    
+    padding-top: 8em;
 }
 
 .stock-row {
@@ -126,4 +81,197 @@ ul {
 .stock-list {
     display: flex;
     justify-content: space-around;
+}
+
+#footer {
+    position: absolute;
+    text-align: left;
+    background:  rgb(0, 21, 74);
+    color: white;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 1em;    
+}
+
+.stack {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 7em;
+}
+
+.home-bg {
+    background: rgb(223, 237, 254);
+    height: 100%;
+    width: 100vw; 
+}
+
+.leads {
+    padding-top: 4em;
+    font-weight: bold;
+    font-size: 2em;
+    line-height: .5em;
+}
+
+.lead-lines {
+    display: block;
+    align-self: center;
+    font-style: bold;
+    font-size: .7em;
+    color:  rgb(0, 0, 0);
+    line-height: 1.3em;
+    text-align: center;
+}
+
+.createUser-div {
+    margin-top: 1em;
+    margin-bottom: 3em;
+    padding: 1.7em;
+    line-height: 1.2em;
+    border: 5px solid rgb(240, 225, 17);
+    background: rgb(243, 245, 237);
+}
+
+.site-layout-content {
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
+.links {
+    display: none;
+}
+
+#mobile-dropdown {
+    background-color: #BEBFC0;
+    border: none;
+    color: rgb(0, 21, 74);
+    margin: 1.1em 3em 0 0;
+}
+
+#account-button {
+    background-color: white;
+    color: black;
+    border: none;
+    margin-left: .7em;
+
+}
+
+@media (min-width: 768px) {
+    #mobile-dropdown {
+        display: none;
+    }
+    .nav-bar {
+        padding: 1.7em;
+    }
+
+    .links {
+        display: flex;
+        font-size: 1.5em;
+        margin-right: 1.5em;
+        justify-content: center;
+    }
+    
+    .link {
+        padding: 0 1em;
+        color: #BEBFC0;
+        align-self: center;
+        font-weight: bold;
+    }
+    
+    .dropdown-items {
+        display: flex;
+        flex-direction: column;
+        padding: 1em;
+        min-width: 12em;
+    }
+    
+    .drop-item {
+        padding: .4em;
+    }
+    
+    .drop-item:hover {
+        color: rgb(0, 21, 74);
+    }
+    
+    #dropdown {
+        background-color: rgb(0, 21, 74);
+        border: none;
+    }
+    
+    #gear {
+        caret-color: #BEBFC0;}    
+
+    .leads {
+        padding-top: 4em;
+        font-weight: bold;
+        font-size: 2em;
+        line-height: .5em;
+    }
+
+    .lead-lines {
+        font-size: 1em;
+        line-height: 2em;
+    }
+
+    .createUser-div {
+        margin-top: 1em;
+        margin-bottom: 3em;
+        padding: 1.7em;
+        line-height: 1.2em;
+    }
+}
+
+@media (min-width: 992px) {
+    
+    .home-bg {
+        background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
+        width: 100vw;
+        padding-top: 4em;
+        margin: 0 auto;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 980px;
+        overflow: hidden;
+    }
+
+    .createUser-div {
+        margin-top: 9em;
+        margin-bottom: 3em;
+        line-height: 1.2em;
+       
+    }
+
+    .leads {
+        padding-top: 3em;
+        font-size: 3em;
+        display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+
+    .createUser-div {
+        position: absolute;
+        padding: 2em;
+        left: 5%;
+        top: 10%;
+    }
+
+    .leads {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        padding: .3em;
+        padding-top: 5em;
+        z-index: 1;
+        right: 5%;
+        top: 0%;
+        font-weight: bold;
+        font-size: 2.6em;
+        height: 100vh;
+        background-image: linear-gradient(180deg,rgba(38, 40, 36, 0.5), rgba(234, 237, 225, 0));
+    }
+    
 }

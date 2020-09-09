@@ -3,14 +3,14 @@ import StockSearch from "./StockSearch";
 import Watchlist from "./Watchlist";
 import StockList from "./StockList";
 import axios from 'axios';
-// import { Redirect, Route } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import "../App.css";
 import CompanyOverview from './CompanyOverview';
 
 export default function Dashboard (props) {
     
     const [currentStock, setCurrentStock] = useState("")
-    const [watchlists, setWatchlists] = useState(null)
+    const [watchlists, setWatchlists] = useState("")
     const [addList, setAddList] = useState(true);
     const [showStockArray, setShowStockArray] = useState(false)
     const [stockList, setStockList] = useState([])
@@ -19,7 +19,10 @@ export default function Dashboard (props) {
     const [incomeStatement, setIncomeStatement] = useState(null)
     const [balanceSheet, setBalanceSheet] = useState(null)
     const [cashFlowStatement, setCashFlowStatement] = useState(null)
+    const [flag, setFlag] = useState(false)
+    const [seeWarning, setSeeWarning] = useState(false)
 
+    
     const handleStockData = (data) => {
         setCurrentStock({ symbol: data["Global Quote"]["01. symbol"], price: data["Global Quote"]["05. price"], $change: data["Global Quote"]["09. change"], pct_change: data["Global Quote"]["10. change percent"]});
         getOverview(data["Global Quote"]["01. symbol"])
@@ -43,32 +46,28 @@ export default function Dashboard (props) {
         axios(config)
         .then((res) => {
             console.log("showWatchlist data:", res.data.data)
-            setWatchlists(res.data.data)
+
+            setWatchlists(res.data.data)            
+          })
+          .then(() => {
+            console.log(watchlists)
+            if (watchlists) {
+                setSeeWarning(false)
+            } else {
+                setSeeWarning(true)
+                // forceUpdate();
+            }
           })
           .catch((error) => {
                 console.log(error);
           });
     }
 
-    const getCurrentWatchlist = (id) => {
-        console.log("getCurrentWatchlist id:", id)
-        let config = {
-            method: "GET",
-            url: props.baseURL + "api/v1/watchlists/" + id, 
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `${props.jwt}`
-            },
-            withCredentials: true,
-        };
-        axios(config)
-        .then((res) => {
-            console.log("getCurrentWatchlist data:", res.data.data)
-            setCurrentWatchlist({'id': res.data.data.id, 'title': res.data.data.title})
-        })
-          .catch((error) => {
-                console.log(error);
-        });
+    if (props.currentUser === null) {
+        return <Redirect to='/'/>
+    } else if (flag === false) {
+        showWatchlists();
+        setFlag(true);
     }
 
     const getStockList = (watchlistId) =>{
@@ -96,9 +95,9 @@ export default function Dashboard (props) {
         });
     }
 
-    useEffect(() => {
-        showWatchlists();
-    }, []);
+    // useEffect(() => {
+    //     showWatchlists();
+    // }, []);
 
     const getOverview = (symbol) => {
         console.log('getOverview Symbol:', symbol)
@@ -202,8 +201,11 @@ export default function Dashboard (props) {
                     currentWatchlist={currentWatchlist}
                     currentStock={currentStock}
                     jwt={props.jwt}
-                    getCurrentWatchlist={getCurrentWatchlist}
-                    emptyCurrentWatchlist={emptyCurrentWatchlist}
+
+                    seeWarning={seeWarning}
+                    setSeeWarning={setSeeWarning}
+                    
+
                 />
             </div>
             { currentWatchlist ?

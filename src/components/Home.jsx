@@ -3,50 +3,65 @@ import CreateUser from './CreateUser';
 import LogIn from './LogIn';
 import { Redirect} from "react-router-dom";
 import "../App.css";
-import Button from "react-bootstrap/Button";
+import { Tabs, Tab, Container } from '@material-ui/core';
+import 'materialize-css';
 
+export default function Home (props) {
+    const [selectedTab, setSelectedTab] = React.useState(0);
 
-export default function Home(props) {
-
+    const handleChange = (event, newValue) => {
+        setSelectedTab(newValue);
+    };
+    
     if (props.loginStatus) {
         return <Redirect to='/dashboard'/>
     }
-
+    
     return (
-        <div>
-            <div className="site-layout-content">
+        <>
+        <div className="bg-color">
+        <div className='home-bg '>
+            {/* <Container > */}
+            <div className="site-layout-content stack">
+                <div className="leads">
+                    <h3 className="lead-lines">
+                        Research stocks ...</h3>
+                    <h3 className="lead-lines">
+                        Add them to your watchlists ... 
+                    </h3>
+                    <h3 className="lead-lines">
+                        Find the next 10bagger!
+                    </h3>
+                </div>
                 <div className="createUser-div">
-                    <CreateUser 
-                        handleSuccessfulRegistration={props.handleSuccessfulRegistration}
-                        loginStatus={props.loginStatus}
-                        currentUser={props.currentUser}
-                        baseURL={props.baseURL}
-                        handleLogin={props.handleLogin}
-                        showLogin={props.showLogin}
-                        revealLogin={props.revealLogin}
-                    />
-                    { props.showLoginBox ?
-                    <LogIn
+                    <Tabs
+                        value={selectedTab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        onChange={handleChange}
+                    >
+                        <Tab label="Create Account" />
+                        <Tab label="Sign In" />
+                    </Tabs>
+                    {selectedTab === 0 &&
+                        <CreateUser 
+                            handleSuccessfulRegistration={props.handleSuccessfulRegistration}
+                            baseURL={props.baseURL}
+                        />
+                    }
+                    {selectedTab === 1 &&
+                        <LogIn
                         handleSuccessfulRegistration={props.handleSuccessfulRegistration}
                         handleChange={props.handleChange}
                         baseURL={props.baseURL}
-                    /> :
-                    <>
-                        <h4>Already have an account?</h4>
-                        <Button variant="outline-secondary" onClick={(evt)=>props.revealLoginBox(evt)}>Login</Button>
-                    </>
-                    }   
-                </div>
-                        
-                    <img style={{position: 'relative'}} className="home-bg" src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' alt="Logo"/>
-                <div className="leads">
-                    <h3 id="lead-lines">Research stocks ... <br/>
-                    Add them to your watchlists ... <br/>
-                    Find the next 10bagger!
-                    </h3>
+                        />
+                    }
                 </div>
             </div>
-            <footer style={{ textAlign: 'left' }}>10bagger ©2020</footer>
+            {/* </Container> */}
         </div>
+       </div>
+        </>
+        
     )
 }

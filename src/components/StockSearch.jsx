@@ -10,6 +10,7 @@ export default class StockSearch extends Component {
     }
     
     handleChange = (evt) => {
+      
       this.setState({
         [evt.target.id]: evt.target.value,
         ticker: evt.target.value

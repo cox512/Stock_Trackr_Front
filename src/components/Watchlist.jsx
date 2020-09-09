@@ -79,7 +79,6 @@ export default function Watchlist(props) {
         };
         axios(config) 
         .then((res) => {
-            console.log("in the axios delete call");            
             props.showWatchlists()
             props.emptyCurrentWatchlist()
         })
@@ -93,7 +92,7 @@ export default function Watchlist(props) {
                     <div>
                         <h3>What list would you like to add the stock to?</h3>
                         {/* This first ternary isn't working. Not sure why. */}
-                        { props.watchlists ? null :
+                        { props.seeWarning === false ? null :
                         <h3><i>You don't currently have any watchlists. Create one to get started!</i></h3>}
                         { props.watchlists ?
                         <Table>
