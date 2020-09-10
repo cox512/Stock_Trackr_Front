@@ -46,18 +46,15 @@ export default function Dashboard (props) {
         axios(config)
         .then((res) => {
             console.log("showWatchlist data:", res.data.data)
-
             setWatchlists(res.data.data)            
-          })
-          .then(() => {
-            console.log(watchlists)
+            // console.log(watchlists['0']['title'])
             if (watchlists) {
                 setSeeWarning(false)
             } else {
                 setSeeWarning(true)
-                // forceUpdate();
             }
-          })
+            }
+        )
           .catch((error) => {
                 console.log(error);
           });
@@ -94,10 +91,6 @@ export default function Dashboard (props) {
             console.log(error);
         });
     }
-
-    // useEffect(() => {
-    //     showWatchlists();
-    // }, []);
 
     const getOverview = (symbol) => {
         console.log('getOverview Symbol:', symbol)

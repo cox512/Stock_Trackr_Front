@@ -38,7 +38,7 @@ export default function Watchlist(props) {
 
     const addStock = (id) => {
         console.log("currentWatchlist ID: ", id)
-        props.getCurrentWatchlist(id)
+        // props.getCurrentWatchlist(id)
         let symbol = props.currentStock.symbol;
         if (symbol === undefined) {
             console.log('addStock if statement id:', id)
@@ -101,7 +101,9 @@ export default function Watchlist(props) {
                                 return (    
                                     <tr key={list.id}>  
                                         <td className="pick-list" onClick={()=>addStock(list.id)}>{list.title}</td>
-                                        <td className="pick-list"><Button  variant="danger" key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</Button></td>
+                                        <td className="pick-list">
+                                            <Button  variant="danger" key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</Button>
+                                        </td>
                                     </tr>
                                 )})} 
                             </tbody>     
