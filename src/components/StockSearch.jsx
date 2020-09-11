@@ -3,7 +3,7 @@ import axios from 'axios';
 import "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import Dropdown from "react-bootstrap/Dropdown";
+import Form from "react-bootstrap/Form";
 
 
 const API_KEY = [
@@ -76,15 +76,18 @@ export default class StockSearch extends Component {
       <>
         <div>
           <p>Enter a ticker symbol below</p>
-          <form onSubmit={(evt)=>this.handleStockSearch(evt)}>
-            <label htmlFor="ticker">Stock:</label>
-            <input type="text" id="ticker" placeholder="Search by name or symbol" onChange={(evt)=>this.handleChange(evt)}/><br/>
-            
-            {this.state.ticker ?
-              <select size={this.state.tickerList.length}>
+          <Form onSubmit={(evt)=>this.handleStockSearch(evt)}>
+            <Form.Group id="ticker">
+              <Form.Label htmlFor="ticker">Stock:</Form.Label>
+              <Form.Control 
+                type="text"
+                placeholder="Enter name or symbol"
+                onChange={(evt)=>this.handleChange(evt)}
+              />
+              {this.state.ticker ?
+              <select size={this.state.tickerList.length} className="selection-form">
                 {this.state.tickerList.map((stock) => {
                   return (
-                    // console.log(stock)
                   <option 
                     key={stock['symbol']} 
                     onClick={() => this.handleSelection(stock.symbol)} >
@@ -94,9 +97,10 @@ export default class StockSearch extends Component {
                 })
               }
               </select> : null
-            }
-          <Button variant="outline-dark" type="submit">Search</Button>
-          </form>
+              }
+            </Form.Group>
+            <Button variant="outline-dark" type="submit">Search</Button>
+          </Form>
         </div>
 
 

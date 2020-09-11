@@ -83,6 +83,11 @@ ul {
     justify-content: space-around;
 }
 
+.selection-form {
+    background-color: white;
+
+}
+
 #footer {
     position: absolute;
     text-align: left;
@@ -234,6 +239,10 @@ ul {
         background-repeat: no-repeat;
         height: 980px;
         overflow: hidden;
+    }
+
+    .selection-form {
+        max-width: 30vw;
     }
 
     .createUser-div {

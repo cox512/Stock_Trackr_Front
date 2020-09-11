@@ -1,92 +1,66 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../App.css'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'materialize-css';
+import { withCookies, useCookies } from 'react-cookie'
 
+function LogIn (props) {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [logInError, setLogInError] = useState(false)
+    const [cookies, setCookie, removeCookie] = useCookies(['username'])
+    // const [redirect, setRedirect]   = useState(false)
 
-  
-export default class LogIn extends Component {
-    state = {
-        username: '',
-        password: '',
-        logInError: false,
-        redirect: false,       
-    }
-    
-    handleChange = (evt) => {
-        this.setState({
-          [evt.target.id]: evt.target.value,
-        });
-    };
-
-    resetErrorMessage = () => {
-        this.setState({
-            logInError: false,
-        })
-    }
-
-    handleLoginSubmit = (evt) => {
+    const handleLoginSubmit = async (evt) => {
         evt.preventDefault()
-        let data = JSON.stringify(this.state);
-        console.log(this.state)
-        let config = {
-            method: "POST",
-            url: this.props.baseURL + "user/login",
-            headers: { 
-                "Content-Type": "application/json",
-            },
-            data: data,
-            withCredentials: true,  
-        };
-        axios(config)
-        .then(res => {
-            console.log(res)
-            return res.data;
-        })
-        .then((data) => {
-            localStorage.setItem('jwt', data.status['token'])
-            if (data.status.code === 200) {
-                this.props.handleSuccessfulRegistration(data.data);
+        try {
+            const res = await axios.post(props.baseURL + "user/login", {
+                username: username,
+                password: password
+            }, {withCredentials: true})
+            console.log(res.data.data.username)
+            // setCookie('username', res.data.data.username)
+            // setCookie('userid', res.data.data.id)
+            localStorage.setItem('jwt', res.data.status['token'])
+            if (res.data.status.code === 200) {
+                props.handleSuccessfulRegistration(res.data.data);
             } else {
-                console.log(this.props.jwt)
-                this.setState({
-                    logInError: true,
-                })                
+                console.log(props.jwt)
+                setLogInError(true);            
             }
-        })
-        .catch((error) => {
+        }
+        catch (error) {
             console.log("Login Error:", error );
-        });
+        };
     }
 
-   
-    render () {
-        return (
-            <div>
-                { this.state.logInError ? 
-                    <>
-                        <h3>There was an error logging you in. Please try again.</h3>
-                        <Button type="button" onClick={()=>this.resetErrorMessage()}>Okay</Button>
-                    </> :
-                <Form onSubmit={(evt)=>this.handleLoginSubmit(evt)}>
+    return (
+        <div>
+            { logInError ? 
+                <>
+                    <h3>There was an error logging you in. Please try again.</h3>
+                    <Button type="button" onClick={()=>setLogInError(false)}>Okay</Button>
+                </> :
+                <Form onSubmit={(evt)=>handleLoginSubmit(evt)}>
                     <Form.Group>
                         <Form.Label htmlFor="username">Username:</Form.Label>
-                        <Form.Control type="text" id="username" value={this.state.username} onChange={(evt)=>this.handleChange(evt)} />
+                        <Form.Control type="text" id="username" value={username} onChange={(evt) => setUsername(evt.target.value)} />
                     </Form.Group>
-
                     <Form.Group>
                         <Form.Label htmlFor="password">Password:</Form.Label>
                         <Form.Control type="password" id="password" 
-                        onChange={(evt)=>this.handleChange(evt)} 
-                        value={this.state.password}/>
+                            onChange={(evt) => setPassword(evt.target.value)} 
+                            value={password}
+                        />
                     </Form.Group>
                     <Button type="submit" variant="primary">Log In</Button>
-                    </Form>
-                }    
-            </div>
-        )
-    }
+                </Form>
+            }    
+        </div>
+    )
 }
+
+export default withCookies(LogIn);

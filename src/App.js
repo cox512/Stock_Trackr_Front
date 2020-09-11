@@ -21,7 +21,7 @@ class App extends Component {
     loginStatus: false,
     showLoginBox: false,
     modalVisible: false,
-    jwt: "",
+    jwt: localStorage.getItem("jwt") || "",
   };
 
   handleChange = (evt) => {
@@ -72,56 +72,61 @@ class App extends Component {
   //     .catch((error) => console.error({ Error: error }));
   // };
 
-  checkLoginStatus = () => {
-    // Upon mounting, look to see if there is currently a user logged in. If so make them the currentUser. If not, make sure there is no currentUser in state
-    var config = {
-      method: "GET",
-      url: baseURL + "user/",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${this.state.jwt}`,
-      },
-      withCredentials: true,
-    };
-    axios(config)
-      .then((res) => {
-        if (res.data.logged_in && this.state.loginStatus === false) {
-          this.setState({
-            loginStatus: true,
-            currentUser: res.data.data[0],
-          });
-        } else if (!res.data.logged_in && this.state.loginStatus === true) {
-          this.setState({
-            loginStatus: false,
-            currentUser: {},
-          });
-          return <Redirect to="/" />;
-        }
-        console.log("logged in?", res.data);
-      })
-      .catch((err) => {
-        console.log("check login error: ", err);
-      });
-  };
+  // checkLoginStatus = () => {
+  //   // Upon mounting, look to see if there is currently a user logged in. If so make them the currentUser. If not, make sure there is no currentUser in state
+  //   var config = {
+  //     method: "GET",
+  //     url: baseURL + "user/",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `${this.state.jwt}`,
+  //     },
+  //     withCredentials: true,
+  //   };
+  //   axios(config)
+  //     .then((res) => {
+  //       if (res.data.logged_in && this.state.loginStatus === false) {
+  //         this.setState({
+  //           loginStatus: true,
+  //           currentUser: res.data.data[0],
+  //         });
+  //       } else if (!res.data.logged_in && this.state.loginStatus === true) {
+  //         this.setState({
+  //           loginStatus: false,
+  //           currentUser: {},
+  //         });
+  //         return <Redirect to="/" />;
+  //       }
+  //       console.log("logged in?", res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log("check login error: ", err);
+  //     });
+  // };
 
-  componentDidMount = () => {
-    const jwt = localStorage.getItem("jwt");
-    if (!jwt) {
-      this.props.history.push("/");
-    }
-    axios
-      .get(baseURL + "user/", { headers: { Authorization: `Bearer ${jwt}` } })
-      .then((res) =>
+  componentDidMount = async () => {
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
+      try {
+        const res = await axios.get(
+          baseURL + "user/",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${jwt}`,
+            },
+          },
+          { withCredentials: true }
+        );
+        console.log(res.data.data[0]);
         this.setState({
-          currentUser: res.data,
-        })
-      )
-      .catch((err) => {
-        console.log("check login error: ", err);
-        localStorage.removeItem("jwt");
-        this.props.history.push("/");
-      });
-    // this.checkLoginStatus();
+          currentUser: res.data.data[0],
+          loginStatus: true,
+        });
+      } catch (error) {
+        console.log("Login Error:", error);
+      }
+    }
   };
 
   handleLogout = () => {
@@ -133,14 +138,6 @@ class App extends Component {
     });
     if (!this.state.loginStatus) {
       console.log("User is logged out.");
-    }
-  };
-
-  componentDidUpdate = () => {
-    if (this.state.redirect) {
-      this.setState({
-        redirect: false,
-      });
     }
   };
 
