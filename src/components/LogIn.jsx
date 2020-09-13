@@ -5,14 +5,14 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'materialize-css';
-import { withCookies, useCookies } from 'react-cookie'
+// import { withCookies, useCookies } from 'react-cookie'
 
-function LogIn (props) {
+export default function LogIn (props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [logInError, setLogInError] = useState(false)
-    const [cookies, setCookie, removeCookie] = useCookies(['username'])
-    // const [redirect, setRedirect]   = useState(false)
+    // const [cookies, setCookie, removeCookie] = useCookies(['username'])
+
 
     const handleLoginSubmit = async (evt) => {
         evt.preventDefault()
@@ -22,8 +22,6 @@ function LogIn (props) {
                 password: password
             }, {withCredentials: true})
             console.log(res.data.data.username)
-            // setCookie('username', res.data.data.username)
-            // setCookie('userid', res.data.data.id)
             localStorage.setItem('jwt', res.data.status['token'])
             if (res.data.status.code === 200) {
                 props.handleSuccessfulRegistration(res.data.data);
@@ -62,5 +60,3 @@ function LogIn (props) {
         </div>
     )
 }
-
-export default withCookies(LogIn);

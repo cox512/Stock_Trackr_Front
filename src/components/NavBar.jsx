@@ -61,7 +61,6 @@ export default function NavBar(props) {
 
     const logout = () => {     
         
-        console.log(props.jwt) 
         var config = {
             method: 'GET',
             url: props.baseURL + 'user/logout',
