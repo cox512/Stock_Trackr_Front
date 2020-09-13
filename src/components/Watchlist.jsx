@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "react-bootstrap";
 import Button from "react-bootstrap/Button";
@@ -12,6 +12,14 @@ export default function Watchlist(props) {
     const handleTitleChange = (evt) => {
         setTitle(evt.target.value)
     }
+
+    // useEffect ((props) => {
+    //     if (props.watchlists) {
+    //         props.setSeeWarning(false)
+    //     } else (
+    //         props.setSeeWarning(true)
+    //     )
+    // }, [props.watchlists] )
 
     const createWatchlist = (evt) => {
         evt.preventDefault();
@@ -38,7 +46,6 @@ export default function Watchlist(props) {
 
     const addStock = (id) => {
         console.log("currentWatchlist ID: ", id)
-        props.getCurrentWatchlist(id)
         let symbol = props.currentStock.symbol;
         if (symbol === undefined) {
             console.log('addStock if statement id:', id)
@@ -59,7 +66,7 @@ export default function Watchlist(props) {
         axios(config) 
         .then((res) => {
             console.log('addStock returns: ', res);
-            props.getStockList(props.currentWatchlist.id)
+            props.getCurrentWatchlist(id);
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -101,7 +108,9 @@ export default function Watchlist(props) {
                                 return (    
                                     <tr key={list.id}>  
                                         <td className="pick-list" onClick={()=>addStock(list.id)}>{list.title}</td>
-                                        <td className="pick-list"><Button  variant="danger" key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</Button></td>
+                                        <td className="pick-list">
+                                            <Button  variant="danger" key={list.key} type="button" onClick={()=>deleteWatchlist(list.id)}>x</Button>
+                                        </td>
                                     </tr>
                                 )})} 
                             </tbody>     

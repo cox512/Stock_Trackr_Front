@@ -22,7 +22,22 @@ export default function Dashboard (props) {
     const [flag, setFlag] = useState(false)
     const [seeWarning, setSeeWarning] = useState(false)
 
-    
+    useEffect (() => {
+        if (watchlists) {
+            setSeeWarning(false)
+        } else (
+            setSeeWarning(true)
+        )
+    }, [] )
+
+    useEffect (() => {
+        if (watchlists.length !== 0) {
+            setSeeWarning(false)
+        } else (
+            setSeeWarning(true)
+        )
+    }, [watchlists] )
+
     const handleStockData = (data) => {
         setCurrentStock({ symbol: data["Global Quote"]["01. symbol"], price: data["Global Quote"]["05. price"], $change: data["Global Quote"]["09. change"], pct_change: data["Global Quote"]["10. change percent"]});
         getOverview(data["Global Quote"]["01. symbol"])
@@ -32,35 +47,21 @@ export default function Dashboard (props) {
         setCurrentWatchlist(null)
     }
 
-    const showWatchlists = () =>{
+    const showWatchlists = async () =>{
         console.log('showWatchlists')
-        let config = {
-            method: "GET",
-            url: props.baseURL + "api/v1/watchlists/", 
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `${props.jwt}`
-            },
-            withCredentials: true,
-        };
-        axios(config)
-        .then((res) => {
+        try {
+            const res = await axios.get(props.baseURL + "api/v1/watchlists/", 
+                {headers:{
+                    "Content-Type": "application/json",
+                    'Authorization': `${props.jwt}`},
+                withCredentials: true}
+            )
             console.log("showWatchlist data:", res.data.data)
-
-            setWatchlists(res.data.data)            
-          })
-          .then(() => {
-            console.log(watchlists)
-            if (watchlists) {
-                setSeeWarning(false)
-            } else {
-                setSeeWarning(true)
-                // forceUpdate();
-            }
-          })
-          .catch((error) => {
-                console.log(error);
-          });
+            setWatchlists(res.data.data)
+        }
+        catch (error) {
+            console.log("Error:", error);
+        }
     }
 
     if (props.currentUser === null) {
@@ -68,38 +69,47 @@ export default function Dashboard (props) {
     } else if (flag === false) {
         showWatchlists();
         setFlag(true);
-    }
+    };
+    
 
-    const getStockList = (watchlistId) =>{
+    const getStockList = async (watchlistId) =>{
         //Called when a watchlist is clicked AND when the stockList is re-rendered after a stock has been deleted.
-        let data = JSON.stringify({watchlist: watchlistId})
-        console.log("watchlist ID: ", watchlistId)
-        var config = {
-            method: "POST",
-            url: props.baseURL + "api/v1/stocks/showList",
-            data: data,
-            headers: { 
-                "Content-Type": "application/json",
-                "Authorization": `${props.jwt}`
-            },
-            withCredentials: true,
-          };
-        axios(config)
-        .then((res) => {
+        try {
+            const res = await axios.post(props.baseURL + "api/v1/stocks/showList", {
+                watchlist: watchlistId},
+                {withCredentials: true,
+                headers:{
+                    "Content-Type": "application/json",
+                    'Authorization': `${props.jwt}`}
+                })
             console.log('res: ', res)
             setStockList(res.data.data)
-            setShowStockArray(true)  
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+            setShowStockArray(true)
+        }
+        catch (error) {
+            console.log("Error:", error);
+        }
     }
 
-    // useEffect(() => {
-    //     showWatchlists();
-    // }, []);
+    const getCurrentWatchlist = async (id) => {
+        console.log('getCurrWatch:', id)
+        try {
+            const res = await axios.get(props.baseURL + "api/v1/watchlists/" + id, 
+            {headers:{
+                "Content-Type": "application/json",
+                'Authorization': `${props.jwt}`},
+            withCredentials: true
+        })
+            setCurrentWatchlist(res.data.data);
+            getStockList(res.data.data.id);
+        }
+        catch (error) {
+            console.log("Error:", error);
+        }
 
-    const getOverview = (symbol) => {
+    }
+
+    const getOverview = async (symbol) => {
         console.log('getOverview Symbol:', symbol)
         let random = Math.floor(Math.random() * 2);
         let API_KEY = [
@@ -201,9 +211,10 @@ export default function Dashboard (props) {
                     currentWatchlist={currentWatchlist}
                     currentStock={currentStock}
                     jwt={props.jwt}
-
+                    getCurrentWatchlist={getCurrentWatchlist}
                     seeWarning={seeWarning}
                     setSeeWarning={setSeeWarning}
+                    emptyCurrentWatchlist={emptyCurrentWatchlist}
                     
 
                 />
