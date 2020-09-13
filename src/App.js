@@ -20,7 +20,7 @@ class App extends Component {
     currentUser: null,
     loginStatus: false,
     showLoginBox: false,
-    modalVisible: false,
+    modalShow: false,
     jwt: localStorage.getItem("jwt") || "",
   };
 
@@ -163,7 +163,7 @@ class App extends Component {
                   <Dashboard
                     currentUser={this.state.currentUser}
                     baseURL={baseURL}
-                    modalVisible={this.state.modalVisible}
+                    modalShow={this.state.modalShow}
                     setModalVisible={this.setModalVisible}
                     jwt={this.state.jwt}
                   />

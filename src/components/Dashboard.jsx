@@ -127,8 +127,8 @@ export default function Dashboard (props) {
     }
 
     const getIncomeStatement = (symbol) => {
-        console.log(symbol)
-        console.log('getIncomeStatement')
+        // console.log(symbol)
+        // console.log('getIncomeStatement')
         let random = Math.floor(Math.random() * 2);
         let API_KEY = [
             process.env.REACT_APP_API_KEY1,
@@ -136,8 +136,7 @@ export default function Dashboard (props) {
           ];
         axios(`https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
-            // console.log(Object.entries(res.data))
-            console.log(res.data)
+            console.log(res)
             // let overview = Object.entries(JSON.stringify(res.data))
             setIncomeStatement(res.data)
         })
@@ -240,6 +239,8 @@ export default function Dashboard (props) {
                     overview={overview}
                     setOverview={setOverview}
                     getOverview={getOverview}
+                    //could have one generic "statement" variable that changes. This might help with condenscing the modals/tables.
+                    incomeStatement={incomeStatement}
                     getIncomeStatement={getIncomeStatement}
                     getBalanceSheet={getBalanceSheet}
                     getCashFlowStatement={getCashFlowStatement}
