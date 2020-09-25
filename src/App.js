@@ -37,47 +37,14 @@ function App() {
     console.log(data);
     setCurrentUser(data);
     setJwt(localStorage.getItem("jwt"));
-    localStorage.setItem("fname", currentUser.fname);
   };
-
-  // checkLoginStatus = () => {
-  //   // Upon mounting, look to see if there is currently a user logged in. If so make them the currentUser. If not, make sure there is no currentUser in state
-  //   var config = {
-  //     method: "GET",
-  //     url: baseURL + "user/",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `${this.state.jwt}`,
-  //     },
-  //     withCredentials: true,
-  //   };
-  //   axios(config)
-  //     .then((res) => {
-  //       if (res.data.logged_in && this.state.loginStatus === false) {
-  //         this.setState({
-  //           loginStatus: true,
-  //           currentUser: res.data.data[0],
-  //         });
-  //       } else if (!res.data.logged_in && this.state.loginStatus === true) {
-  //         this.setState({
-  //           loginStatus: false,
-  //           currentUser: {},
-  //         });
-  //         return <Redirect to="/" />;
-  //       }
-  //       console.log("logged in?", res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log("check login error: ", err);
-  //     });
-  // };
 
   const checkLogin = async () => {
     console.log("checklogin");
-    if (localStorage.getItem("jwt")) {
-      try {
-        const jwt = localStorage.getItem("jwt");
-        const res = await axios.get(
+    try {
+      const jwt = localStorage.getItem("jwt");
+      const res = await axios
+        .get(
           baseURL + "user/",
           {
             headers: {
@@ -86,35 +53,40 @@ function App() {
             },
           },
           { withCredentials: true }
-        );
-        console.log(res.data.data[0]);
-        setCurrentUser(res.data.data[0]);
-        setLogInStatus(true);
-      } catch (error) {
-        console.log("Error:", error);
-        localStorage.removeItem("jwt");
-        return <Redirect to="/" />;
-      }
-    } else {
+        )
+        .then((res) => {
+          setCurrentUser(res.data.data[0]);
+          return res.data;
+        })
+        .then((data) => {
+          console.log("currentUser: ", currentUser);
+          setLogInStatus(true);
+        });
+    } catch (error) {
+      console.log("Error:", error);
       localStorage.clear();
       return <Redirect to="/" />;
     }
   };
 
   useEffect(() => {
+    console.log("use effect checklogin");
     checkLogin();
   }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     console.log("in handle logout");
     localStorage.clear();
+
     setCurrentUser("");
-    setLogInStatus(false);
     setJwt("");
+    setLogInStatus(false);
   };
 
   return (
     <>
+      {redirect ? <Redirect to={redirect} /> : null}
+      {}
       <div>
         <BrowserRouter>
           {/* <div ref={wrapper}>{props.children}</div> */}
@@ -148,8 +120,11 @@ function App() {
               path="/"
               render={() => (
                 <Home
+                  redirect={redirect}
+                  setRedirect={setRedirect}
                   handleSuccessfulRegistration={handleSuccessfulRegistration}
                   currentUser={currentUser}
+                  setCurrentUser={setCurrentUser}
                   logInStatus={logInStatus}
                   baseURL={baseURL}
                   showLoginBox={showLoginBox}

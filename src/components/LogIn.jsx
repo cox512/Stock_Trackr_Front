@@ -14,21 +14,36 @@ export default function LogIn (props) {
     const handleLoginSubmit = async (evt) => {
         evt.preventDefault()
         console.log('handleLoginSubmit');
+        console.log("username:", username)
        try { 
             const res = await axios.post(props.baseURL + "user/login", {
                 username: username,
                 password: password
-            }, {withCredentials: true})
-            .then((res) => {
-                localStorage.setItem('jwt', res.data.status['token'])
-                localStorage.setItem('fname', res.data.data['fname'])
-                props.handleSuccessfulRegistration(res.data.data);  
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                  },
+            },
+             {withCredentials: true})
+            .then(res => {
+                if(res.data.status["code"] === 401) {
+                    return setLogInError(true);
+                }
+                props.setCurrentUser(res.data.data)
+                return res.data;
+            }).then((data) => {
+                console.log("data:", data)
+                localStorage.setItem('jwt', data.status['token']);
+                localStorage.setItem('fname', data.data.fname);
+                props.handleSuccessfulRegistration(data.data);
+                console.log("currentUser: ", props.currentUser)  
             })
         }
         catch (error) {
-            console.error("Error: ", error);
+            console.error("Catch Error: ", error);
             localStorage.clear();
-            setLogInError(true);     
+            setLogInError(true);
         }
     }
 

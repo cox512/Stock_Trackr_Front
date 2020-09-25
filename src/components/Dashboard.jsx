@@ -21,6 +21,7 @@ export default function Dashboard (props) {
     const [cashFlowStatement, setCashFlowStatement] = useState(null)
     const [flag, setFlag] = useState(false)
     const [seeWarning, setSeeWarning] = useState(false)
+    const [fname, setFname] = useState(localStorage.getItem('fname'))
 
     useEffect (() => {
         if (watchlists.length !== 0) {
@@ -144,10 +145,8 @@ export default function Dashboard (props) {
           ];
         axios(`https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
-            // console.log(Object.entries(res.data));
             console.log(Object.entries(Object.entries(res.data))[1][1][1]);
             console.log(Object.entries(Object.entries(Object.entries(res.data))[1][1][1]));
-            // let overview = Object.entries(JSON.stringify(res.data))
             setAnnualIncomeStatement(Object.entries(Object.entries(res.data))[1][1][1])
         })
         .catch((error) => {
@@ -165,9 +164,7 @@ export default function Dashboard (props) {
           ];
         axios(`https://www.alphavantage.co/query?function=CASH_FLOW&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
-            // console.log(Object.entries(res.data))
             console.log(res.data)
-            // let overview = Object.entries(JSON.stringify(res.data))
             setCashFlowStatement(res.data)
         })
         .catch((error) => {
@@ -187,7 +184,6 @@ export default function Dashboard (props) {
         axios(`https://www.alphavantage.co/query?function=Balance_Sheet&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
             console.log(res.data)
-            // let overview = Object.entries(JSON.stringify(res.data))
             setBalanceSheet(res.data)
         })
         .catch((error) => {
@@ -197,8 +193,9 @@ export default function Dashboard (props) {
 
     return (
         <>
+        {props.redirect ? <Redirect to={props.redirect} /> : null}
         <div className="greeting">
-                <h3>Hello there, {localStorage["fname"]}</h3>
+                <h3>Hello there, {fname}</h3>
                 <h4>What company would you like to research today?</h4>
         </div>
         <div className="container">

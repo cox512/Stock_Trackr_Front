@@ -44,6 +44,7 @@ export default function NavBar(props) {
                 return res.data;
             }).then((data) => {
                 console.log(data.data);
+                localStorage.setItem('fname', data.data.fname);
                 props.handleSuccessfulRegistration(data.data);
                 handleClose();
                 props.setRedirect("/");
@@ -67,8 +68,7 @@ export default function NavBar(props) {
                 console.log("logout then statement")
                 props.handleLogout();
                 props.setRedirect("/");
-            }).then(() => {
-                props.setRedirect(null);
+            
             })
         }
         catch (error) {

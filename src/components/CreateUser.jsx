@@ -45,7 +45,6 @@ export default class CreateUser extends Component {
           {withCredentials: true})
         .then((res) => {
           localStorage.setItem('jwt', res.data.status.token);
-          localStorage.setItem('fname', res.data.data['fname']);
           this.props.handleSuccessfulRegistration(res.data.data);
         })
       }

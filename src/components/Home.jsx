@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import CreateUser from './CreateUser';
 import LogIn from './LogIn';
 import { Redirect} from "react-router-dom";
@@ -13,13 +13,18 @@ export default function Home (props) {
         setSelectedTab(newValue);
     };
     
-    if (props.logInStatus) {
-        console.log("Home if statement login status:", props.logInStatus)
-        return <Redirect to='/dashboard'/>
-    }
+    // if (props.logInStatus) {
+    //     console.log("Home if statement login status:", props.logInStatus)
+    //     return <Redirect to='/dashboard'/>
+    // }
+    useEffect (() => {
+        props.setRedirect(null)
+    }, [])
     
     return (
         <>
+        {props.logInStatus ?  <Redirect to='/dashboard' />: null}
+
         <div className="bg-color">
         <div className='home-bg '>
             {/* <Container > */}
@@ -55,6 +60,8 @@ export default function Home (props) {
                         handleSuccessfulRegistration={props.handleSuccessfulRegistration}
                         handleChange={props.handleChange}
                         baseURL={props.baseURL}
+                        currentUser={props.currentUser}
+                        setCurrentUser={props.setCurrentUser}
                         // setJwt={props.setJwt}
                         />
                     }
