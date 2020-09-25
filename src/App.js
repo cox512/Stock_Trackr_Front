@@ -24,9 +24,12 @@ function App() {
   const [jwt, setJwt] = useState(localStorage.getItem("jwt") || "");
 
   const handleChange = (evt) => {
-    const editedUser = currentUser;
-    editedUser[evt.target.id] = evt.target.value;
-    setCurrentUser(editedUser);
+    evt.persist();
+    let value = evt.target.value;
+    setCurrentUser((prevState) => ({
+      ...prevState,
+      [evt.target.id]: value,
+    }));
   };
 
   const handleSuccessfulRegistration = async (data) => {
@@ -34,6 +37,7 @@ function App() {
     console.log(data);
     setCurrentUser(data);
     setJwt(localStorage.getItem("jwt"));
+    localStorage.setItem("fname", currentUser.fname);
   };
 
   // checkLoginStatus = () => {

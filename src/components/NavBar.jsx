@@ -12,50 +12,46 @@ import { Hidden } from '@material-ui/core';
 
 export default function NavBar(props) {
     const [show, setShow] = useState(false);
-    
+    const [fname, setFname] = useState('')
+    const [lname, setLname] = useState('')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
-    
-
-    // useEffect(() => {
-    //     const node = wrapper.current;
-    // }, [] )
-
-    // const wrapper = createRef();
-
-    const handleUpdate = (evt) => {
+   
+    const handleUpdate = async (evt) => {
         evt.preventDefault();
         console.log(props.currentUser);
-        let data = JSON.stringify(props.currentUser);
-        let config = {
-          method: "PUT",
-          url: props.baseURL + "user/" + props.currentUser.id,
-          data: data,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${props.jwt}`,
-          },
-          withCredentials: true,
-        };
-        axios(config)
-          .then((res) => {
-            console.log(res);
-            return res.data;
-          })
-          .then((data) => {
-            console.log(data.data);
-            if (data.status.code === 200) {
-              props.handleSuccessfulRegistration(data.data);
-              handleClose();
-              props.setRedirect("/");
-            } 
-            // else {
-            //   this.setState({
-            //     errorMessage: true,
-            //   });
-            // }
-          })
-          .catch((error) => console.error({ Error: error }));
+        try {
+            const res = await axios.put(
+                props.baseURL + "user/" + props.currentUser.id,
+                {
+                    fname: props.currentUser.fname,
+                    lname: props.currentUser.lname,
+                    username: props.currentUser.username,
+                    email: props.currentUser.email
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `${props.jwt}`,
+                      },
+                },
+                {withCredentials: true}
+            ).then((res) => {
+                return res.data;
+            }).then((data) => {
+                console.log(data.data);
+                props.handleSuccessfulRegistration(data.data);
+                handleClose();
+                props.setRedirect("/");
+              })
+        }
+        catch (error) {
+            console.error("Error: ", error)
+        }
       };
 
     const logout = async () => {     
@@ -192,7 +188,6 @@ export default function NavBar(props) {
 
         <div >
             {props.currentUser !== null ?
- 
             <Modal
                 animation={false}
                 show={show}
@@ -209,7 +204,11 @@ export default function NavBar(props) {
                     
                     <Form.Group>
                         <Form.Label htmlFor="fname">First Name</Form.Label>
-                        <Form.Control type="text" id='fname' value={ props.currentUser.fname } onChange={(evt)=> props.handleChange(evt)}/>
+                        <Form.Control 
+                        type="text" 
+                        id='fname' 
+                        value={ props.currentUser.fname } 
+                        onChange={(evt)=> props.handleChange(evt)}/>
                     </Form.Group>
 
                     <Form.Group >

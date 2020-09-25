@@ -30,19 +30,6 @@ export default function LogIn (props) {
             localStorage.clear();
             setLogInError(true);     
         }
-        // console.log(res.data.status['token']);
-        // console.log(res.data.data);
-
-        // if(res.data.status['token'] && res.data.data['fname']) {
-        //     localStorage.setItem('jwt', res.data.status['token'])
-        //     localStorage.setItem('fname', res.data.data['fname'])
-        //     props.handleSuccessfulRegistration(res.data.data);  
-        // } else {
-        //     console.error("Error in handleLoginSubmit");
-        //     localStorage.clear();
-        //     setLogInError(true);            
-        // };
-        
     }
 
     return (
