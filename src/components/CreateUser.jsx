@@ -30,37 +30,28 @@ export default class CreateUser extends Component {
         })
     }
 
-    createNewUser = (evt) => {
-        evt.preventDefault();
-        console.log(this.state)
-        let data = JSON.stringify(this.state);
-        let config = {
-            method: "POST",
-            url: this.props.baseURL + "user/register",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            data: data,
-            withCredentials: true,
-          };
-          axios(config)
-            .then((res) => {
-              console.log(res);
-            //   return res.data;
-            // })
-            // .then((data))
-              localStorage.setItem('jwt', res.data.status.token)
-              if (res.data.status.code === 200) {
-                this.props.handleSuccessfulRegistration(res.data.data);
-              } else {
-                this.setState({
-                    errorMessage: true
-                })
-              }
-            })
-            .catch((error) => {
-              console.log("Registration Error: ", error);
-            });
+    createNewUser = async (evt) => {
+      evt.preventDefault();
+      try {
+        const res = await axios.post(
+          this.props.baseURL + "user/register",
+          {
+            fname: this.state.fname,
+            lname: this.state.lname,
+            username: this.state.username,
+            password: this.state.password,
+            email: this.state.email
+          },
+          {withCredentials: true})
+        .then((res) => {
+          localStorage.setItem('jwt', res.data.status.token);
+          localStorage.setItem('fname', res.data.data['fname']);
+          this.props.handleSuccessfulRegistration(res.data.data);
+        })
+      }
+      catch (error) {
+        console.log("Registration Error: ", error);
+      }
     };
 
   render () {

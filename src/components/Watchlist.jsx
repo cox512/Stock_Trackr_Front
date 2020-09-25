@@ -13,14 +13,6 @@ export default function Watchlist(props) {
         setTitle(evt.target.value)
     }
 
-    // useEffect ((props) => {
-    //     if (props.watchlists) {
-    //         props.setSeeWarning(false)
-    //     } else (
-    //         props.setSeeWarning(true)
-    //     )
-    // }, [props.watchlists] )
-
     const createWatchlist = (evt) => {
         evt.preventDefault();
         let data = JSON.stringify(title);
@@ -49,6 +41,7 @@ export default function Watchlist(props) {
         let symbol = props.currentStock.symbol;
         if (symbol === undefined) {
             console.log('addStock if statement id:', id)
+            props.getCurrentWatchlist(id)
             return props.getStockList(id)        
         }   
         let data = JSON.stringify({symbol: symbol, id: id});

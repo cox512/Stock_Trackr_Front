@@ -5,34 +5,44 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'materialize-css';
-// import { withCookies, useCookies } from 'react-cookie'
 
 export default function LogIn (props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [logInError, setLogInError] = useState(false)
-    // const [cookies, setCookie, removeCookie] = useCookies(['username'])
-
 
     const handleLoginSubmit = async (evt) => {
         evt.preventDefault()
-        try {
+        console.log('handleLoginSubmit');
+       try { 
             const res = await axios.post(props.baseURL + "user/login", {
                 username: username,
                 password: password
             }, {withCredentials: true})
-            console.log(res.data.data.username)
-            localStorage.setItem('jwt', res.data.status['token'])
-            if (res.data.status.code === 200) {
-                props.handleSuccessfulRegistration(res.data.data);
-            } else {
-                console.log(props.jwt)
-                setLogInError(true);            
-            }
+            .then((res) => {
+                localStorage.setItem('jwt', res.data.status['token'])
+                localStorage.setItem('fname', res.data.data['fname'])
+                props.handleSuccessfulRegistration(res.data.data);  
+            })
         }
         catch (error) {
-            console.log("Login Error:", error );
-        };
+            console.error("Error: ", error);
+            localStorage.clear();
+            setLogInError(true);     
+        }
+        // console.log(res.data.status['token']);
+        // console.log(res.data.data);
+
+        // if(res.data.status['token'] && res.data.data['fname']) {
+        //     localStorage.setItem('jwt', res.data.status['token'])
+        //     localStorage.setItem('fname', res.data.data['fname'])
+        //     props.handleSuccessfulRegistration(res.data.data);  
+        // } else {
+        //     console.error("Error in handleLoginSubmit");
+        //     localStorage.clear();
+        //     setLogInError(true);            
+        // };
+        
     }
 
     return (

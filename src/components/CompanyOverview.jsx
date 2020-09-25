@@ -18,6 +18,8 @@ export default function CompanyOverview (props) {
         handleShow();
     }
 
+    // const incomeStatement = Object.values(props.incomeStatement['annualReports']);
+
     // useEffect (() => {
     //     console.log(props.incomeStatement)
     // }, [])
@@ -50,12 +52,12 @@ export default function CompanyOverview (props) {
                             </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                        {props.incomeStatement ?
+                        {props.annualIncomeStatement ?
                         <Table responsive>
                             <thead>
                                 <tr>
                                 <th>Period Ending:</th>
-                                {props.incomeStatement['annualReports'].map(year => {
+                                {props.annualIncomeStatement.map(year => {
                                     return (
                                     <th key={year['fiscalDateEnding']}>{year['fiscalDateEnding']}</th>
                                     )
@@ -63,24 +65,24 @@ export default function CompanyOverview (props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                <td>1</td>
-                                {Array.from({ length: 12 }).map((_, index) => (
-                                    <td key={index}>Table cell {index}</td>
-                                ))}
-                                </tr>
-                                <tr>
-                                <td>2</td>
-                                {Array.from({ length: 12 }).map((_, index) => (
-                                    <td key={index}>Table cell {index}</td>
-                                ))}
-                                </tr>
-                                <tr>
-                                <td>3</td>
-                                {Array.from({ length: 12 }).map((_, index) => (
-                                    <td key={index}>Table cell {index}</td>
-                                ))}
-                                </tr>
+                                {/* {Object.keys(props.annualIncomeStatement[0]).map((category, index) => {
+                                    for (let item of Object.values(props.annualIncomeStatement)){
+                                    console.log(Object.values(item));
+                                    }
+                                    return (
+                                    <tr key={index}>
+                                        <td>{category}</td>
+                                        {Object.values(props.annualIncomeStatement).map((data, index) => {
+                                            console.log(data);
+                                            return (
+                                            <td key={index}>{data}</td>
+                                            )
+
+                                        })
+                                        
+                                        }
+                                    </tr>
+                                    )})} */}
                             </tbody>
                             </Table> 
                             : null }
