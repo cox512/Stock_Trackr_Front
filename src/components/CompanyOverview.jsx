@@ -1,33 +1,92 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import "react-bootstrap";
 import Button  from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal'
+import Modal from 'react-bootstrap/Modal';
+import Table from 'react-bootstrap/Table';
+
 
 
 export default function CompanyOverview (props) {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     
+    //Figure out how to combine all Statement calls into one.
+    const handleIncomeClick = () => {
+        props.getIncomeStatement(props.overview.Symbol);
+        handleShow();
+    }
+
+    // const incomeStatement = Object.values(props.incomeStatement['annualReports']);
+
+    // useEffect (() => {
+    //     console.log(props.incomeStatement)
+    // }, [])
+
     return (
         <>
             {props.overview ?
             <>
                 <div>
-                {/* <Button type="primary" onClick={() => props.setModalVisible(true)}>
-                Update account info
-                </Button> */}
-                <Button type="primary" onClick={() => props.getIncomeStatement(props.overview.Symbol)}>Income Statement</Button>
+                <Button type="primary" onClick={() => handleIncomeClick()}>Income Statement</Button>
                 <Button onClick={() => props.getBalanceSheet(props.overview.Symbol)}>Balance Sheet</Button>
                 <Button onClick={() => props.getCashFlowStatement(props.overview.Symbol)}>Cash Flow Statement</Button>
                 </div>
 
                 <div>
-                    {/* Modal to display the income statement on button click*/}
+                    {/* Modal to display the income statement on button click
+                    FIND A WAY TO USE ONE MODAL FOR ALL STATEMENTS. could maybe use some regex to get to the words that you want to display.
+                    */}
                     <Modal
-                            title="Income Statement"
-                            centered
-                            visible={props.modalVisible}
-                            onOk={() => props.setModalVisible(false)}
-                            onCancel={() => props.setModalVisible(false)}
-                            >    
+                        title="Income Statement"
+                        size="lg"
+                        show={show}
+                        onHide={handleClose}
+                        centered
+                        animation={false}
+                        >
+                        <Modal.Header closeButton>
+                            <Modal.Title id="contained-modal-title-vcenter">
+                            Income Statement
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                        {props.annualIncomeStatement ?
+                        <Table responsive>
+                            <thead>
+                                <tr>
+                                <th>Period Ending:</th>
+                                {props.annualIncomeStatement.map(year => {
+                                    return (
+                                    <th key={year['fiscalDateEnding']}>{year['fiscalDateEnding']}</th>
+                                    )
+                                })}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {/* {Object.keys(props.annualIncomeStatement[0]).map((category, index) => {
+                                    for (let item of Object.values(props.annualIncomeStatement)){
+                                    console.log(Object.values(item));
+                                    }
+                                    return (
+                                    <tr key={index}>
+                                        <td>{category}</td>
+                                        {Object.values(props.annualIncomeStatement).map((data, index) => {
+                                            console.log(data);
+                                            return (
+                                            <td key={index}>{data}</td>
+                                            )
+
+                                        })
+                                        
+                                        }
+                                    </tr>
+                                    )})} */}
+                            </tbody>
+                            </Table> 
+                            : null }
+                        </Modal.Body>
                     </Modal>
                 </div> 
 

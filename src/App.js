@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 import {
@@ -15,62 +15,26 @@ import Dashboard from "./components/Dashboard";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
-class App extends Component {
-  state = {
-    currentUser: null,
-    loginStatus: false,
-    showLoginBox: false,
-    modalVisible: false,
-    jwt: localStorage.getItem("jwt") || "",
-  };
+function App() {
+  const [redirect, setRedirect] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [logInStatus, setLogInStatus] = useState(false);
+  const [showLoginBox, setShowLoginBox] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [jwt, setJwt] = useState(localStorage.getItem("jwt") || "");
 
-  handleChange = (evt) => {
-    const editedUser = this.state.currentUser;
+  const handleChange = (evt) => {
+    const editedUser = currentUser;
     editedUser[evt.target.id] = evt.target.value;
-    this.setState({
-      currentUser: editedUser,
-    });
+    setCurrentUser(editedUser);
   };
 
-  handleSuccessfulRegistration = (data) => {
-    this.setState({
-      loginStatus: true,
-      currentUser: data,
-      jwt: localStorage.getItem("jwt"),
-    });
+  const handleSuccessfulRegistration = async (data) => {
+    setLogInStatus(true);
+    console.log(data);
+    setCurrentUser(data);
+    setJwt(localStorage.getItem("jwt"));
   };
-
-  // handleUpdate = (evt) => {
-  //   evt.preventDefault();
-  //   console.log(this.state.currentUser);
-  //   let data = JSON.stringify(this.state.currentUser);
-  //   let config = {
-  //     method: "PUT",
-  //     url: baseURL + "user/" + this.state.currentUser.id,
-  //     data: data,
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `${this.state.jwt}`,
-  //     },
-  //     withCredentials: true,
-  //   };
-  //   axios(config)
-  //     .then((res) => {
-  //       console.log(res);
-  //       return res.data;
-  //     })
-  //     .then((data) => {
-  //       console.log(data.data);
-  //       if (data.status.code === 200) {
-  //         this.handleSuccessfulRegistration(data.data);
-  //       } else {
-  //         this.setState({
-  //           errorMessage: true,
-  //         });
-  //       }
-  //     })
-  //     .catch((error) => console.error({ Error: error }));
-  // };
 
   // checkLoginStatus = () => {
   //   // Upon mounting, look to see if there is currently a user logged in. If so make them the currentUser. If not, make sure there is no currentUser in state
@@ -104,10 +68,11 @@ class App extends Component {
   //     });
   // };
 
-  componentDidMount = async () => {
+  const checkLogin = async () => {
+    console.log("checklogin");
     if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
       try {
+        const jwt = localStorage.getItem("jwt");
         const res = await axios.get(
           baseURL + "user/",
           {
@@ -119,80 +84,83 @@ class App extends Component {
           { withCredentials: true }
         );
         console.log(res.data.data[0]);
-        this.setState({
-          currentUser: res.data.data[0],
-          loginStatus: true,
-        });
+        setCurrentUser(res.data.data[0]);
+        setLogInStatus(true);
       } catch (error) {
-        console.log("Login Error:", error);
+        console.log("Error:", error);
+        localStorage.removeItem("jwt");
+        return <Redirect to="/" />;
       }
+    } else {
+      localStorage.clear();
+      return <Redirect to="/" />;
     }
   };
 
-  handleLogout = () => {
-    localStorage.removeItem("jwt");
-    this.setState({
-      loginStatus: false,
-      currentUser: "",
-      jwt: "",
-    });
-    if (!this.state.loginStatus) {
-      console.log("User is logged out.");
-    }
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
+  const handleLogout = async () => {
+    console.log("in handle logout");
+    localStorage.clear();
+    setCurrentUser("");
+    setLogInStatus(false);
+    setJwt("");
   };
 
-  render() {
-    return (
-      <>
-        <div>
-          <BrowserRouter>
-            <div ref={this.wrapper}>{this.props.children}</div>
-            <NavBar
-              currentUser={this.state.currentUser}
-              handleChange={this.handleChange}
-              baseURL={baseURL}
-              jwt={this.state.jwt}
-              handleLogout={this.handleLogout}
-              handleSuccessfulRegistration={this.handleSuccessfulRegistration}
+  return (
+    <>
+      <div>
+        <BrowserRouter>
+          {/* <div ref={wrapper}>{props.children}</div> */}
+          <NavBar
+            setRedirect={setRedirect}
+            redirect={redirect}
+            currentUser={currentUser}
+            handleChange={handleChange}
+            baseURL={baseURL}
+            jwt={jwt}
+            handleLogout={handleLogout}
+            handleSuccessfulRegistration={handleSuccessfulRegistration}
+          />
+          <Switch>
+            <Route
+              exact
+              path="/dashboard"
+              render={() => (
+                <Dashboard
+                  redirect={redirect}
+                  setRedirect={setRedirect}
+                  currentUser={currentUser}
+                  baseURL={baseURL}
+                  modalShow={modalShow}
+                  jwt={jwt}
+                />
+              )}
             />
-            <Switch>
-              <Route
-                exact
-                path="/dashboard"
-                render={() => (
-                  <Dashboard
-                    currentUser={this.state.currentUser}
-                    baseURL={baseURL}
-                    modalVisible={this.state.modalVisible}
-                    setModalVisible={this.setModalVisible}
-                    jwt={this.state.jwt}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/"
-                render={() => (
-                  <Home
-                    handleSuccessfulRegistration={
-                      this.handleSuccessfulRegistration
-                    }
-                    currentUser={this.state.currentUser}
-                    loginStatus={this.state.loginStatus}
-                    baseURL={baseURL}
-                    showLoginBox={this.state.showLoginBox}
-                    jwt={this.state.jwt}
-                  />
-                )}
-              />
-              <Route component={Error} />
-            </Switch>
-          </BrowserRouter>
-        </div>
-        <footer id="footer">10bagger ©2020</footer>
-      </>
-    );
-  }
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <Home
+                  handleSuccessfulRegistration={handleSuccessfulRegistration}
+                  currentUser={currentUser}
+                  logInStatus={logInStatus}
+                  baseURL={baseURL}
+                  showLoginBox={showLoginBox}
+                  jwt={jwt}
+                  setJwt={setJwt}
+                />
+              )}
+            />
+            <Route component={Error} />
+          </Switch>
+        </BrowserRouter>
+      </div>
+      <footer id="footer">10bagger ©2020</footer>
+    </>
+  );
 }
 
 const AppWithRouter = withRouter(App);

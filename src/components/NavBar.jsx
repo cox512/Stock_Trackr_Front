@@ -11,7 +11,6 @@ import '../App.css'
 import { Hidden } from '@material-ui/core';
 
 export default function NavBar(props) {
-    const [redirect, setRedirect] = useState(null)
     const [show, setShow] = useState(false);
     
     const handleClose = () => setShow(false)
@@ -48,7 +47,7 @@ export default function NavBar(props) {
             if (data.status.code === 200) {
               props.handleSuccessfulRegistration(data.data);
               handleClose();
-              setRedirect("/");
+              props.setRedirect("/");
             } 
             // else {
             //   this.setState({
@@ -59,27 +58,26 @@ export default function NavBar(props) {
           .catch((error) => console.error({ Error: error }));
       };
 
-    const logout = () => {     
-        
-        var config = {
-            method: 'GET',
-            url: props.baseURL + 'user/logout',
-            headers: { 
-                'Authorization': `${props.jwt}`, 
-                'Content-Type': 'application.json',
-            },
-            withCredentials: true,
-        };
-        axios(config)
-        .then(() => {
-            props.handleLogout();
-            setRedirect("/");
-        }).then(() => {
-            setRedirect(null);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    const logout = async () => {     
+        try {
+            console.log("Logout button clicked")
+            const res = await axios.get(props.baseURL + 'user/logout',
+                {headers: {
+                    "Content-Type": "application.json",
+                    'Authorization': `${localStorage.getItem("jwt")}`
+                },
+                withCredentials: true}
+            ).then((res) => {
+                console.log("logout then statement")
+                props.handleLogout();
+                props.setRedirect("/");
+            }).then(() => {
+                props.setRedirect(null);
+            })
+        }
+        catch (error) {
+            console.log("Error:", error);
+        }
     }
 
     const handleAlert = (evt) => {
@@ -106,9 +104,9 @@ export default function NavBar(props) {
         .then(() => {
             console.log("in the axios delete call");
             props.handleLogout();
-            setRedirect("/");
+            props.setRedirect("/");
         }).then(() => {
-            setRedirect(null);
+            props.setRedirect(null);
         })
         .catch((error) => console.error({Error: error}));
     }
@@ -117,8 +115,8 @@ export default function NavBar(props) {
         <>
         <div className='nav-bar'>
             <div className="whole-logo">
-            { redirect ? 
-                <Redirect to={redirect} />
+            { props.redirect ? 
+                <Redirect to={props.redirect} />
              : null}
             
             <h3 id="logo-text">

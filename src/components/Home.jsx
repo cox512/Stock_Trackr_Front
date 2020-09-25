@@ -13,7 +13,8 @@ export default function Home (props) {
         setSelectedTab(newValue);
     };
     
-    if (props.loginStatus) {
+    if (props.logInStatus) {
+        console.log("Home if statement login status:", props.logInStatus)
         return <Redirect to='/dashboard'/>
     }
     
@@ -54,6 +55,7 @@ export default function Home (props) {
                         handleSuccessfulRegistration={props.handleSuccessfulRegistration}
                         handleChange={props.handleChange}
                         baseURL={props.baseURL}
+                        // setJwt={props.setJwt}
                         />
                     }
                 </div>

@@ -16,19 +16,11 @@ export default function Dashboard (props) {
     const [stockList, setStockList] = useState([])
     const [currentWatchlist, setCurrentWatchlist] = useState(null)
     const [overview, setOverview] = useState(null)
-    const [incomeStatement, setIncomeStatement] = useState(null)
+    const [annualIncomeStatement, setAnnualIncomeStatement] = useState(null)
     const [balanceSheet, setBalanceSheet] = useState(null)
     const [cashFlowStatement, setCashFlowStatement] = useState(null)
     const [flag, setFlag] = useState(false)
     const [seeWarning, setSeeWarning] = useState(false)
-
-    useEffect (() => {
-        if (watchlists) {
-            setSeeWarning(false)
-        } else (
-            setSeeWarning(true)
-        )
-    }, [] )
 
     useEffect (() => {
         if (watchlists.length !== 0) {
@@ -38,8 +30,33 @@ export default function Dashboard (props) {
         )
     }, [watchlists] )
 
+    const checkForUser = () => {
+        console.log(props.currentUser)
+        if (props.currentUser === null) {
+            console.log("Dashboard. About to Redirect")
+            showWatchlists()
+            return <Redirect to='/'/>
+        } 
+        showWatchlists()
+    }
+
+    useEffect (() => {
+        if (watchlists) {
+            setSeeWarning(false)
+        } else {
+            setSeeWarning(true)
+        }
+        checkForUser();
+    }, [] )
+
+   
     const handleStockData = (data) => {
-        setCurrentStock({ symbol: data["Global Quote"]["01. symbol"], price: data["Global Quote"]["05. price"], $change: data["Global Quote"]["09. change"], pct_change: data["Global Quote"]["10. change percent"]});
+        setCurrentStock({ 
+            symbol: data["Global Quote"]["01. symbol"], 
+            price: data["Global Quote"]["05. price"], 
+            $change: data["Global Quote"]["09. change"], 
+            pct_change: data["Global Quote"]["10. change percent"]
+        });
         getOverview(data["Global Quote"]["01. symbol"])
     }
 
@@ -53,27 +70,18 @@ export default function Dashboard (props) {
             const res = await axios.get(props.baseURL + "api/v1/watchlists/", 
                 {headers:{
                     "Content-Type": "application/json",
-                    'Authorization': `${props.jwt}`},
+                    'Authorization': `${localStorage.getItem("jwt")}`},
                 withCredentials: true}
             )
-            console.log("showWatchlist data:", res.data.data)
-            setWatchlists(res.data.data)
+            console.log("showWatchlist data:", res.data.data);
+            setWatchlists(res.data.data);
         }
         catch (error) {
             console.log("Error:", error);
         }
     }
 
-    if (props.currentUser === null) {
-        return <Redirect to='/'/>
-    } else if (flag === false) {
-        showWatchlists();
-        setFlag(true);
-    };
-    
-
     const getStockList = async (watchlistId) =>{
-        //Called when a watchlist is clicked AND when the stockList is re-rendered after a stock has been deleted.
         try {
             const res = await axios.post(props.baseURL + "api/v1/stocks/showList", {
                 watchlist: watchlistId},
@@ -118,7 +126,7 @@ export default function Dashboard (props) {
           ];
         axios(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
-            console.log(res.data)
+            console.log(res)
             setOverview(res.data)
         })
         .catch((error) => {
@@ -127,8 +135,8 @@ export default function Dashboard (props) {
     }
 
     const getIncomeStatement = (symbol) => {
-        console.log(symbol)
-        console.log('getIncomeStatement')
+        // console.log(symbol)
+        // console.log('getIncomeStatement')
         let random = Math.floor(Math.random() * 2);
         let API_KEY = [
             process.env.REACT_APP_API_KEY1,
@@ -136,10 +144,11 @@ export default function Dashboard (props) {
           ];
         axios(`https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
-            // console.log(Object.entries(res.data))
-            console.log(res.data)
+            // console.log(Object.entries(res.data));
+            console.log(Object.entries(Object.entries(res.data))[1][1][1]);
+            console.log(Object.entries(Object.entries(Object.entries(res.data))[1][1][1]));
             // let overview = Object.entries(JSON.stringify(res.data))
-            setIncomeStatement(res.data)
+            setAnnualIncomeStatement(Object.entries(Object.entries(res.data))[1][1][1])
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -189,7 +198,7 @@ export default function Dashboard (props) {
     return (
         <>
         <div className="greeting">
-                <h3>Hello there, {props.currentUser["fname"]}</h3>
+                <h3>Hello there, {localStorage["fname"]}</h3>
                 <h4>What company would you like to research today?</h4>
         </div>
         <div className="container">
@@ -209,6 +218,7 @@ export default function Dashboard (props) {
                     baseURL={props.baseURL}
                     getStockList={getStockList}
                     currentWatchlist={currentWatchlist}
+                    setCurrentWatchlist={setCurrentWatchlist}
                     currentStock={currentStock}
                     jwt={props.jwt}
                     getCurrentWatchlist={getCurrentWatchlist}
@@ -240,6 +250,8 @@ export default function Dashboard (props) {
                     overview={overview}
                     setOverview={setOverview}
                     getOverview={getOverview}
+                    //could have one generic "statement" variable that changes. This might help with condenscing the modals/tables.
+                    annualIncomeStatement={annualIncomeStatement}
                     getIncomeStatement={getIncomeStatement}
                     getBalanceSheet={getBalanceSheet}
                     getCashFlowStatement={getCashFlowStatement}
