@@ -24,7 +24,7 @@ Here is an initial wireframe for the project. Obviously, changes were made durin
 ![Screenshot of Wireframe](https://github.com/cox512/Stock_Trackr_Front/blob/master/10baggr_wire_screenshot.png)
 
 # TECHNOLOGY USED
-- HTML, CSS, Ant Design, React, React-Bootstrap, Axios, AlphaVantage API, Sqlite, Python, Peewee, Flask, Github, Heroku
+- HTML, CSS, React, React-Bootstrap, Materialize, Axios, AlphaVantage API, Sqlite, Python, Peewee, Flask, Github, Heroku
 
 # LINK
 [https://ten-bagger.herokuapp.com]
