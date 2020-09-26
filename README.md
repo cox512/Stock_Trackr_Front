@@ -19,17 +19,13 @@
 - I want to be able to pull up SEC filings for each company from the SEC web site.
 
 # WIREFRAME
-Here is an initial wireframe for the project. But don't hold me to it. ;-)
+Here is an initial wireframe for the project. Obviously, changes were made during development.
 
 ![Screenshot of Wireframe](https://github.com/cox512/Stock_Trackr_Front/blob/master/10baggr_wire_screenshot.png)
 
 # TECHNOLOGY USED
 - HTML, CSS, Ant Design, React, React-Bootstrap, Axios, AlphaVantage API, Sqlite, Python, Peewee, Flask, Github, Heroku
 
-# NEW TO ME
-Axios, Ant Design, React Hooks, React Functional components
-
 # LINK
-Due to some issues with Chrome's new cookie requirements, the site is best viewed on Firefox.
 [https://ten-bagger.herokuapp.com]
 
