@@ -29,9 +29,9 @@ export default function CompanyOverview (props) {
             {props.overview ?
             <>
                 <div>
-                <Button type="primary" onClick={() => handleIncomeClick()}>Income Statement</Button>
+                {/* <Button type="primary" onClick={() => handleIncomeClick()}>Income Statement</Button>
                 <Button onClick={() => props.getBalanceSheet(props.overview.Symbol)}>Balance Sheet</Button>
-                <Button onClick={() => props.getCashFlowStatement(props.overview.Symbol)}>Cash Flow Statement</Button>
+                <Button onClick={() => props.getCashFlowStatement(props.overview.Symbol)}>Cash Flow Statement</Button> */}
                 </div>
 
                 <div>
