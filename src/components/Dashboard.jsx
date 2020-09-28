@@ -7,6 +7,11 @@ import { Redirect } from "react-router-dom";
 import "../App.css";
 import CompanyOverview from './CompanyOverview';
 
+const API_KEY = [
+    process.env.REACT_APP_API_KEY1,
+    process.env.REACT_APP_API_KEY2,
+  ];
+
 export default function Dashboard (props) {
     
     const [currentStock, setCurrentStock] = useState("")
@@ -121,10 +126,10 @@ export default function Dashboard (props) {
     const getOverview = async (symbol) => {
         console.log('getOverview Symbol:', symbol)
         let random = Math.floor(Math.random() * 2);
-        let API_KEY = [
-            process.env.REACT_APP_API_KEY1,
-            process.env.REACT_APP_API_KEY2,
-          ];
+        // let API_KEY = [
+        //     process.env.REACT_APP_API_KEY1,
+        //     process.env.REACT_APP_API_KEY2,
+        //   ];
         axios(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
             console.log(res)
@@ -139,10 +144,10 @@ export default function Dashboard (props) {
         // console.log(symbol)
         // console.log('getIncomeStatement')
         let random = Math.floor(Math.random() * 2);
-        let API_KEY = [
-            process.env.REACT_APP_API_KEY1,
-            process.env.REACT_APP_API_KEY2,
-          ];
+        // let API_KEY = [
+        //     process.env.REACT_APP_API_KEY1,
+        //     process.env.REACT_APP_API_KEY2,
+        //   ];
         axios(`https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
             console.log(Object.entries(Object.entries(res.data))[1][1][1]);
@@ -158,10 +163,10 @@ export default function Dashboard (props) {
         console.log(symbol)
         console.log('getCashFlowStatement')
         let random = Math.floor(Math.random() * 2);
-        let API_KEY = [
-            process.env.REACT_APP_API_KEY1,
-            process.env.REACT_APP_API_KEY2,
-          ];
+        // let API_KEY = [
+        //     process.env.REACT_APP_API_KEY1,
+        //     process.env.REACT_APP_API_KEY2,
+        //   ];
         axios(`https://www.alphavantage.co/query?function=CASH_FLOW&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
             console.log(res.data)
@@ -177,10 +182,10 @@ export default function Dashboard (props) {
         console.log(symbol)
         console.log('getBalanceSheet')
         let random = Math.floor(Math.random() * 2);
-        let API_KEY = [
-            process.env.REACT_APP_API_KEY1,
-            process.env.REACT_APP_API_KEY2,
-          ];
+        // let API_KEY = [
+        //     process.env.REACT_APP_API_KEY1,
+        //     process.env.REACT_APP_API_KEY2,
+        //   ];
         axios(`https://www.alphavantage.co/query?function=Balance_Sheet&symbol=${symbol}&apikey=${API_KEY[random]}`)
         .then(res => {
             console.log(res.data)

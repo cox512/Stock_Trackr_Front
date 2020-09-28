@@ -10,7 +10,6 @@ const API_KEY = [
   process.env.REACT_APP_API_KEY2,
 ];
 
-let random = Math.floor(Math.random() * 2);
 
 export default function StockSearch (props) {
   const [ticker, setTicker] = useState("");
@@ -19,7 +18,7 @@ export default function StockSearch (props) {
   const  handleChange = (evt) => {
     setTicker(evt.target.value);
     const stockOptions = [];
-
+    let random = Math.floor(Math.random() * 2);
     axios(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${ticker}&apikey=${API_KEY[random]}`)
     .then((res) => {
       console.log(res);
@@ -43,6 +42,7 @@ export default function StockSearch (props) {
 
   const handleStockSearch = (evt) => {
     evt.preventDefault();
+    let random = Math.floor(Math.random() * 2);
     axios(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${API_KEY[random]}`)
     .then((res) => {
       console.log(res.data);

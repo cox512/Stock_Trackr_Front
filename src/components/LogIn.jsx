@@ -15,6 +15,7 @@ export default function LogIn (props) {
         evt.preventDefault()
         console.log('handleLoginSubmit');
         console.log("username:", username)
+        console.log(props.baseURL)
        try { 
             const res = await axios.post(props.baseURL + "user/login", {
                 username: username,
